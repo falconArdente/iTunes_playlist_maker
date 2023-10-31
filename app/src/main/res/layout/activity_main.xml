@@ -45,6 +45,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_search"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/margin_padding_main"
@@ -67,6 +68,7 @@
     </Button>
 
     <Button
+        android:id="@+id/btn_media"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/margin_padding_main"
@@ -88,7 +90,7 @@
     </Button>
 
     <Button
-        android:id="@+id/search_button"
+        android:id="@+id/btn_settings"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/margin_padding_main"
@@ -96,6 +98,7 @@
         android:layout_marginRight="@dimen/margin_padding_main"
         android:layout_weight="1"
         android:backgroundTint="@color/YP_White"
+
         android:padding="@dimen/margin_padding_main"
         android:text="@string/settings"
         android:textAllCaps="false"

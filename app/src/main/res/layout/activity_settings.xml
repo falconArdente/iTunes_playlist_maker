@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/YP_White"
     android:orientation="vertical"
-    android:paddingBottom="12dp">
+    android:paddingBottom="12dp"
+    tools:context=".SettingsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +16,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/back_button"
             android:layout_width="56dp"
             android:layout_height="match_parent"
             android:backgroundTint="@color/YP_White"
