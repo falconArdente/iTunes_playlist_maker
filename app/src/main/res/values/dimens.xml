@@ -7,4 +7,5 @@
     <dimen name="icon_padding_btn">8dp</dimen>
     <dimen name="icon_size_btn">24dp</dimen>
     <dimen name="font_size_settings">16sp</dimen>
+    <dimen name="additional_padding">12dp</dimen>
 </resources>

@@ -16,7 +16,7 @@
             android:name=".MediaActivity"
             android:exported="false" />
         <activity
-            android:name=".Search_Activity"
+            android:name=".SearchActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
@@ -26,7 +26,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

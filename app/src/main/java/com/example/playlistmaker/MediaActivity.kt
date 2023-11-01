@@ -8,8 +8,12 @@ class MediaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media)
-        val btnBack =findViewById<Button>(R.id.back_button)
-        btnBack.setOnClickListener {
+        backButtonClickAttach()
+    }
+
+    private fun backButtonClickAttach() {
+        val backButton = findViewById<Button>(R.id.back_button)
+        backButton.setOnClickListener {
             finish()
         }
     }

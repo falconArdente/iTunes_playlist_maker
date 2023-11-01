@@ -8,24 +8,34 @@ import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val btnSearch = findViewById<Button>(R.id.btn_search)
-        val btnMedia = findViewById<Button>(R.id.btn_media)
-        val btnSettings = findViewById<Button>(R.id.btn_settings)
-        btnSearch.setOnClickListener {
-            startActivity(Intent(this@MainActivity, Search_Activity::class.java))
-        }
+        searchButtonAttach()
+        mediaButtonAttach()
+        settingsButtonAttach()
+    }
 
+    private fun searchButtonAttach() {
+        val searchButton = findViewById<Button>(R.id.btn_search)
+        searchButton.setOnClickListener {
+            startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+        }
+    }
+
+    private fun mediaButtonAttach() {// так как нужно опробвать способы привязки
+        val mediaButton = findViewById<Button>(R.id.btn_media)
         val mediaBtnClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
                 startActivity(Intent(this@MainActivity, MediaActivity::class.java))
             }
         }
-        btnMedia.setOnClickListener(mediaBtnClickListener)
+        mediaButton.setOnClickListener(mediaBtnClickListener)
+    }
 
-        btnSettings.setOnClickListener {
+    private fun settingsButtonAttach() {
+        mediaButtonAttach()
+        val settingsButton = findViewById<Button>(R.id.btn_settings)
+        settingsButton.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
     }

@@ -5,87 +5,60 @@
     android:layout_height="match_parent"
     android:background="@color/YP_White"
     android:orientation="vertical"
-    android:paddingBottom="12dp"
     tools:context=".SettingsActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginBottom="12dp"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/header">
 
         <Button
             android:id="@+id/back_button"
             style="@style/backButton" />
 
         <TextView
-            style="@style/secondaryActivityHeader"
+            style="@style/secondaryActivityHeaderTextView"
             android:text="@string/settings" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <Space style="@style/empty_space_horizontal" />
 
-        <Button
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:text="@string/search_small"
-            android:visibility="invisible"
-            tools:ignore="RtlHardcoded" />
+        <Button style="@style/hidden_search_button" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_padding_main"
-        android:layout_marginRight="6dp"
-        android:orientation="horizontal"
+        style="@style/setting_menu_row_layout"
+        android:layout_marginRight="@dimen/margin_padding_main"
+        android:layout_marginBottom="8dp"
         tools:ignore="RtlHardcoded">
-
+        <!-- правый отступ подобран с компромиссом между шаблоном и требованиями AS к эргономике переключателя -->
         <TextView
             style="@style/settingsTextView"
             android:text="@string/dark_theme_title" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <Space style="@style/empty_space_horizontal" />
 
         <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:switchMinWidth="56dp" />
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+        <!-- минимальный размер использовал
+        исходя из требований AS к эргономичности переключателя
+             !-->
+
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_padding_main"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/setting_menu_row_layout">
 
         <TextView
             style="@style/settingsTextView"
             android:text="@string/share" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <Space style="@style/empty_space_horizontal" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/icon_settings"
+            android:contentDescription="@string/share"
             android:src="@drawable/share" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_padding_main"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/setting_menu_row_layout">
 
         <TextView
             style="@style/settingsTextView"
@@ -93,35 +66,25 @@
 
         </TextView>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <Space style="@style/empty_space_horizontal" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/icon_settings"
+            android:contentDescription="@string/support"
             android:src="@drawable/support" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_padding_main"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/setting_menu_row_layout">
 
         <TextView
             style="@style/settingsTextView"
             android:text="@string/agreement" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <Space style="@style/empty_space_horizontal" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/icon_settings"
+            android:contentDescription="@string/agreement"
             android:src="@drawable/arr_forward" />
 
     </LinearLayout>

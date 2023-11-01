@@ -6,36 +6,25 @@
     android:layout_height="match_parent"
     android:background="@color/YP_Blue"
     android:orientation="vertical"
-    android:paddingBottom="12dp">
+    android:paddingBottom="@dimen/additional_padding">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:clipChildren="true"
-        android:clipToPadding="true"
+        style="@style/header"
         android:padding="4dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingLeft="12dp"
+            android:paddingLeft="@dimen/additional_padding"
             android:text="@string/app_name"
             android:textColor="@color/YP_White"
             android:textSize="@dimen/main_font"
-            tools:ignore="RtlHardcoded" />
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <Space style="@style/empty_space_horizontal" />
 
-        <Button
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:text="@string/search_small"
-            android:visibility="invisible" />
+        <Button style="@style/hidden_search_button" />
     </LinearLayout>
 
     <Button
