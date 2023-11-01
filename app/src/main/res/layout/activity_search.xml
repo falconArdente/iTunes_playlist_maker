@@ -11,5 +11,4 @@
     <TextView
         style="@style/secondaryActivityHeaderTextView"
         android:text="@string/search_small" />
-
 </LinearLayout>
