@@ -53,6 +53,7 @@
         <item name="icon">@drawable/arrow_back</item>
         <item name="iconTint">@color/YP_Black</item>
         <item name="android:outlineSpotShadowColor">@color/YP_White</item>
+        <item name="android:outlineAmbientShadowColor">@color/YP_White</item>
     </style>
 
     <style name="hidden_search_button">
