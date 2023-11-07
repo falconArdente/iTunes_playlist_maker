@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/YP_White"
+    android:orientation="vertical"
+    tools:context=".SettingsActivity">
+
+    <LinearLayout style="@style/header">
+
+        <Button
+            android:id="@+id/back_button"
+            style="@style/backButton" />
+
+        <TextView
+            style="@style/secondaryActivityHeaderTextView"
+            android:text="@string/settings" />
+
+        <Space style="@style/empty_space_horizontal" />
+
+        <Button style="@style/hidden_search_button" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/setting_menu_row_layout"
+        android:layout_marginRight="@dimen/margin_padding_main"
+        android:layout_marginBottom="8dp"
+        tools:ignore="RtlHardcoded">
+        <!-- правый отступ подобран с компромиссом между шаблоном и требованиями AS к эргономике переключателя -->
+        <TextView
+            style="@style/settingsTextView"
+            android:text="@string/dark_theme_title" />
+
+        <Space style="@style/empty_space_horizontal" />
+
+        <Switch
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+        <!-- минимальный размер использовал
+        исходя из требований AS к эргономичности переключателя
+             !-->
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_menu_row_layout">
+
+        <TextView
+            style="@style/settingsTextView"
+            android:text="@string/share" />
+
+        <Space style="@style/empty_space_horizontal" />
+
+        <ImageView
+            style="@style/icon_settings"
+            android:contentDescription="@string/share"
+            android:src="@drawable/share" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_menu_row_layout">
+
+        <TextView
+            style="@style/settingsTextView"
+            android:text="@string/support">
+
+        </TextView>
+
+        <Space style="@style/empty_space_horizontal" />
+
+        <ImageView
+            style="@style/icon_settings"
+            android:contentDescription="@string/support"
+            android:src="@drawable/support" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_menu_row_layout">
+
+        <TextView
+            style="@style/settingsTextView"
+            android:text="@string/agreement" />
+
+        <Space style="@style/empty_space_horizontal" />
+
+        <ImageView
+            style="@style/icon_settings"
+            android:contentDescription="@string/agreement"
+            android:src="@drawable/arr_forward" />
+
+    </LinearLayout>
+</LinearLayout>
