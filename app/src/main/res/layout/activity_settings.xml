@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/YP_White"
+    android:background="?attr/colorSecondary"
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
@@ -35,8 +35,11 @@
         <Space style="@style/empty_space_horizontal" />
 
         <Switch
+            android:id="@+id/is_night_theme_switch"
             android:layout_width="56dp"
             android:layout_height="48dp"
+            android:thumbTint="?attr/thumbColor"
+            android:trackTint="?attr/trackColor"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
         <!-- минимальный размер использовал
         исходя из требований AS к эргономичности переключателя
@@ -58,7 +61,9 @@
             android:src="@drawable/share" />
     </LinearLayout>
 
-    <LinearLayout style="@style/setting_menu_row_layout">
+    <LinearLayout
+        android:id="@+id/email_to_support"
+        style="@style/setting_menu_row_layout">
 
         <TextView
             style="@style/settingsTextView"
@@ -74,7 +79,9 @@
             android:src="@drawable/support" />
     </LinearLayout>
 
-    <LinearLayout style="@style/setting_menu_row_layout">
+    <LinearLayout
+        android:id="@+id/view_agreement"
+        style="@style/setting_menu_row_layout">
 
         <TextView
             style="@style/settingsTextView"

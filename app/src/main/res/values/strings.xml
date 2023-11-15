@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Playlist Maker</string>
+    <string name="app_name" translatable="false">Playlist maker</string>
     <string name="title_hello">Привет, Практикующий!</string>
     <string name="search_small">Поиск</string>
     <string name="media">Медиатека</string>
@@ -8,4 +8,8 @@
     <string name="share">Поделиться приложением</string>
     <string name="support">Написать в поддержку</string>
     <string name="agreement">Пользовательское соглашение</string>
+    <string name="my_email" translatable="false">iwsokolov@yandex.ru</string>
+    <string name="email_subject_for_support" translatable="false">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="email_body_for_support" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="agreement_URL" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
 </resources>
