@@ -8,4 +8,5 @@
     <string name="share">Share an app</string>
     <string name="support">Contact to support</string>
     <string name="agreement">User agreement</string>
+    <string name="go_back">go to previous screen</string>
 </resources>

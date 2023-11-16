@@ -1,14 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/header"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical"
     tools:context=".SearchActivity">
 
-    <Button
-        android:id="@+id/back_button"
-        style="@style/backButton" />
+    <LinearLayout style="@style/header">
 
-    <TextView
-        style="@style/secondaryActivityHeaderTextView"
-        android:text="@string/search_small" />
+        <Button
+            android:id="@+id/back_button"
+            style="@style/backButton" />
+
+        <TextView
+            style="@style/secondaryActivityHeaderTextView"
+            android:text="@string/search_small" />
+
+        <Space style="@style/empty_space_horizontal" />
+
+        <Button style="@style/hidden_search_button" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/search_padding">
+
+        <Button
+            android:id="@+id/search_background"
+            style="@style/search_bar_background" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/search_padding">
+
+            <ImageView
+                android:id="@+id/lens_icon"
+                android:layout_width="18dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="14dp"
+                android:src="@drawable/lens"
+                app:tint="?attr/colorOnSecondaryContainer" />
+
+            <EditText
+                android:id="@+id/search_bar"
+                style="@style/search_bar" />
+
+            <ImageView
+                android:id="@+id/clear_icon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="12dp"
+                android:scaleType="centerCrop"
+                android:scaleX="2.2"
+                android:scaleY="2.2"
+                android:src="@drawable/clear"
+                app:tint="?attr/colorOnSecondaryContainer" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

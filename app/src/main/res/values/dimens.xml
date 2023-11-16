@@ -2,10 +2,17 @@
 <resources>
     <dimen name="main_font">26sp</dimen>
     <dimen name="main_buttons_font_size">26sp</dimen>
+    <dimen name="searchbox_text_size">16sp</dimen>
     <dimen name="margin_padding_main">16dp</dimen>
     <dimen name="button_corner_radius">16dp</dimen>
+    <dimen name="search_field_radius">8dp</dimen>
     <dimen name="icon_padding_btn">8dp</dimen>
     <dimen name="icon_size_btn">24dp</dimen>
     <dimen name="font_size_settings">16sp</dimen>
     <dimen name="additional_padding">12dp</dimen>
+    <dimen name="header_font_size">22sp</dimen>
+    <dimen name="header_height">56dp</dimen>
+    <dimen name="search_padding">8dp</dimen>
+    <dimen name="search_icon_size">16dp</dimen>
+    <dimen name="search_text_lines_max">1</dimen>
 </resources>
