@@ -47,7 +47,8 @@
 
     </LinearLayout>
 
-    <LinearLayout style="@style/setting_menu_row_layout">
+    <LinearLayout style="@style/setting_menu_row_layout"
+        android:id="@+id/share_an_app">
 
         <TextView
             style="@style/settingsTextView"

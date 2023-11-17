@@ -30,7 +30,8 @@
 
         <Button
             android:id="@+id/search_background"
-            style="@style/search_bar_background" />
+            style="@style/search_bar_background"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,12 +46,15 @@
                 android:layout_height="16dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="14dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/lens"
                 app:tint="?attr/colorOnSecondaryContainer" />
 
             <EditText
                 android:id="@+id/search_bar"
-                style="@style/search_bar" />
+                style="@style/search_bar"
+                android:importantForAutofill="no"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <ImageView
                 android:id="@+id/clear_icon"
@@ -58,6 +62,7 @@
                 android:layout_height="16dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="12dp"
+                android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
                 android:scaleX="2.2"
                 android:scaleY="2.2"

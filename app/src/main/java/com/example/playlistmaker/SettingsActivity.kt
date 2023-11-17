@@ -1,15 +1,16 @@
 package com.example.playlistmaker
 
-
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +20,27 @@ class SettingsActivity : AppCompatActivity() {
         switchListenerAttach()
         contactSupportAttach()
         viewAgreementAttach()
+        shareAnAppAttach()
+    }
+
+    private fun shareAnAppAttach() {
+        val shareButton = findViewById<LinearLayout>(R.id.share_an_app)
+        shareButton.setOnClickListener {
+            try {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name)
+                var shareMessage = "\n${R.string.to_share_text}\n\n"
+                shareMessage =
+                    """
+                    ${shareMessage + "https://play.google.com/store/apps/details?id=" + applicationInfo.uid}
+                    """.trimIndent()
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+                startActivity(shareIntent)
+            } catch (e: Exception) {
+                Log.e("SHARE", e.message.toString())
+            }
+        }
     }
 
     private fun backButtonAttach() {
@@ -27,22 +49,29 @@ class SettingsActivity : AppCompatActivity() {
         backButton.setOnClickListener { startActivity(goMain) }
     }
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private fun switchListenerAttach() {
         val darkThemeSwitch = findViewById<Switch>(R.id.is_night_theme_switch)
         darkThemeSwitch.setOnClickListener {
-            if (darkThemeSwitch.isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            val isNightModeOutside =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+            if (darkThemeSwitch.isChecked != isNightModeOutside) {
+                if (darkThemeSwitch.isChecked) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
             }
         }
     }
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onResume() {
         super.onResume()
         val darkThemeSwitch = findViewById<Switch>(R.id.is_night_theme_switch)
-        darkThemeSwitch.isChecked =
-            AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+        val isNightModeOutside =
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        darkThemeSwitch.isChecked = isNightModeOutside
     }
 
     private fun contactSupportAttach() {
