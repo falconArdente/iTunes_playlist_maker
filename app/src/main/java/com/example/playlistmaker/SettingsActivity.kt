@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
@@ -42,9 +41,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun backButtonAttach() {
-        val backButton = findViewById<Button>(R.id.back_button)
+        val header = findViewById<androidx.appcompat.widget.Toolbar>(R.id.header)
         val goMain = Intent(this, MainActivity::class.java)
-        backButton.setOnClickListener { startActivity(goMain) }
+        header.setNavigationOnClickListener { startActivity(goMain) }
     }
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")

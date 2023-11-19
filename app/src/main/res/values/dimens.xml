@@ -18,4 +18,5 @@
     <dimen name="clear_button_horizontal_margin">12dp</dimen>
     <dimen name="clear_button_vertical_margin">10dp</dimen>
     <dimen name="search_bar_margin_right">40dp</dimen>
+    <dimen name="small_padding_for_header">4dp</dimen>
 </resources>

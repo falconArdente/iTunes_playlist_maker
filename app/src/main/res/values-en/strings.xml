@@ -10,4 +10,5 @@
     <string name="agreement">User agreement</string>
     <string name="go_back">go to previous screen</string>
     <string name="to_share_text">let me recommend you</string>
+    <string name="clear_button_description">push to clear a prompt</string>
 </resources>

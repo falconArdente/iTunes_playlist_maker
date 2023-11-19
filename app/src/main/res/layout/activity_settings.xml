@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,20 +8,14 @@
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
-    <LinearLayout style="@style/header">
-
-        <Button
-            android:id="@+id/back_button"
-            style="@style/backButton" />
-
-        <TextView
-            style="@style/secondaryActivityHeaderTextView"
-            android:text="@string/settings" />
-
-        <Space style="@style/empty_space_horizontal" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/header"
+        style="@style/secondaryActivityHeader"
+        app:navigationIcon="@drawable/back_arrow_for_header"
+        app:title="@string/settings">
 
         <Button style="@style/hidden_search_button" />
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         style="@style/setting_menu_row_layout"
@@ -40,6 +35,7 @@
             android:layout_height="48dp"
             android:thumbTint="?attr/thumbColor"
             android:trackTint="?attr/trackColor"
+            android:trackTintMode="src_over"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
         <!-- минимальный размер использовал
         исходя из требований AS к эргономичности переключателя
@@ -60,7 +56,8 @@
         <ImageView
             style="@style/icon_settings"
             android:contentDescription="@string/share"
-            android:src="@drawable/share" />
+            android:src="@drawable/share"
+            tools:ignore="ImageContrastCheck" />
     </LinearLayout>
 
     <LinearLayout
@@ -78,7 +75,8 @@
         <ImageView
             style="@style/icon_settings"
             android:contentDescription="@string/support"
-            android:src="@drawable/support" />
+            android:src="@drawable/support"
+            tools:ignore="ImageContrastCheck" />
     </LinearLayout>
 
     <LinearLayout
@@ -94,7 +92,8 @@
         <ImageView
             style="@style/icon_settings"
             android:contentDescription="@string/agreement"
-            android:src="@drawable/arr_forward" />
+            android:src="@drawable/arr_forward"
+            tools:ignore="ImageContrastCheck" />
 
     </LinearLayout>
 </LinearLayout>

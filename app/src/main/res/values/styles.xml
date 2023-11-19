@@ -32,39 +32,31 @@
         <item name="android:fontFamily">"@font/ys_display_regular"</item>
     </style>
 
-    <style name="secondaryActivityHeaderTextView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
+    <style name="secondaryActivityHeader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/header_height</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:paddingLeft">@dimen/search_padding</item>
+        <item name="titleTextAppearance">@style/HeaderTextStyle</item>
+        <item name="titleMarginStart">@dimen/clear_button_horizontal_margin</item>
+    </style>
+
+    <style name="HeaderTextStyle">
+        <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/header_font_size</item>
-        <item name="android:fontFamily">"@font/ys_display_medium"</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
     <style name="header">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/header_height</item>
-        <item name="android:orientation">horizontal</item>
-    </style>
-
-    <style name="backButton">
-        <item name="android:layout_width">56dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:backgroundTint">?attr/colorSecondary</item>
-        <item name="android:text">back</item>
-        <item name="icon">@drawable/arrow_back</item>
-        <item name="iconSize">@dimen/icon_size_btn</item>
-        <item name="android:contentDescription">@string/go_back</item>
-        <item name="iconTint">?attr/colorOnSecondary</item>
-        <item name="android:outlineSpotShadowColor">?attr/colorSecondary</item>
-        <item name="android:outlineAmbientShadowColor">?attr/colorSecondary</item>
     </style>
 
     <style name="hidden_search_button">
-        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_width">96dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_marginRight">@dimen/small_padding_for_header</item>
+        <item name="android:layout_gravity">end</item>
         <item name="android:text">@string/search_small</item>
         <item name="android:visibility">invisible</item>
     </style>
@@ -91,7 +83,7 @@
         <item name="android:orientation">horizontal</item>
     </style>
 
-    <style name="search_bar" parent="@style/Widget.Material3.TabLayout">
+    <style name="search_bar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">left|center</item>

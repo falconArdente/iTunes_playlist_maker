@@ -8,20 +8,14 @@
     android:orientation="vertical"
     tools:context=".SearchActivity">
 
-    <LinearLayout style="@style/header">
-
-        <Button
-            android:id="@+id/back_button"
-            style="@style/backButton" />
-
-        <TextView
-            style="@style/secondaryActivityHeaderTextView"
-            android:text="@string/search_small" />
-
-        <Space style="@style/empty_space_horizontal" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/header"
+        style="@style/secondaryActivityHeader"
+        app:navigationIcon="@drawable/back_arrow_for_header"
+        app:title="@string/search_small">
 
         <Button style="@style/hidden_search_button" />
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -33,7 +27,7 @@
             android:id="@+id/search_bar"
             style="@style/search_bar"
             android:importantForAutofill="no"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="LabelFor,TextContrastCheck,TouchTargetSizeCheck,DuplicateSpeakableTextCheck,VisualLintTextFieldSize" />
 
         <ImageView
             android:id="@+id/clear_icon"
@@ -41,11 +35,13 @@
             android:layout_height="@dimen/search_icon_size"
             android:layout_gravity="center|end"
             android:layout_marginHorizontal="@dimen/clear_button_horizontal_margin"
+            android:contentDescription="@string/clear_button_description"
             android:scaleType="centerCrop"
             android:scaleX="2.2"
             android:scaleY="2.2"
             android:src="@drawable/clear"
-            app:tint="?attr/colorOnSecondaryContainer" />
+            app:tint="?attr/colorOnSecondaryContainer"
+            tools:ignore="ImageContrastCheck" />
 
     </FrameLayout>
 </LinearLayout>

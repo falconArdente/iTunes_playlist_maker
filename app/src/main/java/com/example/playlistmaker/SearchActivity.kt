@@ -7,7 +7,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -88,7 +87,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun backButtonClickAttach() {
-        val backButton = findViewById<Button>(R.id.back_button)
-        backButton.setOnClickListener { finish() }
+        val header = findViewById<androidx.appcompat.widget.Toolbar>(R.id.header)
+        header.setNavigationOnClickListener { finish() }
     }
 }

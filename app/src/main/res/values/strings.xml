@@ -15,4 +15,5 @@
     <string name="playmarket_URL_base" translatable="false">https://play.google.com/store/apps/details?id=</string>
     <string name="go_back">вернуться на предыдущий экран</string>
     <string name="to_share_text">рекомендую приложение</string>
+    <string name="clear_button_description">нажмите, чтобы отчистить поисковой запрос</string>
 </resources>
