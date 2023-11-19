@@ -12,6 +12,7 @@ import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
+
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +31,9 @@ class SettingsActivity : AppCompatActivity() {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name)
-                var shareMessage = "\n${R.string.to_share_text}\n\n"
-                shareMessage =
-                    """
-                    ${shareMessage + "https://play.google.com/store/apps/details?id=" + applicationInfo.uid}
-                    """.trimIndent()
-                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+                val shareMessage = "\n${R.string.to_share_text}\n\n" +
+                        "$applicationContext.getString(R.string.playmarket_URL_base)" + applicationInfo.uid
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage.trimIndent())
                 startActivity(shareIntent)
             } catch (e: Exception) {
                 Log.e("SHARE", e.message.toString())

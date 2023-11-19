@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="MainActivityButton" parent="Base.Theme.PlaylistMaker">
+    <style name="MainActivityButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
@@ -92,9 +92,9 @@
     </style>
 
     <style name="search_bar" parent="@style/Widget.Material3.TabLayout">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">left|center</item>
         <item name="android:backgroundTint">?attr/colorSecondaryContainer</item>
         <item name="android:focusedByDefault">false</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
@@ -104,14 +104,12 @@
         <item name="android:textCursorDrawable">@drawable/cursor</item>
         <item name="android:textSize">@dimen/searchbox_text_size</item>
         <item name="android:textColor">@color/YP_Black</item>
-    </style>
-
-    <style name="search_bar_background">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">52dp</item>
-        <item name="android:layout_marginHorizontal">@dimen/search_padding</item>
-        <item name="android:backgroundTint">?attr/colorSecondaryContainer</item>
-        <item name="cornerRadius">@dimen/search_field_radius</item>
+        <item name="android:textColorHint">?attr/colorOnSecondaryContainer</item>
+        <item name="android:drawableStart">@drawable/search_icon</item>
+        <item name="android:drawablePadding">@dimen/icon_padding_btn</item>
+        <item name="android:drawableTint">?attr/colorOnSecondaryContainer</item>
+        <item name="android:layout_marginEnd">@dimen/search_bar_margin_right</item>
+        <item name="android:paddingStart">@dimen/additional_padding</item>
     </style>
 
 </resources>

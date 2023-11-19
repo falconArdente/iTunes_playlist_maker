@@ -12,7 +12,10 @@
     <dimen name="additional_padding">12dp</dimen>
     <dimen name="header_font_size">22sp</dimen>
     <dimen name="header_height">56dp</dimen>
-    <dimen name="search_padding">8dp</dimen>
+    <dimen name="search_padding">16dp</dimen>
     <dimen name="search_icon_size">16dp</dimen>
     <dimen name="search_text_lines_max">1</dimen>
+    <dimen name="clear_button_horizontal_margin">12dp</dimen>
+    <dimen name="clear_button_vertical_margin">10dp</dimen>
+    <dimen name="search_bar_margin_right">40dp</dimen>
 </resources>
