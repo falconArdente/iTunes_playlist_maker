@@ -9,7 +9,8 @@
     android:paddingBottom="@dimen/additional_padding">
 
     <FrameLayout
-        style="@style/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_height"
         android:padding="@dimen/small_padding_for_header">
 
         <TextView
@@ -30,18 +31,21 @@
         android:id="@+id/btn_search"
         style="@style/MainActivityButton"
         android:text="@string/search_small"
-        app:icon="@drawable/lens" />
+        app:icon="@drawable/lens"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btn_media"
         style="@style/MainActivityButton"
         android:text="@string/media"
-        app:icon="@drawable/media" />
+        app:icon="@drawable/media"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btn_settings"
         style="@style/MainActivityButton"
         android:text="@string/settings"
-        app:icon="@drawable/sets" />
+        app:icon="@drawable/sets"
+        tools:ignore="VisualLintButtonSize" />
 </LinearLayout>
 

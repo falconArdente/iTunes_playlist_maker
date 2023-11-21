@@ -17,22 +17,23 @@
         <Button style="@style/hidden_search_button" />
     </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
-        style="@style/setting_menu_row_layout"
-        android:layout_marginRight="@dimen/margin_padding_main"
-        android:layout_marginBottom="8dp"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         tools:ignore="RtlHardcoded">
-        <!-- правый отступ подобран с компромиссом между шаблоном и требованиями AS к эргономике переключателя -->
+
         <TextView
             style="@style/settingsTextView"
+            android:gravity="start|center"
             android:text="@string/dark_theme_title" />
-
-        <Space style="@style/empty_space_horizontal" />
-
+        <!-- правый отступ подобран с компромиссом между шаблоном и требованиями AS к эргономике переключателя -->
         <Switch
             android:id="@+id/is_night_theme_switch"
             android:layout_width="56dp"
             android:layout_height="48dp"
+            android:layout_gravity="end|center"
+            android:layout_marginRight="@dimen/margin_padding_main"
             android:thumbTint="?attr/thumbColor"
             android:trackTint="?attr/trackColor"
             android:trackTintMode="src_over"
@@ -40,60 +41,24 @@
         <!-- минимальный размер использовал
         исходя из требований AS к эргономичности переключателя
              !-->
+    </FrameLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/share_an_app"
-        style="@style/setting_menu_row_layout">
+        style="@style/settingsTextView"
+        android:text="@string/share"
+        app:drawableEndCompat="@drawable/share" />
 
-        <TextView
-            style="@style/settingsTextView"
-            android:text="@string/share" />
-
-        <Space style="@style/empty_space_horizontal" />
-
-        <ImageView
-            style="@style/icon_settings"
-            android:contentDescription="@string/share"
-            android:src="@drawable/share"
-            tools:ignore="ImageContrastCheck" />
-    </LinearLayout>
-
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/email_to_support"
-        style="@style/setting_menu_row_layout">
+        style="@style/settingsTextView"
+        android:text="@string/support"
+        app:drawableEndCompat="@drawable/support" />
 
-        <TextView
-            style="@style/settingsTextView"
-            android:text="@string/support">
-
-        </TextView>
-
-        <Space style="@style/empty_space_horizontal" />
-
-        <ImageView
-            style="@style/icon_settings"
-            android:contentDescription="@string/support"
-            android:src="@drawable/support"
-            tools:ignore="ImageContrastCheck" />
-    </LinearLayout>
-
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/view_agreement"
-        style="@style/setting_menu_row_layout">
+        style="@style/settingsTextView"
+        android:text="@string/agreement"
+        app:drawableEndCompat="@drawable/arr_forward" />
 
-        <TextView
-            style="@style/settingsTextView"
-            android:text="@string/agreement" />
-
-        <Space style="@style/empty_space_horizontal" />
-
-        <ImageView
-            style="@style/icon_settings"
-            android:contentDescription="@string/agreement"
-            android:src="@drawable/arr_forward"
-            tools:ignore="ImageContrastCheck" />
-
-    </LinearLayout>
 </LinearLayout>

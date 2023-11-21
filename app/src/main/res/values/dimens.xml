@@ -19,4 +19,6 @@
     <dimen name="clear_button_vertical_margin">10dp</dimen>
     <dimen name="search_bar_margin_right">40dp</dimen>
     <dimen name="small_padding_for_header">4dp</dimen>
+    <dimen name="settings_row_height">61dp</dimen>
+    <dimen name="vertical_padding_for_search_frame">8dp</dimen>
 </resources>

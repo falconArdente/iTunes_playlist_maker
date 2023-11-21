@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.LinearLayout
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -24,14 +23,14 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun shareAnAppAttach() {
-        val shareButton = findViewById<LinearLayout>(R.id.share_an_app)
+        val shareButton = findViewById<androidx.appcompat.widget.AppCompatTextView>(R.id.share_an_app)
         shareButton.setOnClickListener {
             try {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name)
                 val shareMessage = "\n${R.string.to_share_text}\n\n" +
-                        "$applicationContext.getString(R.string.playmarket_URL_base)" + applicationInfo.uid
+                        applicationContext.getString(R.string.playmarket_URL_base) + applicationInfo.uid
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage.trimIndent())
                 startActivity(shareIntent)
             } catch (e: Exception) {
@@ -72,7 +71,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun contactSupportAttach() {
-        val contactToSupportButton = findViewById<LinearLayout>(R.id.email_to_support)
+        val contactToSupportButton = findViewById<androidx.appcompat.widget.AppCompatTextView>(R.id.email_to_support)
         contactToSupportButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/html"
@@ -84,7 +83,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun viewAgreementAttach() {
-        val viewAgreementButton = findViewById<LinearLayout>(R.id.view_agreement)
+        val viewAgreementButton = findViewById<androidx.appcompat.widget.AppCompatTextView>(R.id.view_agreement)
         viewAgreementButton.setOnClickListener {
             val url: String = resources.getString(R.string.agreement_URL)
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
