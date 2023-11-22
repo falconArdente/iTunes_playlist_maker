@@ -1,8 +1,7 @@
 package com.example.playlistmaker
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 
 class MediaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,8 +11,8 @@ class MediaActivity : AppCompatActivity() {
     }
 
     private fun backButtonClickAttach() {
-        val backButton = findViewById<Button>(R.id.back_button)
-        backButton.setOnClickListener {
+        val header = findViewById<androidx.appcompat.widget.Toolbar>(R.id.header)
+        header.setNavigationOnClickListener {
             finish()
         }
     }
