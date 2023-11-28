@@ -17,6 +17,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_DEF = ""
     }
 
+    private val tracks: ArrayList<Track> = arrayListOf()
     private var searchPromptString: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +25,7 @@ class SearchActivity : AppCompatActivity() {
         backButtonClickAttach()
         searchBarTextWatcherAttach()
         clearTextAttach()
+        Utility.toMokATrackList(tracks)
     }
 
     private fun clearTextAttach() {
