@@ -16,4 +16,7 @@
     <string name="go_back">вернуться на предыдущий экран</string>
     <string name="to_share_text">рекомендую приложение</string>
     <string name="clear_button_description">нажмите, чтобы отчистить поисковой запрос</string>
+    <string name="track_title_mok">Наименование композиции</string>
+    <string name="artist_name_mok">Исполнитель</string>
+    <string name="track_duration_mok" translatable="false">01:10</string>
 </resources>

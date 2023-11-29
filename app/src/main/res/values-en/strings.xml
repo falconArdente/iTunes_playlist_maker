@@ -11,4 +11,6 @@
     <string name="go_back">go to previous screen</string>
     <string name="to_share_text">let me recommend you</string>
     <string name="clear_button_description">push to clear a prompt</string>
+    <string name="track_title_mok">Track title</string>
+    <string name="artist_name_mok">Artist</string>
 </resources>
