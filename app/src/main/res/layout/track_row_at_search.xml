@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout_track_row"
     android:layout_width="match_parent"
     android:layout_height="@dimen/track_row_height"
@@ -9,7 +10,8 @@
 
     <ImageView
         android:id="@+id/image_track"
-        style="@style/track_row_image" />
+        style="@style/track_row_image"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:id="@+id/track_texts_host"
@@ -27,7 +29,8 @@
             android:layout_height="@dimen/track_row_track_composition_name_height"
             android:text="@string/track_title_mok"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="@dimen/track_row_text_size_big" />
+            android:textSize="@dimen/track_row_text_size_big"
+            tools:ignore="TextSizeCheck" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,13 +41,15 @@
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/track_row_text"
-                android:text="@string/artist_name_mok" />
+                android:text="@string/artist_name_mok"
+                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:id="@+id/track_time"
                 style="@style/track_row_text"
                 android:text="@string/track_duration_mok"
-                app:drawableStartCompat="@drawable/ic_point_centered" />
+                app:drawableStartCompat="@drawable/ic_point_centered"
+                tools:ignore="TextContrastCheck" />
         </LinearLayout>
 
     </LinearLayout>
@@ -56,5 +61,6 @@
         android:layout_gravity="end|center"
         android:layout_marginHorizontal="@dimen/go_button_horizontal_margin"
         android:src="@drawable/arr_forward"
-        app:tint="?attr/colorSecondaryVariant" />
+        app:tint="?attr/colorSecondaryVariant"
+        tools:ignore="ContentDescription,ImageContrastCheck" />
 </LinearLayout>

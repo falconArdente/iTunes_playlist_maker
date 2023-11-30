@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -37,12 +38,11 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         .inflate(R.layout.track_row_at_search, parent, false)//built-in name of object is itemView
 ) {
 
-    private val rootLayout: LinearLayout = itemView.findViewById(R.id.root_layout_track_row)
     private val image: ImageView = itemView.findViewById(R.id.image_track)
     private val trackTitle: TextView = itemView.findViewById(R.id.track_title)
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
     private val duration: TextView = itemView.findViewById(R.id.track_time)
-    private val textHost:LinearLayout=itemView.findViewById(R.id.track_texts_host)
+    private val textHost: LinearLayout = itemView.findViewById(R.id.track_texts_host)
     fun bind(item: Track) {
         Glide.with(itemView)
             .load(item.artworkUrl100)
@@ -51,11 +51,12 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .centerCrop()
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.track_row_image_corners)))
             .into(image)
-        trackTitle.text = item.trackName
-        artistName.text = item.artistName
         duration.text = item.trackTime
-        //toDo
-        println(artistName.width.toString())
+        textHost.doOnPreDraw {
+            trackTitle.text = Utility.toCutTextForTrackRow(it as ViewGroup, item.trackName, false)
+            artistName.text =
+                Utility.toCutTextForTrackRow(it, item.artistName, true)
+        }
     }
 }
 

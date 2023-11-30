@@ -1,6 +1,16 @@
 package com.example.playlistmaker
 
+import android.view.ViewGroup
+
 object Utility {
+    fun toCutTextForTrackRow(container: ViewGroup, text: String, isArtistName: Boolean): String {
+        val divider: Int = if (isArtistName) 17 else 21
+        val countOfLettersToDraw = (container.width / divider)
+        return if (text.length > countOfLettersToDraw) text.substring(
+            0, countOfLettersToDraw
+        ) + " .." else text
+    }
+
     fun toMokATrackList(tracks: ArrayList<Track>) {
         tracks.add(
             Track(
@@ -44,8 +54,8 @@ object Utility {
         )
         tracks.add(
             Track(
-                trackName = "Bubble Gum Music //2 listeners per this month",
-                artistName = "The Rock & Roll Dubble Bubble Trading Card Co. of Philadelphia-19141",
+                trackName = "Bubble Gum Music //2 listeners per this mon th",
+                artistName = "The Rock & Roll Dubble Bubble Trading Card Co. of Phil adel phia - 19141",
                 trackTime = "2:46",
                 artworkUrl100 = "https://i.pinimg.com/originals/82/72/f7/8272f702e370be69133bd34286d4acec.jpg"
             )
