@@ -25,7 +25,7 @@ class SearchActivity : AppCompatActivity() {
         backButtonClickAttach()
         searchBarTextWatcherAttach()
         clearTextAttach()
-        Utility.toMokATrackList(tracks)
+
     }
 
     private fun clearTextAttach() {
@@ -69,6 +69,7 @@ class SearchActivity : AppCompatActivity() {
         val searchBar = findViewById<EditText>(R.id.search_bar)
         val xMark = findViewById<ImageView>(R.id.clear_icon)
         if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
+        startUpViewHolder()
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -91,5 +92,13 @@ class SearchActivity : AppCompatActivity() {
     private fun backButtonClickAttach() {
         val header = findViewById<androidx.appcompat.widget.Toolbar>(R.id.header)
         header.setNavigationOnClickListener { finish() }
+    }
+
+    private fun startUpViewHolder() {
+        Utility.toMokATrackList(tracks)
+        val tracksAdapter = TrackVHadapter(tracks)
+        val tracksRecyclerView =
+            findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.tracks_recycler_view)
+        tracksRecyclerView.adapter = tracksAdapter
     }
 }

@@ -23,6 +23,7 @@
     <dimen name="settings_row_height">61dp</dimen>
     <dimen name="vertical_padding_for_search_frame">8dp</dimen>
     <dimen name="track_row_image_size">45dp</dimen>
+    <dimen name="track_row_image_corners">2dp</dimen>
     <dimen name="track_row_height">45dp</dimen>
     <dimen name="track_row_horizontal_margin">8dp</dimen>
     <dimen name="track_row_track_composition_name_height">19dp</dimen>

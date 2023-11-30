@@ -4,14 +4,15 @@
     android:id="@+id/root_layout_track_row"
     android:layout_width="match_parent"
     android:layout_height="@dimen/track_row_height"
-    android:orientation="horizontal"
-    android:background="?attr/colorSecondary">
+    android:background="?attr/colorSecondary"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/image_track"
         style="@style/track_row_image" />
 
     <LinearLayout
+        android:id="@+id/track_texts_host"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -23,9 +24,9 @@
         <TextView
             android:id="@+id/track_title"
             style="@style/track_row_text"
-            android:textColor="?attr/colorOnSecondary"
             android:layout_height="@dimen/track_row_track_composition_name_height"
             android:text="@string/track_title_mok"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="@dimen/track_row_text_size_big" />
 
         <LinearLayout
@@ -55,5 +56,5 @@
         android:layout_gravity="end|center"
         android:layout_marginHorizontal="@dimen/go_button_horizontal_margin"
         android:src="@drawable/arr_forward"
-        app:tint="?attr/colorSecondaryVariant"/>
+        app:tint="?attr/colorSecondaryVariant" />
 </LinearLayout>

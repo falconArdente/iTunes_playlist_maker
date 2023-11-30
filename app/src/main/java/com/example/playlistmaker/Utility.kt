@@ -34,12 +34,20 @@ object Utility {
                 artworkUrl100 = "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
             )
         )
-        tracks.add(//MambO number 5!
+        tracks.add(
             Track(
                 trackName = "Sweet Child O'Mine",
                 artistName = "Guns N' Roses",
                 trackTime = "5:03",
                 artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
+            )
+        )
+        tracks.add(
+            Track(
+                trackName = "Bubble Gum Music //2 listeners per this month",
+                artistName = "The Rock & Roll Dubble Bubble Trading Card Co. of Philadelphia-19141",
+                trackTime = "2:46",
+                artworkUrl100 = "https://i.pinimg.com/originals/82/72/f7/8272f702e370be69133bd34286d4acec.jpg"
             )
         )
     }
