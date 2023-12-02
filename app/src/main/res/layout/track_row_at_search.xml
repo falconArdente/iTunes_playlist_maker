@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/image_track"
         style="@style/track_row_image"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,ImageContrastCheck" />
 
     <LinearLayout
         android:id="@+id/track_texts_host"
@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginHorizontal="@dimen/track_row_horizontal_margin"
+        android:layout_marginVertical="@dimen/track_row_writings_vertical_margin"
         android:layout_weight="1"
         android:gravity="start"
         android:orientation="vertical">
@@ -33,23 +34,32 @@
             tools:ignore="TextSizeCheck" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/track_row_track_artist_name_height"
             android:gravity="start|center"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/track_row_text"
+                android:layout_weight="1"
                 android:text="@string/artist_name_mok"
-                tools:ignore="TextContrastCheck" />
+                tools:ignore="InefficientWeight,TextContrastCheck,TextSizeCheck" />
+
+            <ImageView
+                android:layout_width="@dimen/track_row_track_artist_name_height"
+                android:layout_height="@dimen/track_row_track_artist_name_height"
+                android:src="@drawable/ic_point_centered"
+                app:tint="?attr/colorSecondaryVariant"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/track_time"
                 style="@style/track_row_text"
+                android:layout_width="@dimen/track_row_duration_time_width"
+                android:ellipsize="none"
                 android:text="@string/track_duration_mok"
-                app:drawableStartCompat="@drawable/ic_point_centered"
-                tools:ignore="TextContrastCheck" />
+                tools:ignore="TextContrastCheck,TextSizeCheck" />
         </LinearLayout>
 
     </LinearLayout>
@@ -59,7 +69,9 @@
         android:layout_width="@dimen/icon_size_btn"
         android:layout_height="@dimen/icon_size_btn"
         android:layout_gravity="end|center"
-        android:layout_marginHorizontal="@dimen/go_button_horizontal_margin"
+        android:layout_marginTop="@dimen/track_row_go_button_margin_top"
+        android:layout_marginEnd="@dimen/go_button_right_margin"
+        android:layout_marginBottom="@dimen/track_row_go_button_margin_bottom"
         android:src="@drawable/arr_forward"
         app:tint="?attr/colorSecondaryVariant"
         tools:ignore="ContentDescription,ImageContrastCheck" />
