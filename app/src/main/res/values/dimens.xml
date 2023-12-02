@@ -16,9 +16,24 @@
     <dimen name="search_icon_size">16dp</dimen>
     <dimen name="search_text_lines_max">1</dimen>
     <dimen name="clear_button_horizontal_margin">12dp</dimen>
+    <dimen name="go_button_right_margin">12dp</dimen>
     <dimen name="clear_button_vertical_margin">10dp</dimen>
     <dimen name="search_bar_margin_right">40dp</dimen>
     <dimen name="small_padding_for_header">4dp</dimen>
-    <dimen name="settings_row_height">61dp</dimen>
+    <dimen name="settings_row_height">60dp</dimen>
     <dimen name="vertical_padding_for_search_frame">8dp</dimen>
+    <dimen name="track_row_image_size">45dp</dimen>
+    <dimen name="track_row_vertical_padding">8dp</dimen>
+    <dimen name="track_row_image_corners">2dp</dimen>
+    <dimen name="track_row_start_margin">12dp</dimen>
+    <dimen name="track_row_height">61dp</dimen>
+    <dimen name="track_row_horizontal_margin">8dp</dimen>
+    <dimen name="track_row_writings_vertical_margin">14dp</dimen>
+    <dimen name="track_row_track_composition_name_height">20dp</dimen>
+    <dimen name="track_row_track_artist_name_height">12dp</dimen>
+    <dimen name="track_row_duration_time_width">64dp</dimen>
+    <dimen name="track_row_text_size_big">16sp</dimen>
+    <dimen name="track_row_text_size_small">11sp</dimen>
+    <dimen name="track_row_go_button_margin_top">18dp</dimen>
+    <dimen name="track_row_go_button_margin_bottom">19dp</dimen>
 </resources>

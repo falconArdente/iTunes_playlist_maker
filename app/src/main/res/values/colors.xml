@@ -8,4 +8,5 @@
     <color name="YP_White">#FFFFFF</color>
     <color name="YP_Text_Gray">#AEAFB4</color>
     <color name="YP_Light_Gray">#E6E8EB</color>
+    <color name="transparent">#00000000</color>
 </resources>

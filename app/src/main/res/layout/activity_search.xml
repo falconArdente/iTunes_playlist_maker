@@ -45,4 +45,11 @@
             tools:ignore="ImageContrastCheck" />
 
     </FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tracks_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/track_row_at_search"/>
 </LinearLayout>

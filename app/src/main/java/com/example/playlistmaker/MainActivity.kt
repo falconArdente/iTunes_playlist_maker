@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
         searchButtonAttach()
         mediaButtonAttach()
         settingsButtonAttach()
+
     }
 
     private fun searchButtonAttach() {

@@ -17,6 +17,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_DEF = ""
     }
 
+    private val tracks: ArrayList<Track> = arrayListOf()
     private var searchPromptString: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +30,6 @@ class SearchActivity : AppCompatActivity() {
     private fun clearTextAttach() {
         val searchBar = findViewById<EditText>(R.id.search_bar)
         val xMark = findViewById<ImageView>(R.id.clear_icon)
-
         xMark.setOnClickListener {
             searchBar.setText("")
             this.currentFocus?.let { view ->
@@ -44,7 +44,7 @@ class SearchActivity : AppCompatActivity() {
         val xMark = findViewById<ImageView>(R.id.clear_icon)
         val searchBarTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -67,6 +67,7 @@ class SearchActivity : AppCompatActivity() {
         val searchBar = findViewById<EditText>(R.id.search_bar)
         val xMark = findViewById<ImageView>(R.id.clear_icon)
         if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
+        startUpViewHolder()
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -89,5 +90,13 @@ class SearchActivity : AppCompatActivity() {
     private fun backButtonClickAttach() {
         val header = findViewById<androidx.appcompat.widget.Toolbar>(R.id.header)
         header.setNavigationOnClickListener { finish() }
+    }
+
+    private fun startUpViewHolder() {
+        Utility.toMokATrackList(tracks)
+        val tracksAdapter = TrackAdapter(tracks)
+        val tracksRecyclerView =
+            findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.tracks_recycler_view)
+        tracksRecyclerView.adapter = tracksAdapter
     }
 }
