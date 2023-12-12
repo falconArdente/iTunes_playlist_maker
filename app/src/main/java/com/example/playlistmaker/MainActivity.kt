@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         searchButtonAttach()
         mediaButtonAttach()
         settingsButtonAttach()
-
     }
 
     private fun searchButtonAttach() {
@@ -38,5 +37,4 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
     }
-
 }

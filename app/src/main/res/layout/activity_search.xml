@@ -27,6 +27,8 @@
         <EditText
             android:id="@+id/search_bar"
             style="@style/search_bar"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:importantForAutofill="no"
             tools:ignore="LabelFor,TextContrastCheck,TouchTargetSizeCheck,DuplicateSpeakableTextCheck,VisualLintTextFieldSize" />
 
