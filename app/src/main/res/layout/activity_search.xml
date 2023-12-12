@@ -28,8 +28,8 @@
             android:id="@+id/search_bar"
             style="@style/search_bar"
             android:imeOptions="actionDone"
-            android:singleLine="true"
             android:importantForAutofill="no"
+            android:singleLine="true"
             tools:ignore="LabelFor,TextContrastCheck,TouchTargetSizeCheck,DuplicateSpeakableTextCheck,VisualLintTextFieldSize" />
 
         <ImageView
@@ -47,11 +47,20 @@
             tools:ignore="ImageContrastCheck" />
 
     </FrameLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tracks_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/track_row_at_search"/>
+        tools:listitem="@layout/track_row_at_search" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/placeholder_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_vertical"
+        android:visibility="gone"
+        tools:layout="@layout/search_placeholder_frame" />
 </LinearLayout>
