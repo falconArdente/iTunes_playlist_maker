@@ -61,11 +61,11 @@
         android:id="@+id/placeholder_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/search_placeholder_top_margin"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/search_placeholder_top_margin"
         android:gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <FrameLayout
             android:layout_width="@dimen/search_placeholder_size"
@@ -73,29 +73,18 @@
             android:layout_marginBottom="@dimen/search_status_to_writings_distance">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="9dp"
-                android:layout_marginTop="3dp"
-                android:src="@drawable/mus_sign_left"
-                tools:ignore="ContentDescription,RtlHardcoded" />
+                style="@style/search_placeholder_left_part"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/status_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="37dp"
-                android:layout_marginTop="28dp"
+                style="@style/search_placeholder_main_part"
                 android:src="@drawable/sad_smile"
-                tools:ignore="ContentDescription,RtlHardcoded" />
+                tools:ignore="ContentDescription" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/mus_sign_right"
-                tools:ignore="ContentDescription,RtlHardcoded" />
+                style="@style/search_placeholder_right_part"
+                tools:ignore="ContentDescription" />
         </FrameLayout>
 
         <TextView

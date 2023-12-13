@@ -103,4 +103,27 @@
         <item name="android:layout_marginVertical">@dimen/track_row_vertical_padding</item>
         <item name="android:src">@drawable/placeholder_search_bar</item>
     </style>
+
+    <style name="search_placeholder_left_part">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">9dp</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:src">@drawable/mus_sign_left</item>
+    </style>
+
+    <style name="search_placeholder_main_part">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">37dp</item>
+        <item name="android:layout_marginTop">28dp</item>
+    </style>
+
+    <style name="search_placeholder_right_part">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">80dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:src">@drawable/mus_sign_right</item>
+    </style>
 </resources>

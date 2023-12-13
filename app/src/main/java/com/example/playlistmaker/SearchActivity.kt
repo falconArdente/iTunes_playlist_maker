@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -13,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,11 +25,11 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
+        const val BASE_URL="https://itunes.apple.com"
     }
 
-    private val url: String = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
-        .baseUrl(url)
+        .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val iTunesService = retrofit.create(ITunesApi::class.java)
@@ -63,12 +65,12 @@ class SearchActivity : AppCompatActivity() {
         if (searchBar.text.isNotEmpty()) {
             iTunesService.findTrack(searchBar.text.toString()).enqueue(object :
                 Callback<TrackSearchResponse> {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<TrackSearchResponse>,
                     response: Response<TrackSearchResponse>
                 ) {
                     if (response.code() == 200) {
-                        println("data received at 200")
                         tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracks.addAll(response.body()?.results!!)
@@ -76,7 +78,6 @@ class SearchActivity : AppCompatActivity() {
                         }
                         if (tracks.isEmpty()) {
                             showTracks(true)
-
                         } else {
                             showTracks()
                         }
@@ -104,7 +105,7 @@ class SearchActivity : AppCompatActivity() {
         val statusImageView = findViewById<ImageView>(R.id.status_image)
         text.text = applicationContext.getString(R.string.search_status_connection_problem)
         updateButton.visibility = View.VISIBLE
-        statusImageView.setImageDrawable(applicationContext.getDrawable(R.drawable.no_wifi))
+        statusImageView.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.no_wifi))
         placeholderFrame.visibility = View.VISIBLE
     }
 
@@ -118,9 +119,14 @@ class SearchActivity : AppCompatActivity() {
         if (tracksIsNone) {
             trackListRecyclerView.visibility = View.GONE
             val text = findViewById<TextView>(R.id.status_text)
-            text.text = applicationContext.getString(R.string.search_status_nothing)
+            text.text = this.getString(R.string.search_status_nothing)
             updateButton.visibility = View.GONE
-            statusImageView.setImageDrawable(applicationContext.getDrawable(R.drawable.sad_smile))
+            statusImageView.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.sad_smile
+                )
+            )
             placeholderFrame.visibility = View.VISIBLE
         } else {
             trackListRecyclerView.visibility = View.VISIBLE
@@ -145,15 +151,16 @@ class SearchActivity : AppCompatActivity() {
         val xMark = findViewById<ImageView>(R.id.clear_icon)
         val trackListRecyclerView =
             findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.tracks_recycler_view)
+        val placeholderFrame =
+            findViewById<LinearLayout>(R.id.placeholder_frame)
         val searchBarTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     xMark.visibility = View.GONE
-                    trackListRecyclerView.visibility=View.GONE
+                    trackListRecyclerView.visibility = View.GONE
+                    placeholderFrame.visibility = View.GONE
                 } else {
                     xMark.visibility = View.VISIBLE
                 }
