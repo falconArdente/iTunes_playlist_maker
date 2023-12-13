@@ -42,4 +42,5 @@
     <dimen name="update_button_text_size">14sp</dimen>
     <dimen name="update_button_corners">54dp</dimen>
     <dimen name="search_status_writings_to_button_distance">24dp</dimen>
+    <dimen name="search_placeholder_top_margin">102dp</dimen>
 </resources>

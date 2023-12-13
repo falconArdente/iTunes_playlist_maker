@@ -35,10 +35,10 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
     private val duration: TextView = itemView.findViewById(R.id.track_time)
     fun bind(item: Track) {
-        duration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.duration.toLong())
+        duration.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.duration.toLong())
         trackTitle.text = item.trackName
         artistName.text = item.artistName
-
         Glide.with(itemView)
             .load(item.artworkUrl100)
             .placeholder(R.drawable.placeholder_search_bar)

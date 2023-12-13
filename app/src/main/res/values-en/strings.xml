@@ -14,6 +14,6 @@
     <string name="track_title_mok">Track title</string>
     <string name="artist_name_mok">Artist</string>
     <string name="search_status_nothing">Did found nothing</string>
-    <string name="search_status_connection_problem">Connection problem Download failed. Please, check Your Internet communication.</string>
+    <string name="search_status_connection_problem">Connection problem\nDownload failed. Please, check \nYour Internet communication.</string>
     <string name="update_title">Update</string>
 </resources>
