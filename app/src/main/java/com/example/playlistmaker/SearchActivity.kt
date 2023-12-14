@@ -25,7 +25,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
-        const val BASE_URL="https://itunes.apple.com"
+        const val BASE_URL = "https://itunes.apple.com"
     }
 
     private val retrofit = Retrofit.Builder()
@@ -43,10 +43,6 @@ class SearchActivity : AppCompatActivity() {
         searchBarTextWatcherAttach()
         searchBarSetActionDone()//temporary use only
         clearTextAttach()
-        updateButtonClickAttach()
-    }
-
-    private fun updateButtonClickAttach() {
         findViewById<TextView>(R.id.update_button).setOnClickListener { sendRequest() }
     }
 
@@ -204,7 +200,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startUpViewHolder() {
-        Utility.toMokATrackList(tracks)
         val tracksRecyclerView =
             findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.tracks_recycler_view)
         tracksRecyclerView.adapter = tracksAdapter
