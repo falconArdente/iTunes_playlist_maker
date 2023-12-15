@@ -27,21 +27,25 @@
         <TextView
             android:id="@+id/track_title"
             style="@style/track_row_text"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/track_row_track_composition_name_height"
             android:text="@string/track_title_mok"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="@dimen/track_row_text_size_big"
             tools:ignore="TextSizeCheck" />
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="@dimen/track_row_track_artist_name_height"
             android:gravity="start|center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="TextSizeCheck">
 
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/track_row_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/artist_name_mok"
                 tools:ignore="InefficientWeight,TextContrastCheck,TextSizeCheck" />
@@ -57,10 +61,9 @@
                 android:id="@+id/track_time"
                 style="@style/track_row_text"
                 android:layout_width="@dimen/track_row_duration_time_width"
-                android:ellipsize="none"
                 android:text="@string/track_duration_mok"
                 tools:ignore="TextContrastCheck,TextSizeCheck" />
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </LinearLayout>
 

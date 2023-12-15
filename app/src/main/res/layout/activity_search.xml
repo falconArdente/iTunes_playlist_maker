@@ -54,7 +54,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/track_row_at_search" />
 
     <LinearLayout
@@ -73,17 +72,10 @@
             android:layout_marginBottom="@dimen/search_status_to_writings_distance">
 
             <ImageView
-                style="@style/search_placeholder_left_part"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
                 android:id="@+id/status_image"
-                style="@style/search_placeholder_main_part"
-                android:src="@drawable/sad_smile"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                style="@style/search_placeholder_right_part"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_sad_smile_mus"
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 

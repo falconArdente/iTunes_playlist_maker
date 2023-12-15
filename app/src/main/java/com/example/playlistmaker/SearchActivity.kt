@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -15,39 +16,51 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
-        const val BASE_URL = "https://itunes.apple.com"
     }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunesService = retrofit.create(ITunesApi::class.java)
+    private val iTunesService = Utility.initItunesService()
     private val tracks: ArrayList<Track> = arrayListOf()
     private val tracksAdapter = TrackAdapter(tracks)
     private var searchPromptString: String = ""
+
+    private lateinit var placeholderFrame: LinearLayout
+    private lateinit var trackListRecyclerView: RecyclerView
+    private lateinit var searchBar: EditText
+    private lateinit var xMark: ImageView
+    private lateinit var updateButton: TextView
+    private lateinit var statusImageView: ImageView
+    private lateinit var text: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        placeholderFrame = findViewById(R.id.placeholder_frame)
+        trackListRecyclerView = findViewById(R.id.tracks_recycler_view)
+        searchBar = findViewById(R.id.search_bar)
+        xMark = findViewById(R.id.clear_icon)
+        updateButton = findViewById(R.id.update_button)
+        statusImageView = findViewById(R.id.status_image)
+        text = findViewById(R.id.status_text)
+        updateButton = findViewById(R.id.update_button)
         backButtonClickAttach()
         searchBarTextWatcherAttach()
         searchBarSetActionDone()//temporary use only
         clearTextAttach()
+        startUpViewHolder()
         findViewById<TextView>(R.id.update_button).setOnClickListener { sendRequest() }
     }
 
     private fun searchBarSetActionDone() {
-        val searchBar = findViewById<EditText>(R.id.search_bar)
         searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 sendRequest()
@@ -57,7 +70,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun sendRequest() {
-        val searchBar = findViewById<EditText>(R.id.search_bar)
         if (searchBar.text.isNotEmpty()) {
             iTunesService.findTrack(searchBar.text.toString()).enqueue(object :
                 Callback<TrackSearchResponse> {
@@ -79,6 +91,7 @@ class SearchActivity : AppCompatActivity() {
                         }
                     } else {
                         showErrorSign()
+                        Log.e("servRequests", "$response.code()")
                     }
                 }
 
@@ -91,27 +104,19 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showErrorSign() {
-        val placeholderFrame =
-            findViewById<LinearLayout>(R.id.placeholder_frame)
-        val trackListRecyclerView =
-            findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.tracks_recycler_view)
-        val updateButton = findViewById<TextView>(R.id.update_button)
         trackListRecyclerView.visibility = View.GONE
-        val text = findViewById<TextView>(R.id.status_text)
-        val statusImageView = findViewById<ImageView>(R.id.status_image)
         text.text = applicationContext.getString(R.string.search_status_connection_problem)
         updateButton.visibility = View.VISIBLE
-        statusImageView.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.no_wifi))
+        statusImageView.setImageDrawable(
+            AppCompatResources.getDrawable(
+                this,
+                R.drawable.image_no_wifi_mus
+            )
+        )
         placeholderFrame.visibility = View.VISIBLE
     }
 
     private fun showTracks(tracksIsNone: Boolean = false) {
-        val placeholderFrame =
-            findViewById<LinearLayout>(R.id.placeholder_frame)
-        val trackListRecyclerView =
-            findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.tracks_recycler_view)
-        val updateButton = findViewById<TextView>(R.id.update_button)
-        val statusImageView = findViewById<ImageView>(R.id.status_image)
         if (tracksIsNone) {
             trackListRecyclerView.visibility = View.GONE
             val text = findViewById<TextView>(R.id.status_text)
@@ -120,7 +125,7 @@ class SearchActivity : AppCompatActivity() {
             statusImageView.setImageDrawable(
                 AppCompatResources.getDrawable(
                     this,
-                    R.drawable.sad_smile
+                    R.drawable.image_sad_smile_mus
                 )
             )
             placeholderFrame.visibility = View.VISIBLE
@@ -131,8 +136,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clearTextAttach() {
-        val searchBar = findViewById<EditText>(R.id.search_bar)
-        val xMark = findViewById<ImageView>(R.id.clear_icon)
         xMark.setOnClickListener {
             searchBar.setText("")
             this.currentFocus?.let { view ->
@@ -143,12 +146,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchBarTextWatcherAttach() {
-        val searchBar = findViewById<EditText>(R.id.search_bar)
-        val xMark = findViewById<ImageView>(R.id.clear_icon)
-        val trackListRecyclerView =
-            findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.tracks_recycler_view)
-        val placeholderFrame =
-            findViewById<LinearLayout>(R.id.placeholder_frame)
         val searchBarTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -171,10 +168,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val searchBar = findViewById<EditText>(R.id.search_bar)
-        val xMark = findViewById<ImageView>(R.id.clear_icon)
         if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
-        startUpViewHolder()
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -187,7 +181,6 @@ class SearchActivity : AppCompatActivity() {
         persistentState: PersistableBundle?
     ) {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
-        val searchBar = findViewById<EditText>(R.id.search_bar)
         searchBar.setText(
             savedInstanceState?.getString(SEARCH_PROMPT)
                 ?: SEARCH_DEF
@@ -200,8 +193,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startUpViewHolder() {
-        val tracksRecyclerView =
-            findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.tracks_recycler_view)
-        tracksRecyclerView.adapter = tracksAdapter
+        trackListRecyclerView.adapter = tracksAdapter
+        trackListRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 }
