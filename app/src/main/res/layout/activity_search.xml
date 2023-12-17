@@ -27,7 +27,9 @@
         <EditText
             android:id="@+id/search_bar"
             style="@style/search_bar"
+            android:imeOptions="actionDone"
             android:importantForAutofill="no"
+            android:singleLine="true"
             tools:ignore="LabelFor,TextContrastCheck,TouchTargetSizeCheck,DuplicateSpeakableTextCheck,VisualLintTextFieldSize" />
 
         <ImageView
@@ -45,11 +47,57 @@
             tools:ignore="ImageContrastCheck" />
 
     </FrameLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tracks_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/track_row_at_search"/>
+        android:visibility="gone"
+        tools:listitem="@layout/track_row_at_search" />
+
+    <LinearLayout
+        android:id="@+id/placeholder_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/search_placeholder_top_margin"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="@dimen/search_placeholder_size"
+            android:layout_height="@dimen/search_placeholder_size"
+            android:layout_marginBottom="@dimen/search_status_to_writings_distance">
+
+            <ImageView
+                android:id="@+id/status_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_sad_smile_mus"
+                tools:ignore="ContentDescription" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_medium"
+            android:gravity="center_horizontal|top"
+            android:text="@string/search_status_nothing"
+            android:textSize="@dimen/search_status_text_size" />
+
+        <TextView
+            android:id="@+id/update_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/search_status_writings_to_button_distance"
+            android:background="@drawable/update_button_background"
+            android:fontFamily="@font/ys_display_regular"
+            android:gravity="center"
+            android:text="@string/update_title"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="@dimen/update_button_text_size" />
+    </LinearLayout>
 </LinearLayout>

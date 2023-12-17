@@ -36,4 +36,11 @@
     <dimen name="track_row_text_size_small">11sp</dimen>
     <dimen name="track_row_go_button_margin_top">18dp</dimen>
     <dimen name="track_row_go_button_margin_bottom">19dp</dimen>
+    <dimen name="search_placeholder_size">120dp</dimen>
+    <dimen name="search_status_to_writings_distance">16dp</dimen>
+    <dimen name="search_status_text_size">19sp</dimen>
+    <dimen name="update_button_text_size">14sp</dimen>
+    <dimen name="update_button_corners">54dp</dimen>
+    <dimen name="search_status_writings_to_button_distance">24dp</dimen>
+    <dimen name="search_placeholder_top_margin">102dp</dimen>
 </resources>
