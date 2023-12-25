@@ -8,5 +8,4 @@ data class Track(
     @SerializedName("trackTimeMillis")
     val duration: String,
     val artworkUrl100: String,
-
 )
