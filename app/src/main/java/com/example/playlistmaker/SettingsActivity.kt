@@ -1,12 +1,10 @@
 package com.example.playlistmaker
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -45,18 +43,18 @@ class SettingsActivity : AppCompatActivity() {
         header.setNavigationOnClickListener { startActivity(goMain) }
     }
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private fun switchListenerAttach() {
-        val darkThemeSwitch = findViewById<Switch>(R.id.is_night_theme_switch)
+        val darkThemeSwitch =
+            findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.is_night_theme_switch)
         darkThemeSwitch.setOnCheckedChangeListener { switch, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
         }
     }
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onResume() {
         super.onResume()
-        val darkThemeSwitch = findViewById<Switch>(R.id.is_night_theme_switch)
+        val darkThemeSwitch =
+            findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.is_night_theme_switch)
         val isNightModeOutside =
             resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         darkThemeSwitch.isChecked = isNightModeOutside
