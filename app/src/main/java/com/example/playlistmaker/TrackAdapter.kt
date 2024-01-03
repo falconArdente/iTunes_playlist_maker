@@ -1,9 +1,11 @@
 package com.example.playlistmaker
 
 import android.icu.text.SimpleDateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -34,6 +36,7 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     private val trackTitle: TextView = itemView.findViewById(R.id.track_title)
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
     private val duration: TextView = itemView.findViewById(R.id.track_time)
+    private val rootLayout: LinearLayout = itemView.findViewById(R.id.root_layout_track_row)
     fun bind(item: Track) {
         duration.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.duration.toLong())
@@ -46,5 +49,9 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .centerCrop()
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.track_row_image_corners)))
             .into(image)
+        rootLayout.setOnClickListener {
+            App.history.addTrack(item)
+            Log.d("VAULT","Add to history: "+ App.history.tracks.last().trackName)
+        }
     }
 }

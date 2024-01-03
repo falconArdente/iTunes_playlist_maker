@@ -31,8 +31,10 @@ class SearchActivity : AppCompatActivity() {
     private val iTunesService = Utility.initItunesService()
     private val tracks: ArrayList<Track> = arrayListOf()
     private val tracksAdapter = TrackAdapter(tracks)
-    private var searchPromptString: String = ""
+    private val historyAdapter = TrackAdapter(App.history.tracks)
 
+
+    private var searchPromptString: String = ""
     private lateinit var placeholderFrame: LinearLayout
     private lateinit var trackListRecyclerView: RecyclerView
     private lateinit var searchBar: EditText
@@ -40,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateButton: TextView
     private lateinit var statusImageView: ImageView
     private lateinit var text: TextView
-
+    private lateinit var clearHistoryButton: androidx.appcompat.widget.AppCompatTextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -58,6 +60,12 @@ class SearchActivity : AppCompatActivity() {
         clearTextAttach()
         startUpViewHolder()
         findViewById<TextView>(R.id.update_button).setOnClickListener { sendRequest() }
+        clearHistoryButtonClickAttach()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        App.history.saveToVault()
     }
 
     private fun searchBarSetActionDone() {
@@ -135,6 +143,16 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun clearHistoryButtonClickAttach() {
+        clearHistoryButton =
+            findViewById(R.id.clear_search_list)
+        clearHistoryButton.setOnClickListener {
+            App.history.clear()
+            trackListRecyclerView.adapter?.notifyDataSetChanged()
+        }
+    }
+
     private fun clearTextAttach() {
         xMark.setOnClickListener {
             searchBar.setText("")
@@ -152,7 +170,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     xMark.visibility = View.GONE
-                    trackListRecyclerView.visibility = View.GONE
                     placeholderFrame.visibility = View.GONE
                 } else {
                     xMark.visibility = View.VISIBLE
@@ -161,6 +178,11 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 searchPromptString = searchBar.text.toString()
+                if (searchPromptString.isEmpty()) {
+                    trackListRecyclerView.swapAdapter(historyAdapter, false)
+                } else {
+                    trackListRecyclerView.swapAdapter(tracksAdapter, true)
+                }
             }
         }
         searchBar.addTextChangedListener(searchBarTextWatcher)
@@ -169,6 +191,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
+        App.history.getFromVault()
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -193,7 +216,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startUpViewHolder() {
-        trackListRecyclerView.adapter = tracksAdapter
+        trackListRecyclerView.adapter = TrackAdapter(App.history.tracks)
         trackListRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }

@@ -16,4 +16,6 @@
     <string name="search_status_nothing">Did found nothing</string>
     <string name="search_status_connection_problem">Connection problem\nDownload failed. Please, check \nYour Internet communication.</string>
     <string name="update_title">Update</string>
+    <string name="searched_before_text">Searched previously</string>
+    <string name="clear_history_text">Clear search list</string>
 </resources>

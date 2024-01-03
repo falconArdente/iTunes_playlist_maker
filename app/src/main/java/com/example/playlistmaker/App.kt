@@ -11,12 +11,13 @@ class App : Application() {
     companion object {
         lateinit var appPreferences: SharedPreferences
         var darkThemeIsOn: Boolean = false
+        lateinit var history: SearchHistory
     }
-
 
     override fun onCreate() {
         super.onCreate()
         getAppPreferences()
+        history = SearchHistory()
     }
 
     private fun getAppPreferences() {

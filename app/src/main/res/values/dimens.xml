@@ -43,4 +43,10 @@
     <dimen name="update_button_corners">54dp</dimen>
     <dimen name="search_status_writings_to_button_distance">24dp</dimen>
     <dimen name="search_placeholder_top_margin">102dp</dimen>
+    <dimen name="been_searched_header_height">52dp</dimen>
+    <dimen name="been_searched_text_size">19sp</dimen>
+    <dimen name="been_searched_header_margin_top">24sp</dimen>
+    <dimen name="been_searched_header_margin_bottom">8dp</dimen>
+    <dimen name="clear_history_button_width">148dp</dimen>
+    <dimen name="clear_history_button_height">36dp</dimen>
 </resources>
