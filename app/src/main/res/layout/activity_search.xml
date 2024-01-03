@@ -75,7 +75,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:visibility="visible"
-            tools:itemCount="3"
+            tools:itemCount="1"
             tools:listitem="@layout/track_row_at_search" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -103,7 +103,7 @@
         android:layout_marginTop="@dimen/search_placeholder_top_margin"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <FrameLayout
             android:layout_width="@dimen/search_placeholder_size"
@@ -137,6 +137,7 @@
             android:gravity="center"
             android:text="@string/update_title"
             android:textColor="?attr/colorSecondary"
-            android:textSize="@dimen/update_button_text_size" />
+            android:textSize="@dimen/update_button_text_size"
+            android:visibility="visible" />
     </LinearLayout>
 </LinearLayout>

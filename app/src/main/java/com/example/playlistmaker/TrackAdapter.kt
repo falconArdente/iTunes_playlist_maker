@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import android.icu.text.SimpleDateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -51,7 +50,6 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .into(image)
         rootLayout.setOnClickListener {
             App.history.addTrack(item)
-            Log.d("VAULT","Add to history: "+ App.history.tracks.last().trackName)
         }
     }
 }

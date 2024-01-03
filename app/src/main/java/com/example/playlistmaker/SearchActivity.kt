@@ -26,13 +26,20 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
+
+        enum class Layout {
+            History,
+            CleanHistory,
+            SearchGot,
+            SearchIsEmpty,
+            Error,
+        }
     }
 
     private val iTunesService = Utility.initItunesService()
     private val tracks: ArrayList<Track> = arrayListOf()
     private val tracksAdapter = TrackAdapter(tracks)
     private val historyAdapter = TrackAdapter(App.history.tracks)
-
 
     private var searchPromptString: String = ""
     private lateinit var placeholderFrame: LinearLayout
@@ -41,8 +48,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var xMark: ImageView
     private lateinit var updateButton: TextView
     private lateinit var statusImageView: ImageView
-    private lateinit var text: TextView
+    private lateinit var statusText: TextView
     private lateinit var clearHistoryButton: androidx.appcompat.widget.AppCompatTextView
+    private lateinit var beenSearchedTitle: androidx.appcompat.widget.AppCompatTextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -52,8 +60,9 @@ class SearchActivity : AppCompatActivity() {
         xMark = findViewById(R.id.clear_icon)
         updateButton = findViewById(R.id.update_button)
         statusImageView = findViewById(R.id.status_image)
-        text = findViewById(R.id.status_text)
+        statusText = findViewById(R.id.status_text)
         updateButton = findViewById(R.id.update_button)
+        beenSearchedTitle = findViewById(R.id.been_searched_title)
         backButtonClickAttach()
         searchBarTextWatcherAttach()
         searchBarSetActionDone()//temporary use only
@@ -68,12 +77,92 @@ class SearchActivity : AppCompatActivity() {
         App.history.saveToVault()
     }
 
-    private fun searchBarSetActionDone() {
-        searchBar.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                sendRequest()
+    override fun onResume() {
+        super.onResume()
+        if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
+        App.history.getFromVault()
+        if (App.history.tracks.isEmpty()) showLayout(Layout.CleanHistory)
+        else showLayout(Layout.History)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState.putString(SEARCH_PROMPT, searchPromptString)
+    }
+
+    override fun onRestoreInstanceState(
+        savedInstanceState: Bundle?,
+        persistentState: PersistableBundle?
+    ) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState)
+        searchBar.setText(
+            savedInstanceState?.getString(SEARCH_PROMPT)
+                ?: SEARCH_DEF
+        )
+    }
+
+    fun showLayout(layout: Layout) {
+        when (layout) {
+            Layout.SearchGot -> {
+                beenSearchedTitle.visibility = View.GONE
+                clearHistoryButton.visibility = View.GONE
+                placeholderFrame.visibility = View.GONE
+                if (trackListRecyclerView.adapter != tracksAdapter) trackListRecyclerView.swapAdapter(
+                    tracksAdapter,
+                    true
+                )
+                trackListRecyclerView.visibility = View.VISIBLE
             }
-            false
+
+            Layout.SearchIsEmpty -> {
+                beenSearchedTitle.visibility = View.GONE
+                clearHistoryButton.visibility = View.GONE
+                updateButton.visibility = View.GONE
+                statusText.text = this.getString(R.string.search_status_nothing)
+                statusImageView.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.image_sad_smile_mus
+                    )
+                )
+                placeholderFrame.visibility = View.VISIBLE
+            }
+
+            Layout.Error -> {
+                beenSearchedTitle.visibility = View.GONE
+                clearHistoryButton.visibility = View.GONE
+                trackListRecyclerView.visibility = View.GONE
+                statusText.text =
+                    applicationContext.getString(R.string.search_status_connection_problem)
+                statusImageView.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.image_no_wifi_mus
+                    )
+                )
+                updateButton.visibility = View.VISIBLE
+                placeholderFrame.visibility = View.VISIBLE
+            }
+
+            Layout.History -> {
+                placeholderFrame.visibility = View.GONE
+                updateButton.visibility = View.GONE
+                if (trackListRecyclerView.adapter != historyAdapter) trackListRecyclerView.swapAdapter(
+                    historyAdapter,
+                    false
+                )
+                beenSearchedTitle.visibility = View.VISIBLE
+                clearHistoryButton.visibility = View.VISIBLE
+                trackListRecyclerView.visibility = View.VISIBLE
+            }
+
+            Layout.CleanHistory -> {
+                placeholderFrame.visibility = View.GONE
+                updateButton.visibility = View.GONE
+                beenSearchedTitle.visibility = View.GONE
+                clearHistoryButton.visibility = View.GONE
+                trackListRecyclerView.visibility = View.GONE
+            }
         }
     }
 
@@ -93,63 +182,38 @@ class SearchActivity : AppCompatActivity() {
                             tracksAdapter.notifyDataSetChanged()
                         }
                         if (tracks.isEmpty()) {
-                            showTracks(true)
+                            showLayout(Layout.SearchIsEmpty)
                         } else {
-                            showTracks()
+                            showLayout(Layout.SearchGot)
                         }
                     } else {
-                        showErrorSign()
+                        showLayout(Layout.Error)
                         Log.e("servRequests", "$response.code()")
                     }
                 }
 
                 override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
-                    showErrorSign()
+                    showLayout(Layout.Error)
                 }
-
             })
         }
     }
 
-    private fun showErrorSign() {
-        trackListRecyclerView.visibility = View.GONE
-        text.text = applicationContext.getString(R.string.search_status_connection_problem)
-        updateButton.visibility = View.VISIBLE
-        statusImageView.setImageDrawable(
-            AppCompatResources.getDrawable(
-                this,
-                R.drawable.image_no_wifi_mus
-            )
-        )
-        placeholderFrame.visibility = View.VISIBLE
-    }
-
-    private fun showTracks(tracksIsNone: Boolean = false) {
-        if (tracksIsNone) {
-            trackListRecyclerView.visibility = View.GONE
-            val text = findViewById<TextView>(R.id.status_text)
-            text.text = this.getString(R.string.search_status_nothing)
-            updateButton.visibility = View.GONE
-            statusImageView.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    this,
-                    R.drawable.image_sad_smile_mus
-                )
-            )
-            placeholderFrame.visibility = View.VISIBLE
-        } else {
-            trackListRecyclerView.visibility = View.VISIBLE
-            placeholderFrame.visibility = View.GONE
+    private fun searchBarSetActionDone() {
+        searchBar.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                sendRequest()
+            }
+            false
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun clearHistoryButtonClickAttach() {
         clearHistoryButton =
             findViewById(R.id.clear_search_list)
         clearHistoryButton.setOnClickListener {
             App.history.clear()
-            trackListRecyclerView.adapter?.notifyDataSetChanged()
+            showLayout(Layout.CleanHistory)
         }
     }
 
@@ -170,7 +234,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     xMark.visibility = View.GONE
-                    placeholderFrame.visibility = View.GONE
                 } else {
                     xMark.visibility = View.VISIBLE
                 }
@@ -178,36 +241,10 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 searchPromptString = searchBar.text.toString()
-                if (searchPromptString.isEmpty()) {
-                    trackListRecyclerView.swapAdapter(historyAdapter, false)
-                } else {
-                    trackListRecyclerView.swapAdapter(tracksAdapter, true)
-                }
+                if (searchPromptString.isEmpty()) showLayout(Layout.History)
             }
         }
         searchBar.addTextChangedListener(searchBarTextWatcher)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
-        App.history.getFromVault()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outState.putString(SEARCH_PROMPT, searchPromptString)
-    }
-
-    override fun onRestoreInstanceState(
-        savedInstanceState: Bundle?,
-        persistentState: PersistableBundle?
-    ) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState)
-        searchBar.setText(
-            savedInstanceState?.getString(SEARCH_PROMPT)
-                ?: SEARCH_DEF
-        )
     }
 
     private fun backButtonClickAttach() {
