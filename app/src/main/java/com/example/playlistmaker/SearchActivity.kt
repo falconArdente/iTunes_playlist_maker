@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -27,7 +28,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
 
-        enum class Layout {
+        enum class State {
             History,
             CleanHistory,
             SearchGot,
@@ -81,8 +82,8 @@ class SearchActivity : AppCompatActivity() {
         super.onResume()
         if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
         App.history.getFromVault()
-        if (App.history.tracks.isEmpty()) showLayout(Layout.CleanHistory)
-        else showLayout(Layout.History)
+        if (App.history.tracks.isEmpty()) showLayout(State.CleanHistory)
+        else showLayout(State.History)
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -101,12 +102,12 @@ class SearchActivity : AppCompatActivity() {
         )
     }
 
-    fun showLayout(layout: Layout) {
-        when (layout) {
-            Layout.SearchGot -> {
-                beenSearchedTitle.visibility = View.GONE
-                clearHistoryButton.visibility = View.GONE
-                placeholderFrame.visibility = View.GONE
+    fun showLayout(state: State) {
+        when (state) {
+            State.SearchGot -> {
+                beenSearchedTitle.isVisible=false
+                clearHistoryButton.isVisible=false
+                placeholderFrame.isVisible=false
                 if (trackListRecyclerView.adapter != tracksAdapter) trackListRecyclerView.swapAdapter(
                     tracksAdapter,
                     true
@@ -114,10 +115,10 @@ class SearchActivity : AppCompatActivity() {
                 trackListRecyclerView.visibility = View.VISIBLE
             }
 
-            Layout.SearchIsEmpty -> {
-                beenSearchedTitle.visibility = View.GONE
-                clearHistoryButton.visibility = View.GONE
-                updateButton.visibility = View.GONE
+            State.SearchIsEmpty -> {
+                beenSearchedTitle.isVisible=false
+                clearHistoryButton.isVisible=false
+                updateButton.isVisible=false
                 statusText.text = this.getString(R.string.search_status_nothing)
                 statusImageView.setImageDrawable(
                     AppCompatResources.getDrawable(
@@ -128,10 +129,10 @@ class SearchActivity : AppCompatActivity() {
                 placeholderFrame.visibility = View.VISIBLE
             }
 
-            Layout.Error -> {
-                beenSearchedTitle.visibility = View.GONE
-                clearHistoryButton.visibility = View.GONE
-                trackListRecyclerView.visibility = View.GONE
+            State.Error -> {
+                beenSearchedTitle.isVisible=false
+                clearHistoryButton.isVisible=false
+                trackListRecyclerView.isVisible=false
                 statusText.text =
                     applicationContext.getString(R.string.search_status_connection_problem)
                 statusImageView.setImageDrawable(
@@ -144,9 +145,9 @@ class SearchActivity : AppCompatActivity() {
                 placeholderFrame.visibility = View.VISIBLE
             }
 
-            Layout.History -> {
-                placeholderFrame.visibility = View.GONE
-                updateButton.visibility = View.GONE
+            State.History -> {
+                placeholderFrame.isVisible=false
+                updateButton.isVisible=false
                 if (trackListRecyclerView.adapter != historyAdapter) trackListRecyclerView.swapAdapter(
                     historyAdapter,
                     false
@@ -156,12 +157,12 @@ class SearchActivity : AppCompatActivity() {
                 trackListRecyclerView.visibility = View.VISIBLE
             }
 
-            Layout.CleanHistory -> {
-                placeholderFrame.visibility = View.GONE
-                updateButton.visibility = View.GONE
-                beenSearchedTitle.visibility = View.GONE
-                clearHistoryButton.visibility = View.GONE
-                trackListRecyclerView.visibility = View.GONE
+            State.CleanHistory -> {
+                placeholderFrame.isVisible=false
+                updateButton.isVisible=false
+                beenSearchedTitle.isVisible=false
+                clearHistoryButton.isVisible=false
+                trackListRecyclerView.isVisible=false
             }
         }
     }
@@ -182,18 +183,18 @@ class SearchActivity : AppCompatActivity() {
                             tracksAdapter.notifyDataSetChanged()
                         }
                         if (tracks.isEmpty()) {
-                            showLayout(Layout.SearchIsEmpty)
+                            showLayout(State.SearchIsEmpty)
                         } else {
-                            showLayout(Layout.SearchGot)
+                            showLayout(State.SearchGot)
                         }
                     } else {
-                        showLayout(Layout.Error)
+                        showLayout(State.Error)
                         Log.e("servRequests", "$response.code()")
                     }
                 }
 
                 override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
-                    showLayout(Layout.Error)
+                    showLayout(State.Error)
                 }
             })
         }
@@ -213,7 +214,7 @@ class SearchActivity : AppCompatActivity() {
             findViewById(R.id.clear_search_list)
         clearHistoryButton.setOnClickListener {
             App.history.clear()
-            showLayout(Layout.CleanHistory)
+            showLayout(State.CleanHistory)
         }
     }
 
@@ -241,7 +242,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 searchPromptString = searchBar.text.toString()
-                if (searchPromptString.isEmpty()) showLayout(Layout.History)
+                if (searchPromptString.isEmpty()) showLayout(State.History)
             }
         }
         searchBar.addTextChangedListener(searchBarTextWatcher)

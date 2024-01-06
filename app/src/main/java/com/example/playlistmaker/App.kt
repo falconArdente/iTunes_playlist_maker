@@ -4,26 +4,24 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 
-const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
-const val DARK_THEME_KEY = "dark_theme_is_on"
+private const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
+private const val DARK_THEME_KEY = "dark_theme_is_on"
 
 class App : Application() {
+    private var darkThemeIsOn: Boolean = false
+
     companion object {
         lateinit var appPreferences: SharedPreferences
-        var darkThemeIsOn: Boolean = false
+
         lateinit var history: SearchHistory
     }
 
     override fun onCreate() {
         super.onCreate()
-        getAppPreferences()
-        history = SearchHistory()
-    }
-
-    private fun getAppPreferences() {
         appPreferences = getSharedPreferences(APP_PREFERENCES_FILE_NAME, MODE_PRIVATE)
         darkThemeIsOn = appPreferences.getBoolean(DARK_THEME_KEY, false)
         switchTheme(darkThemeIsOn)
+        history = SearchHistory(appPreferences)
     }
 
     private fun saveDarkThemeState() {
