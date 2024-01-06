@@ -15,9 +15,10 @@ class SearchHistory(private val appPreferences: SharedPreferences) {
         val size = tracks.size
         if (size > HISTORY_SIZE) tracks.removeLast()
         tracks.add(0, track)
+        saveToVault()
     }
 
-    fun saveToVault() {
+    private fun saveToVault() {
         appPreferences.edit()
             .putString(SEARCH_LIST_KEY, gson.toJson(tracks))
             .apply()

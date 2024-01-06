@@ -9,10 +9,9 @@ private const val DARK_THEME_KEY = "dark_theme_is_on"
 
 class App : Application() {
     private var darkThemeIsOn: Boolean = false
+    private lateinit var appPreferences: SharedPreferences
 
     companion object {
-        lateinit var appPreferences: SharedPreferences
-
         lateinit var history: SearchHistory
     }
 

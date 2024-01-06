@@ -39,8 +39,9 @@ class SearchActivity : AppCompatActivity() {
 
     private val iTunesService = Utility.initItunesService()
     private val tracks: ArrayList<Track> = arrayListOf()
+    private lateinit var history: SearchHistory
+    private lateinit var historyAdapter: TrackAdapter
     private val tracksAdapter = TrackAdapter(tracks)
-    private val historyAdapter = TrackAdapter(App.history.tracks)
 
     private var searchPromptString: String = ""
     private lateinit var placeholderFrame: LinearLayout
@@ -55,6 +56,8 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        history = App.history
+        historyAdapter = TrackAdapter(history.tracks)
         placeholderFrame = findViewById(R.id.placeholder_frame)
         trackListRecyclerView = findViewById(R.id.tracks_recycler_view)
         searchBar = findViewById(R.id.search_bar)
@@ -73,16 +76,11 @@ class SearchActivity : AppCompatActivity() {
         clearHistoryButtonClickAttach()
     }
 
-    override fun onPause() {
-        super.onPause()
-        App.history.saveToVault()
-    }
-
     override fun onResume() {
         super.onResume()
         if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
-        App.history.getFromVault()
-        if (App.history.tracks.isEmpty()) showLayout(State.CleanHistory)
+        history.getFromVault()
+        if (history.tracks.isEmpty()) showLayout(State.CleanHistory)
         else showLayout(State.History)
     }
 
@@ -105,9 +103,9 @@ class SearchActivity : AppCompatActivity() {
     fun showLayout(state: State) {
         when (state) {
             State.SearchGot -> {
-                beenSearchedTitle.isVisible=false
-                clearHistoryButton.isVisible=false
-                placeholderFrame.isVisible=false
+                beenSearchedTitle.isVisible = false
+                clearHistoryButton.isVisible = false
+                placeholderFrame.isVisible = false
                 if (trackListRecyclerView.adapter != tracksAdapter) trackListRecyclerView.swapAdapter(
                     tracksAdapter,
                     true
@@ -116,9 +114,10 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.SearchIsEmpty -> {
-                beenSearchedTitle.isVisible=false
-                clearHistoryButton.isVisible=false
-                updateButton.isVisible=false
+                beenSearchedTitle.isVisible = false
+                clearHistoryButton.isVisible = false
+                updateButton.isVisible = false
+                trackListRecyclerView.isVisible = false
                 statusText.text = this.getString(R.string.search_status_nothing)
                 statusImageView.setImageDrawable(
                     AppCompatResources.getDrawable(
@@ -130,9 +129,9 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.Error -> {
-                beenSearchedTitle.isVisible=false
-                clearHistoryButton.isVisible=false
-                trackListRecyclerView.isVisible=false
+                beenSearchedTitle.isVisible = false
+                clearHistoryButton.isVisible = false
+                trackListRecyclerView.isVisible = false
                 statusText.text =
                     applicationContext.getString(R.string.search_status_connection_problem)
                 statusImageView.setImageDrawable(
@@ -146,8 +145,8 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.History -> {
-                placeholderFrame.isVisible=false
-                updateButton.isVisible=false
+                placeholderFrame.isVisible = false
+                updateButton.isVisible = false
                 if (trackListRecyclerView.adapter != historyAdapter) trackListRecyclerView.swapAdapter(
                     historyAdapter,
                     false
@@ -158,11 +157,11 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.CleanHistory -> {
-                placeholderFrame.isVisible=false
-                updateButton.isVisible=false
-                beenSearchedTitle.isVisible=false
-                clearHistoryButton.isVisible=false
-                trackListRecyclerView.isVisible=false
+                placeholderFrame.isVisible = false
+                updateButton.isVisible = false
+                beenSearchedTitle.isVisible = false
+                clearHistoryButton.isVisible = false
+                trackListRecyclerView.isVisible = false
             }
         }
     }
@@ -213,7 +212,7 @@ class SearchActivity : AppCompatActivity() {
         clearHistoryButton =
             findViewById(R.id.clear_search_list)
         clearHistoryButton.setOnClickListener {
-            App.history.clear()
+            history.clear()
             showLayout(State.CleanHistory)
         }
     }
@@ -254,7 +253,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startUpViewHolder() {
-        trackListRecyclerView.adapter = TrackAdapter(App.history.tracks)
+        trackListRecyclerView.adapter = TrackAdapter(history.tracks)
         trackListRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }

@@ -49,7 +49,7 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.track_row_image_corners)))
             .into(image)
         rootLayout.setOnClickListener {
-            App.history.addTrack(item)
+           App.history.addTrack(item)
         }
     }
 }

@@ -46,7 +46,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun switchListenerAttach() {
         val darkThemeSwitch =
             findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.is_night_theme_switch)
-        darkThemeSwitch.setOnCheckedChangeListener { switch, isChecked ->
+        darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
         }
     }
