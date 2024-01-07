@@ -23,24 +23,15 @@
         android:layout_marginTop="24dp"
         tools:ignore="RtlHardcoded">
 
-        <TextView
-            style="@style/settingsTextView"
-            android:gravity="start|center"
-            android:text="@string/dark_theme_title" />
-        <!-- правый отступ подобран с компромиссом между шаблоном и требованиями AS к эргономике переключателя -->
-        <Switch
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/is_night_theme_switch"
-            android:layout_width="56dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end|center"
-            android:layout_marginRight="@dimen/margin_padding_main"
-            android:thumbTint="?attr/thumbColor"
-            android:trackTint="?attr/trackColor"
+            style="@style/settingsTextView"
+            android:layout_marginHorizontal="@dimen/margin_padding_main"
+            android:text="@string/dark_theme_title"
             android:trackTintMode="src_over"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
-        <!-- минимальный размер использовал
-        исходя из требований AS к эргономичности переключателя
-             !-->
+            app:thumbTint="?attr/thumbColor"
+            app:trackTint="?attr/trackColor" />
+
     </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
