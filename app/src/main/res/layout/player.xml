@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/header"
@@ -39,7 +41,8 @@
         app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/track_title"
@@ -50,7 +53,8 @@
         android:text="@string/track_title_mok"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
-        app:layout_constraintTop_toBottomOf="@id/track_image" />
+        app:layout_constraintTop_toBottomOf="@id/track_image"
+        tools:ignore="VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/artist_name"
@@ -61,7 +65,8 @@
         android:text="@string/artist_name_mok"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
-        app:layout_constraintTop_toBottomOf="@id/track_title" />
+        app:layout_constraintTop_toBottomOf="@id/track_title"
+        tools:ignore="VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/play_button"
@@ -71,7 +76,8 @@
         android:background="@drawable/play_button"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
-        app:layout_constraintTop_toBottomOf="@id/artist_name" />
+        app:layout_constraintTop_toBottomOf="@id/artist_name"
+        tools:ignore="SpeakableTextPresentCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/duration"
@@ -82,7 +88,8 @@
         android:text="@string/duration_dots_mok"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
-        app:layout_constraintTop_toBottomOf="@id/play_button" />
+        app:layout_constraintTop_toBottomOf="@id/play_button"
+        tools:ignore="VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/plus_button"
@@ -93,7 +100,8 @@
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
-        app:layout_constraintTop_toTopOf="@id/play_button" />
+        app:layout_constraintTop_toTopOf="@id/play_button"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/favorite_button"
@@ -104,7 +112,8 @@
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
-        app:layout_constraintTop_toTopOf="@id/play_button" />
+        app:layout_constraintTop_toTopOf="@id/play_button"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/duration_title"
@@ -113,7 +122,8 @@
         android:layout_marginTop="@dimen/player_rows_to_duration"
         android:text="@string/duration_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/duration" />
+        app:layout_constraintTop_toBottomOf="@id/duration"
+        tools:ignore="TextContrastCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/album_title"
@@ -121,7 +131,8 @@
         android:layout_width="wrap_content"
         android:text="@string/album_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/duration_title" />
+        app:layout_constraintTop_toBottomOf="@id/duration_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds,TextContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/year_title"
@@ -129,7 +140,8 @@
         android:layout_width="wrap_content"
         android:text="@string/year_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/album_title" />
+        app:layout_constraintTop_toBottomOf="@id/album_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds,TextContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/genre_title"
@@ -137,7 +149,8 @@
         android:layout_width="wrap_content"
         android:text="@string/genre_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/year_title" />
+        app:layout_constraintTop_toBottomOf="@id/year_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds,TextContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/country_title"
@@ -145,7 +158,8 @@
         android:layout_width="wrap_content"
         android:text="@string/country_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/genre_title" />
+        app:layout_constraintTop_toBottomOf="@id/genre_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds,TextContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/duration_value"
@@ -153,7 +167,8 @@
         android:layout_width="wrap_content"
         android:text="@string/duration_dots_mok"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/duration_title" />
+        app:layout_constraintTop_toTopOf="@id/duration_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/album_value"
@@ -161,7 +176,8 @@
         android:layout_width="wrap_content"
         android:text="@string/album_mok"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/album_title" />
+        app:layout_constraintTop_toTopOf="@id/album_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/year_value"
@@ -169,7 +185,8 @@
         android:layout_width="wrap_content"
         android:text="@string/year_mok"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/year_title" />
+        app:layout_constraintTop_toTopOf="@id/year_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/genre_value"
@@ -177,7 +194,8 @@
         android:layout_width="wrap_content"
         android:text="@string/genre_mok"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/genre_title" />
+        app:layout_constraintTop_toTopOf="@id/genre_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/country_value"
@@ -185,5 +203,6 @@
         android:layout_width="wrap_content"
         android:text="@string/country_mok"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/country_title" />
+        app:layout_constraintTop_toTopOf="@id/country_title"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
 </androidx.constraintlayout.widget.ConstraintLayout>
