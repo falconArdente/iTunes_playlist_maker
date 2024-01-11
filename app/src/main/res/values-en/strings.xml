@@ -18,4 +18,13 @@
     <string name="update_title">Update</string>
     <string name="searched_before_text">Searched previously</string>
     <string name="clear_history_text">Clear search list</string>
+    <string name="duration_title">Duration</string>
+    <string name="album_title">Album</string>
+    <string name="year_title">Year</string>
+    <string name="genre_title">Genre</string>
+    <string name="country_title">Country</string>
+    <string name="album_mok">Downloading album</string>
+    <string name="year_mok">Downloading year</string>
+    <string name="genre_mok">Downloading genre</string>
+    <string name="country_mok">Downloading country</string>
 </resources>

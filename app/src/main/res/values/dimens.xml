@@ -49,4 +49,19 @@
     <dimen name="been_searched_header_margin_bottom">8dp</dimen>
     <dimen name="clear_history_button_width">148dp</dimen>
     <dimen name="clear_history_button_height">36dp</dimen>
+    <dimen name="player_guidelines_padding">24dp</dimen>
+    <dimen name="player_image_max_size">512dp</dimen>
+    <dimen name="player_image_top_margin">82dp</dimen>
+    <dimen name="track_image_to_title_padding_for_player">24dp</dimen>
+    <dimen name="track_title_to_name_padding_for_player">12dp</dimen>
+    <dimen name="artist_name_text_size_for_player">16sp</dimen>
+    <dimen name="play_button_size">100dp</dimen>
+    <dimen name="play_button_to_artist_name">30dp</dimen>
+    <dimen name="duration_to_play_button">4dp</dimen>
+    <dimen name="duration_text_size_for_player">14sp</dimen>
+    <dimen name="add_and_fav_buttons_size">51dp</dimen>
+    <dimen name="player_rows_height">32dp</dimen>
+    <dimen name="player_rows_to_duration">30dp</dimen>
+    <dimen name="player_rows_title_text_size">13sp</dimen>
+    <dimen name="player_rows_padding">16dp</dimen>
 </resources>
