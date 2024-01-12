@@ -9,18 +9,7 @@ import java.util.Locale
 
 
 class PlayerActivity : AppCompatActivity() {
-    private var track: Track? = Track(
-        "",
-        "song",
-        "What a wonderful world",
-        "Sting",
-        "192000",
-        "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/90/30/d3/9030d3b3-4405-4eef-8e44-aad5d6003534/190295877705.jpg/512x512bb.jpg",
-        "Collection one",
-        "",
-        "folk",
-        "Indonesia",
-    )
+    private var track: Track?=null
     private lateinit var backButton: androidx.appcompat.widget.Toolbar
     private lateinit var trackImage: androidx.appcompat.widget.AppCompatImageView
     private lateinit var trackTitle: androidx.appcompat.widget.AppCompatTextView
