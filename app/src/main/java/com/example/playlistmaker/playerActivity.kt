@@ -9,7 +9,7 @@ import java.util.Locale
 
 
 class PlayerActivity : AppCompatActivity() {
-    private var track: Track?=null
+    private var track: Track? = null
     private lateinit var backButton: androidx.appcompat.widget.Toolbar
     private lateinit var trackImage: androidx.appcompat.widget.AppCompatImageView
     private lateinit var trackTitle: androidx.appcompat.widget.AppCompatTextView
