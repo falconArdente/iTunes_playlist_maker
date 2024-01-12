@@ -56,7 +56,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        history = App.history
+        history = (this.applicationContext as App).history
         historyAdapter = TrackAdapter(history.tracks)
         placeholderFrame = findViewById(R.id.placeholder_frame)
         trackListRecyclerView = findViewById(R.id.tracks_recycler_view)

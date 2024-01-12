@@ -20,6 +20,7 @@
     <string name="artist_name_mok">Исполнитель</string>
     <string name="track_duration_mok" translatable="false">293000</string>
     <string name="base_url_for_search" translatable="false">https://itunes.apple.com</string>
+    <string name="itunes_big_image_postfix" translatable="false">512x512bb.jpg</string>
     <string name="search_status_nothing">Ничего не нашлось</string>
     <string name="search_status_connection_problem">Проблемы со связью\n Загрузка не удалась. \n Проверьте подключение к интернету</string>
     <string name="update_title">Обновить</string>

@@ -1,11 +1,13 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -27,7 +29,7 @@ class TrackAdapter(
     }
 }
 
-class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+class TrackViewHolder(val parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.track_row_at_search, parent, false)//built-in name of object is itemView
 ) {
@@ -49,7 +51,10 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.track_row_image_corners)))
             .into(image)
         rootLayout.setOnClickListener {
-           App.history.addTrack(item)
+            (parent.context.applicationContext as App).history.addTrack(item)
+            val intent = Intent(parent.context, PlayerActivity::class.java)
+            intent.putExtra("track",item)
+            startActivity(parent.context,intent,null)
         }
     }
 }

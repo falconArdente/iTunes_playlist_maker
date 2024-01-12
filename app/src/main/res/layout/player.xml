@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".PlayerActivity"
     tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck">
 
     <androidx.appcompat.widget.Toolbar
@@ -36,9 +37,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/player_image_top_margin"
-        android:maxHeight="@dimen/player_image_max_size"
+        app:layout_constraintWidth_max="@dimen/player_image_max_size"
         android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
         app:layout_constraintTop_toTopOf="parent"
@@ -80,7 +81,7 @@
         tools:ignore="SpeakableTextPresentCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/duration"
+        android:id="@+id/current_play_position"
         style="@style/player_duration_text_style"
         android:layout_width="@dimen/play_button_size"
         android:layout_height="wrap_content"
@@ -122,7 +123,7 @@
         android:layout_marginTop="@dimen/player_rows_to_duration"
         android:text="@string/duration_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/duration"
+        app:layout_constraintTop_toBottomOf="@id/current_play_position"
         tools:ignore="TextContrastCheck,VisualLintBounds" />
 
     <androidx.appcompat.widget.AppCompatTextView
