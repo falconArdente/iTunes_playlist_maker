@@ -5,11 +5,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.gson.Gson
 import java.util.Locale
 
+private const val TRACK_KEY = "track"
 
 class PlayerActivity : AppCompatActivity() {
-    private var track: Track? = null
+    private lateinit var track:Track
     private lateinit var backButton: androidx.appcompat.widget.Toolbar
     private lateinit var trackImage: androidx.appcompat.widget.AppCompatImageView
     private lateinit var trackTitle: androidx.appcompat.widget.AppCompatTextView
@@ -29,8 +31,15 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(R.layout.player)
         boundVariablesToElements()
         backButton.setNavigationOnClickListener { finish() }
-        track = intent.getSerializableExtra("track", Track::class.java)
-        placeTrackDataToElements(this.track!!)
+        track = getTrackFromIntent()
+        placeTrackDataToElements(track)
+    }
+
+    private fun getTrackFromIntent(): Track {
+        val json = Gson()
+        val tempString = intent.getStringExtra(TRACK_KEY)
+        if (tempString.isNullOrEmpty()) finish()
+        return json.fromJson(tempString, Track::class.java)
     }
 
     private fun placeTrackDataToElements(track: Track) {

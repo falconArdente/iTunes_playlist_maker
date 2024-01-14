@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -11,7 +12,10 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.gson.Gson
 import java.util.Locale
+
+private const val TRACK_KEY = "track"
 
 class TrackAdapter(
     private val data: ArrayList<Track>
@@ -27,6 +31,8 @@ class TrackAdapter(
     override fun getItemCount(): Int {
         return data.size
     }
+
+    public fun onClickListener() {}
 }
 
 class TrackViewHolder(val parent: ViewGroup) : RecyclerView.ViewHolder(
@@ -53,8 +59,10 @@ class TrackViewHolder(val parent: ViewGroup) : RecyclerView.ViewHolder(
         rootLayout.setOnClickListener {
             (parent.context.applicationContext as App).history.addTrack(item)
             val intent = Intent(parent.context, PlayerActivity::class.java)
-            intent.putExtra("track",item)
-            startActivity(parent.context,intent,null)
+            val json = Gson()
+            intent.putExtra(TRACK_KEY, json.toJson(item))
+            Log.d(TRACK_KEY, intent.toString())
+            startActivity(parent.context, intent, null)
         }
     }
 }

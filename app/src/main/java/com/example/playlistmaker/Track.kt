@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class Track(
     val id: String,
@@ -15,4 +14,4 @@ data class Track(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-):Serializable
+)
