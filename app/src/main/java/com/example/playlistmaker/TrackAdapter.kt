@@ -16,7 +16,7 @@ interface TrackOnClickListener {
 }
 
 class TrackAdapter(
-    private val data: ArrayList<Track>, private val onClickListener: TrackOnClickListener
+     var data: ArrayList<Track>, private val onClickListener: TrackOnClickListener
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder =
@@ -35,14 +35,14 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.track_row_at_search, parent, false)//built-in name of object is itemView
 ) {
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private val image: ImageView = itemView.findViewById(R.id.image_track)
     private val trackTitle: TextView = itemView.findViewById(R.id.track_title)
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
     private val duration: TextView = itemView.findViewById(R.id.track_time)
     private val rootLayout: LinearLayout = itemView.findViewById(R.id.root_layout_track_row)
     fun bind(item: Track, onClickListener: TrackOnClickListener) {
-        duration.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.duration.toLong())
+        duration.text =dateFormat.format(item.duration.toLong())
         trackTitle.text = item.trackName
         artistName.text = item.artistName
         Glide.with(itemView)
@@ -52,8 +52,6 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .centerCrop()
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.track_row_image_corners)))
             .into(image)
-        rootLayout.setOnClickListener {
-            onClickListener.onClick(item)
-        }
+        rootLayout.setOnClickListener { onClickListener.onClick(item) }
     }
 }

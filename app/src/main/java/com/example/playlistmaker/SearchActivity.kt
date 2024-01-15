@@ -26,12 +26,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val TRACK_KEY = "track"
 
 class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
+        const val TRACK_KEY = "track"
 
         enum class State {
             History,
@@ -48,13 +48,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyAdapter: TrackAdapter
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
-            Log.d("track", "inClick")
             (this@SearchActivity.applicationContext as App).history.addTrack(item)
             val intent =
                 Intent(this@SearchActivity.applicationContext, PlayerActivity::class.java)
             val json = Gson()
             intent.putExtra(TRACK_KEY, json.toJson(item))
-            Log.d(TRACK_KEY, intent.toString())
             ContextCompat.startActivity(this@SearchActivity.applicationContext, intent, null)
         }
     }

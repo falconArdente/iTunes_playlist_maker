@@ -11,6 +11,7 @@ import java.util.Locale
 private const val TRACK_KEY = "track"
 
 class PlayerActivity : AppCompatActivity() {
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private lateinit var track:Track
     private lateinit var backButton: androidx.appcompat.widget.Toolbar
     private lateinit var trackImage: androidx.appcompat.widget.AppCompatImageView
@@ -45,9 +46,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun placeTrackDataToElements(track: Track) {
         trackTitle.text = track.trackName
         artistName.text = track.artistName
-        duration.text = SimpleDateFormat(
-            "mm:ss", Locale.getDefault()
-        ).format(track.duration.toLong())
+        duration.text = dateFormat.format(track.duration.toLong())
         album.text = track.collectionName
         year.text = track.releaseDate.substring(0, 4)
         genre.text = track.primaryGenreName
