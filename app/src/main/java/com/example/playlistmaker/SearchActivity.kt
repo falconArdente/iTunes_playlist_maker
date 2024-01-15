@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
@@ -16,12 +17,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+private const val TRACK_KEY = "track"
 
 class SearchActivity : AppCompatActivity() {
     companion object {
@@ -41,8 +46,19 @@ class SearchActivity : AppCompatActivity() {
     private val tracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
     private lateinit var historyAdapter: TrackAdapter
-    private val tracksAdapter = TrackAdapter(tracks)
-
+    private var trackOnClickListener = object : TrackOnClickListener {
+        override fun onClick(item: Track) {
+            Log.d("track", "inClick")
+            (this@SearchActivity.applicationContext as App).history.addTrack(item)
+            val intent =
+                Intent(this@SearchActivity.applicationContext, PlayerActivity::class.java)
+            val json = Gson()
+            intent.putExtra(TRACK_KEY, json.toJson(item))
+            Log.d(TRACK_KEY, intent.toString())
+            ContextCompat.startActivity(this@SearchActivity.applicationContext, intent, null)
+        }
+    }
+    private lateinit var tracksAdapter: TrackAdapter
     private var searchPromptString: String = ""
     private lateinit var placeholderFrame: LinearLayout
     private lateinit var trackListRecyclerView: RecyclerView
@@ -57,7 +73,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         history = (this.applicationContext as App).history
-        historyAdapter = TrackAdapter(history.tracks)
+        historyAdapter = TrackAdapter(history.tracks, trackOnClickListener)
         placeholderFrame = findViewById(R.id.placeholder_frame)
         trackListRecyclerView = findViewById(R.id.tracks_recycler_view)
         searchBar = findViewById(R.id.search_bar)
@@ -253,7 +269,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startUpViewHolder() {
-        trackListRecyclerView.adapter = TrackAdapter(history.tracks)
+        tracksAdapter = TrackAdapter(tracks, trackOnClickListener)
+        trackListRecyclerView.adapter = TrackAdapter(history.tracks, trackOnClickListener)
         trackListRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
