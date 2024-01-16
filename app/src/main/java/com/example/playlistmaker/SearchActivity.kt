@@ -48,12 +48,12 @@ class SearchActivity : AppCompatActivity() {
     private var historyTracks: ArrayList<Track> = arrayListOf()
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
-            (this@SearchActivity.applicationContext as App).history.addTrack(item)
+            (applicationContext as App).history.addTrack(item)
             val intent =
-                Intent(this@SearchActivity.applicationContext, PlayerActivity::class.java)
+                Intent(applicationContext, PlayerActivity::class.java)
             val json = Gson()
             intent.putExtra(TRACK_KEY, json.toJson(item))
-            ContextCompat.startActivity(this@SearchActivity.applicationContext, intent, null)
+            ContextCompat.startActivity(applicationContext, intent, null)
         }
     }
     private val tracksAdapter = TrackAdapter(historyTracks, trackOnClickListener)
@@ -70,8 +70,8 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        history= (this.applicationContext as App).history
-        historyTracks=history.tracks
+        history = (applicationContext as App).history
+        historyTracks = history.tracks
         placeholderFrame = findViewById(R.id.placeholder_frame)
         trackListRecyclerView = findViewById(R.id.tracks_recycler_view)
         searchBar = findViewById(R.id.search_bar)
@@ -92,10 +92,12 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
-        history.getFromVault()
-        if (history.tracks.isEmpty()) showLayout(State.CleanHistory)
-        else showLayout(State.History)
+        if (searchBar.text.isNullOrEmpty()) {
+            xMark.visibility = View.GONE
+            history.getFromVault()
+            if (historyTracks.isEmpty()) showLayout(State.CleanHistory)
+            else showLayout(State.History)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -114,6 +116,7 @@ class SearchActivity : AppCompatActivity() {
         )
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun showLayout(state: State) {
         when (state) {
             State.SearchGot -> {
