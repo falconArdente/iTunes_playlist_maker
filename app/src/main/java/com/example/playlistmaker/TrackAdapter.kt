@@ -16,18 +16,18 @@ interface TrackOnClickListener {
 }
 
 class TrackAdapter(
-     var data: ArrayList<Track>, private val onClickListener: TrackOnClickListener
+     var tracks: ArrayList<Track>, private val onClickListener: TrackOnClickListener
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder =
         TrackViewHolder(parent)
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(data[position], onClickListener)
+        holder.bind(tracks[position], onClickListener)
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return tracks.size
     }
 }
 
