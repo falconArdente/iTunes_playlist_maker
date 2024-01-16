@@ -43,9 +43,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val iTunesService = Utility.initItunesService()
-    private val tracks: ArrayList<Track> = arrayListOf()
+    private val searchTracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
-    private lateinit var historyAdapter: TrackAdapter
+    private var historyTracks: ArrayList<Track> = arrayListOf()
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
             (this@SearchActivity.applicationContext as App).history.addTrack(item)
@@ -56,7 +56,7 @@ class SearchActivity : AppCompatActivity() {
             ContextCompat.startActivity(this@SearchActivity.applicationContext, intent, null)
         }
     }
-    private lateinit var tracksAdapter: TrackAdapter
+    private val tracksAdapter = TrackAdapter(historyTracks, trackOnClickListener)
     private var searchPromptString: String = ""
     private lateinit var placeholderFrame: LinearLayout
     private lateinit var trackListRecyclerView: RecyclerView
@@ -70,8 +70,8 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        history = (this.applicationContext as App).history
-        historyAdapter = TrackAdapter(history.tracks, trackOnClickListener)
+        history= (this.applicationContext as App).history
+        historyTracks=history.tracks
         placeholderFrame = findViewById(R.id.placeholder_frame)
         trackListRecyclerView = findViewById(R.id.tracks_recycler_view)
         searchBar = findViewById(R.id.search_bar)
@@ -120,10 +120,10 @@ class SearchActivity : AppCompatActivity() {
                 beenSearchedTitle.isVisible = false
                 clearHistoryButton.isVisible = false
                 placeholderFrame.isVisible = false
-                if (trackListRecyclerView.adapter != tracksAdapter) trackListRecyclerView.swapAdapter(
-                    tracksAdapter,
-                    true
-                )
+                if (tracksAdapter.tracks != searchTracks) {
+                    tracksAdapter.tracks = searchTracks
+                    tracksAdapter.notifyDataSetChanged()
+                }
                 trackListRecyclerView.visibility = View.VISIBLE
             }
 
@@ -161,10 +161,10 @@ class SearchActivity : AppCompatActivity() {
             State.History -> {
                 placeholderFrame.isVisible = false
                 updateButton.isVisible = false
-                if (trackListRecyclerView.adapter != historyAdapter) trackListRecyclerView.swapAdapter(
-                    historyAdapter,
-                    false
-                )
+                if (tracksAdapter.tracks != historyTracks) {
+                    tracksAdapter.tracks = historyTracks
+                    tracksAdapter.notifyDataSetChanged()
+                }
                 beenSearchedTitle.visibility = View.VISIBLE
                 clearHistoryButton.visibility = View.VISIBLE
                 trackListRecyclerView.visibility = View.VISIBLE
@@ -190,12 +190,12 @@ class SearchActivity : AppCompatActivity() {
                     response: Response<TrackSearchResponse>
                 ) {
                     if (response.code() == 200) {
-                        tracks.clear()
+                        searchTracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
-                            tracks.addAll(response.body()?.results!!)
+                            searchTracks.addAll(response.body()?.results!!)
                             tracksAdapter.notifyDataSetChanged()
                         }
-                        if (tracks.isEmpty()) {
+                        if (searchTracks.isEmpty()) {
                             showLayout(State.SearchIsEmpty)
                         } else {
                             showLayout(State.SearchGot)
@@ -267,8 +267,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startUpViewHolder() {
-        tracksAdapter = TrackAdapter(tracks, trackOnClickListener)
-        trackListRecyclerView.adapter = TrackAdapter(history.tracks, trackOnClickListener)
+        trackListRecyclerView.adapter = tracksAdapter
         trackListRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
