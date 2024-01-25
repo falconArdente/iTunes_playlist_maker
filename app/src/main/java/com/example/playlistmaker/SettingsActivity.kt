@@ -6,12 +6,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         backButtonAttach()
         switchListenerAttach()
         contactSupportAttach()
@@ -20,9 +23,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun shareAnAppAttach() {
-        val shareButton =
-            findViewById<androidx.appcompat.widget.AppCompatTextView>(R.id.share_an_app)
-        shareButton.setOnClickListener {
+        binding.shareAnApp.setOnClickListener {
             try {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
@@ -38,32 +39,25 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun backButtonAttach() {
-        val header = findViewById<androidx.appcompat.widget.Toolbar>(R.id.header)
         val goMain = Intent(this, MainActivity::class.java)
-        header.setNavigationOnClickListener { startActivity(goMain) }
+        binding.header.setNavigationOnClickListener { startActivity(goMain) }
     }
 
     private fun switchListenerAttach() {
-        val darkThemeSwitch =
-            findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.is_night_theme_switch)
-        darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
+        binding.isNightThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val darkThemeSwitch =
-            findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.is_night_theme_switch)
         val isNightModeOutside =
             resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        darkThemeSwitch.isChecked = isNightModeOutside
+        binding.isNightThemeSwitch.isChecked = isNightModeOutside
     }
 
     private fun contactSupportAttach() {
-        val contactToSupportButton =
-            findViewById<androidx.appcompat.widget.AppCompatTextView>(R.id.email_to_support)
-        contactToSupportButton.setOnClickListener {
+        binding.emailToSupport.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/html"
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(R.string.my_email))
@@ -74,13 +68,10 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun viewAgreementAttach() {
-        val viewAgreementButton =
-            findViewById<androidx.appcompat.widget.AppCompatTextView>(R.id.view_agreement)
-        viewAgreementButton.setOnClickListener {
+        binding.viewAgreement.setOnClickListener {
             val url: String = resources.getString(R.string.agreement_URL)
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(browserIntent)
         }
     }
-
 }

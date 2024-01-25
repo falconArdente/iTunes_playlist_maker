@@ -1,13 +1,14 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Utility {
-    private const val BASE_URL = "https://itunes.apple.com"
-    fun initItunesService():ITunesApi{
+    fun initItunesService(context: Context): ITunesApi {
+        val baseURL = context.getString(R.string.base_url_for_search)
         val retrofit = Retrofit.Builder()
-            .baseUrl( BASE_URL)
+            .baseUrl(baseURL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(ITunesApi::class.java)

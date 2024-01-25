@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
@@ -10,15 +11,13 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +26,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
+        const val TRACK_KEY = "track"
 
         enum class State {
             History,
@@ -37,51 +37,47 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private val iTunesService = Utility.initItunesService()
-    private val tracks: ArrayList<Track> = arrayListOf()
+    private lateinit var iTunesService: ITunesApi
+    private val searchTracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
-    private lateinit var historyAdapter: TrackAdapter
-    private val tracksAdapter = TrackAdapter(tracks)
-
+    private var historyTracks: ArrayList<Track> = arrayListOf()
+    private var trackOnClickListener = object : TrackOnClickListener {
+        override fun onClick(item: Track) {
+            (applicationContext as App).history.addTrack(item)
+            val intent =
+                Intent(applicationContext, PlayerActivity::class.java)
+            val json = Gson()
+            intent.putExtra(TRACK_KEY, json.toJson(item))
+            ContextCompat.startActivity(applicationContext, intent, null)
+        }
+    }
+    private val tracksAdapter = TrackAdapter(historyTracks, trackOnClickListener)
     private var searchPromptString: String = ""
-    private lateinit var placeholderFrame: LinearLayout
-    private lateinit var trackListRecyclerView: RecyclerView
-    private lateinit var searchBar: EditText
-    private lateinit var xMark: ImageView
-    private lateinit var updateButton: TextView
-    private lateinit var statusImageView: ImageView
-    private lateinit var statusText: TextView
-    private lateinit var clearHistoryButton: androidx.appcompat.widget.AppCompatTextView
-    private lateinit var beenSearchedTitle: androidx.appcompat.widget.AppCompatTextView
+    private lateinit var binding: ActivitySearchBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-        history = App.history
-        historyAdapter = TrackAdapter(history.tracks)
-        placeholderFrame = findViewById(R.id.placeholder_frame)
-        trackListRecyclerView = findViewById(R.id.tracks_recycler_view)
-        searchBar = findViewById(R.id.search_bar)
-        xMark = findViewById(R.id.clear_icon)
-        updateButton = findViewById(R.id.update_button)
-        statusImageView = findViewById(R.id.status_image)
-        statusText = findViewById(R.id.status_text)
-        updateButton = findViewById(R.id.update_button)
-        beenSearchedTitle = findViewById(R.id.been_searched_title)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        iTunesService = Utility.initItunesService(this)
+        history = (applicationContext as App).history
+        historyTracks = history.tracks
         backButtonClickAttach()
         searchBarTextWatcherAttach()
         searchBarSetActionDone()//temporary use only
         clearTextAttach()
         startUpViewHolder()
-        findViewById<TextView>(R.id.update_button).setOnClickListener { sendRequest() }
+        binding.updateButton.setOnClickListener { sendRequest() }
         clearHistoryButtonClickAttach()
     }
 
     override fun onResume() {
         super.onResume()
-        if (searchBar.text.isNullOrEmpty()) xMark.visibility = View.GONE
-        history.getFromVault()
-        if (history.tracks.isEmpty()) showLayout(State.CleanHistory)
-        else showLayout(State.History)
+        if (binding.searchBar.text.isNullOrEmpty()) {
+            binding.clearIcon.visibility = View.GONE
+            history.getFromVault()
+            if (historyTracks.isEmpty()) showLayout(State.CleanHistory)
+            else showLayout(State.History)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -94,81 +90,82 @@ class SearchActivity : AppCompatActivity() {
         persistentState: PersistableBundle?
     ) {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
-        searchBar.setText(
+        binding.searchBar.setText(
             savedInstanceState?.getString(SEARCH_PROMPT)
                 ?: SEARCH_DEF
         )
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun showLayout(state: State) {
         when (state) {
             State.SearchGot -> {
-                beenSearchedTitle.isVisible = false
-                clearHistoryButton.isVisible = false
-                placeholderFrame.isVisible = false
-                if (trackListRecyclerView.adapter != tracksAdapter) trackListRecyclerView.swapAdapter(
-                    tracksAdapter,
-                    true
-                )
-                trackListRecyclerView.visibility = View.VISIBLE
+                binding.beenSearchedTitle.isVisible = false
+                binding.clearSearchList.isVisible = false
+                binding.placeholderFrame.isVisible = false
+                if (tracksAdapter.tracks != searchTracks) {
+                    tracksAdapter.tracks = searchTracks
+                    tracksAdapter.notifyDataSetChanged()
+                }
+                binding.tracksRecyclerView.visibility = View.VISIBLE
             }
 
             State.SearchIsEmpty -> {
-                beenSearchedTitle.isVisible = false
-                clearHistoryButton.isVisible = false
-                updateButton.isVisible = false
-                trackListRecyclerView.isVisible = false
-                statusText.text = this.getString(R.string.search_status_nothing)
-                statusImageView.setImageDrawable(
+                binding.beenSearchedTitle.isVisible = false
+                binding.clearSearchList.isVisible = false
+                binding.updateButton.isVisible = false
+                binding.tracksRecyclerView.isVisible = false
+                binding.statusText.text = this.getString(R.string.search_status_nothing)
+                binding.statusImage.setImageDrawable(
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.image_sad_smile_mus
                     )
                 )
-                placeholderFrame.visibility = View.VISIBLE
+                binding.placeholderFrame.visibility = View.VISIBLE
             }
 
             State.Error -> {
-                beenSearchedTitle.isVisible = false
-                clearHistoryButton.isVisible = false
-                trackListRecyclerView.isVisible = false
-                statusText.text =
+                binding.beenSearchedTitle.isVisible = false
+                binding.clearSearchList.isVisible = false
+                binding.tracksRecyclerView.isVisible = false
+                binding.statusText.text =
                     applicationContext.getString(R.string.search_status_connection_problem)
-                statusImageView.setImageDrawable(
+                binding.statusImage.setImageDrawable(
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.image_no_wifi_mus
                     )
                 )
-                updateButton.visibility = View.VISIBLE
-                placeholderFrame.visibility = View.VISIBLE
+                binding.updateButton.visibility = View.VISIBLE
+                binding.placeholderFrame.visibility = View.VISIBLE
             }
 
             State.History -> {
-                placeholderFrame.isVisible = false
-                updateButton.isVisible = false
-                if (trackListRecyclerView.adapter != historyAdapter) trackListRecyclerView.swapAdapter(
-                    historyAdapter,
-                    false
-                )
-                beenSearchedTitle.visibility = View.VISIBLE
-                clearHistoryButton.visibility = View.VISIBLE
-                trackListRecyclerView.visibility = View.VISIBLE
+                binding.placeholderFrame.isVisible = false
+                binding.updateButton.isVisible = false
+                if (tracksAdapter.tracks != historyTracks) {
+                    tracksAdapter.tracks = historyTracks
+                    tracksAdapter.notifyDataSetChanged()
+                }
+                binding.beenSearchedTitle.visibility = View.VISIBLE
+                binding.clearSearchList.visibility = View.VISIBLE
+                binding.tracksRecyclerView.visibility = View.VISIBLE
             }
 
             State.CleanHistory -> {
-                placeholderFrame.isVisible = false
-                updateButton.isVisible = false
-                beenSearchedTitle.isVisible = false
-                clearHistoryButton.isVisible = false
-                trackListRecyclerView.isVisible = false
+                binding.placeholderFrame.isVisible = false
+                binding.updateButton.isVisible = false
+                binding.beenSearchedTitle.isVisible = false
+                binding.clearSearchList.isVisible = false
+                binding.tracksRecyclerView.isVisible = false
             }
         }
     }
 
     private fun sendRequest() {
-        if (searchBar.text.isNotEmpty()) {
-            iTunesService.findTrack(searchBar.text.toString()).enqueue(object :
+        if (binding.searchBar.text.isNotEmpty()) {
+            iTunesService.findTrack(binding.searchBar.text.toString()).enqueue(object :
                 Callback<TrackSearchResponse> {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
@@ -176,12 +173,12 @@ class SearchActivity : AppCompatActivity() {
                     response: Response<TrackSearchResponse>
                 ) {
                     if (response.code() == 200) {
-                        tracks.clear()
+                        searchTracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
-                            tracks.addAll(response.body()?.results!!)
+                            searchTracks.addAll(response.body()?.results!!)
                             tracksAdapter.notifyDataSetChanged()
                         }
-                        if (tracks.isEmpty()) {
+                        if (searchTracks.isEmpty()) {///!!!!
                             showLayout(State.SearchIsEmpty)
                         } else {
                             showLayout(State.SearchGot)
@@ -200,7 +197,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchBarSetActionDone() {
-        searchBar.setOnEditorActionListener { _, actionId, _ ->
+        binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 sendRequest()
             }
@@ -209,17 +206,15 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clearHistoryButtonClickAttach() {
-        clearHistoryButton =
-            findViewById(R.id.clear_search_list)
-        clearHistoryButton.setOnClickListener {
+        binding.clearSearchList.setOnClickListener {
             history.clear()
             showLayout(State.CleanHistory)
         }
     }
 
     private fun clearTextAttach() {
-        xMark.setOnClickListener {
-            searchBar.setText("")
+        binding.clearIcon.setOnClickListener {
+            binding.searchBar.setText("")
             this.currentFocus?.let { view ->
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 imm?.hideSoftInputFromWindow(view.windowToken, 0)
@@ -233,18 +228,18 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
-                    xMark.visibility = View.GONE
+                    binding.clearIcon.visibility = View.GONE
                 } else {
-                    xMark.visibility = View.VISIBLE
+                    binding.clearIcon.visibility = View.VISIBLE
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
-                searchPromptString = searchBar.text.toString()
+                searchPromptString = binding.searchBar.text.toString()
                 if (searchPromptString.isEmpty()) showLayout(State.History)
             }
         }
-        searchBar.addTextChangedListener(searchBarTextWatcher)
+        binding.searchBar.addTextChangedListener(searchBarTextWatcher)
     }
 
     private fun backButtonClickAttach() {
@@ -253,8 +248,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startUpViewHolder() {
-        trackListRecyclerView.adapter = TrackAdapter(history.tracks)
-        trackListRecyclerView.layoutManager =
+        binding.tracksRecyclerView.adapter = tracksAdapter
+        binding.tracksRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 }

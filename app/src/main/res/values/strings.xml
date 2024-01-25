@@ -20,9 +20,21 @@
     <string name="artist_name_mok">Исполнитель</string>
     <string name="track_duration_mok" translatable="false">293000</string>
     <string name="base_url_for_search" translatable="false">https://itunes.apple.com</string>
+    <string name="itunes_small_image_postfix" translatable="false">100x100bb.jpg</string>
+    <string name="itunes_big_image_postfix" translatable="false">512x512bb.jpg</string>
     <string name="search_status_nothing">Ничего не нашлось</string>
     <string name="search_status_connection_problem">Проблемы со связью\n Загрузка не удалась. \n Проверьте подключение к интернету</string>
     <string name="update_title">Обновить</string>
     <string name="searched_before_text">Вы искали</string>
     <string name="clear_history_text">Очистить историю</string>
+    <string name="duration_title">Длительность</string>
+    <string name="album_title">Альбом</string>
+    <string name="year_title">Год</string>
+    <string name="genre_title">Жанр</string>
+    <string name="country_title">Страна</string>
+    <string name="album_mok">Альбом загружается</string>
+    <string name="year_mok">Год загружается</string>
+    <string name="genre_mok">Жанр загружается</string>
+    <string name="country_mok">Страна загружается</string>
+    <string name="duration_dots_mok" translatable="false">00:00</string>
 </resources>
