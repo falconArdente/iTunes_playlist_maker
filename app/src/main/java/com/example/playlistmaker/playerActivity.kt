@@ -12,7 +12,7 @@ private const val TRACK_KEY = "track"
 
 class PlayerActivity : AppCompatActivity() {
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-    private lateinit var track:Track
+    private lateinit var track: Track
     private lateinit var backButton: androidx.appcompat.widget.Toolbar
     private lateinit var trackImage: androidx.appcompat.widget.AppCompatImageView
     private lateinit var trackTitle: androidx.appcompat.widget.AppCompatTextView
@@ -48,11 +48,19 @@ class PlayerActivity : AppCompatActivity() {
         artistName.text = track.artistName
         duration.text = dateFormat.format(track.duration.toLong())
         album.text = track.collectionName
-        year.text = track.releaseDate.substring(0, 4)
+        year.text = if (track.releaseDate.length > 3) track.releaseDate.substring(
+            0,
+            4
+        ) else track.releaseDate
         genre.text = track.primaryGenreName
         country.text = track.country
-        val bigImagePath: String =
-            track.artworkUrl100.dropLast(13) + getString(R.string.itunes_big_image_postfix)
+        val pattern = getString(R.string.itunes_small_image_postfix)
+        val bigImagePath: String = if (track.artworkUrl100.lastIndexOf(pattern) > 0)
+            track.artworkUrl100.replace(
+                pattern,
+                getString(R.string.itunes_big_image_postfix)
+            )
+        else track.artworkUrl100
         Glide.with(trackImage)
             .load(bigImagePath)
             .placeholder(R.drawable.placeholder_search_bar)
