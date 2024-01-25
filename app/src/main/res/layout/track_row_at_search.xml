@@ -50,7 +50,7 @@
                 android:text="@string/artist_name_mok"
                 tools:ignore="InefficientWeight,TextContrastCheck,TextSizeCheck" />
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="@dimen/track_row_track_artist_name_height"
                 android:layout_height="@dimen/track_row_track_artist_name_height"
                 android:src="@drawable/ic_point_centered"

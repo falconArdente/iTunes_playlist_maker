@@ -22,7 +22,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
@@ -38,7 +37,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private val iTunesService = Utility.initItunesService()
+    private lateinit var iTunesService: ITunesApi
     private val searchTracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
     private var historyTracks: ArrayList<Track> = arrayListOf()
@@ -57,8 +56,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=ActivitySearchBinding.inflate(layoutInflater)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        iTunesService = Utility.initItunesService(this)
         history = (applicationContext as App).history
         historyTracks = history.tracks
         backButtonClickAttach()
