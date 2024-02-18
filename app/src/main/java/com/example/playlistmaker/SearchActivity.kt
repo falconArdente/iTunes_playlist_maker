@@ -30,6 +30,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_DEF = ""
         const val TRACK_KEY = "track"
         private const val AUTO_SEND_REQUEST_DELAY = 2000L
+        private const val PROGRESS_BAR_DELAY = 45L
 
         enum class State {
             History,
@@ -43,6 +44,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var iTunesService: ITunesApi
     private var uiHandler: Handler? = null
+    private var progressbarPercentage: Int = 0
     private val searchTracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
     private var historyTracks: ArrayList<Track> = arrayListOf()
@@ -106,6 +108,7 @@ class SearchActivity : AppCompatActivity() {
     fun showLayout(state: State) {
         when (state) {
             State.SearchGot -> {
+                rotateTheProgressBar(false)
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.placeholderFrame.isVisible = false
@@ -117,6 +120,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.SearchIsEmpty -> {
+                rotateTheProgressBar(false)
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.updateButton.isVisible = false
@@ -132,6 +136,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.Error -> {
+                rotateTheProgressBar(false)
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.tracksRecyclerView.isVisible = false
@@ -148,6 +153,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.History -> {
+                rotateTheProgressBar(false)
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 if (tracksAdapter.tracks != historyTracks) {
@@ -160,6 +166,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.CleanHistory -> {
+                rotateTheProgressBar(false)
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
@@ -168,7 +175,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.WaitingForResponse -> {
-
+                rotateTheProgressBar(true)
             }
         }
     }
@@ -243,7 +250,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.clearIcon.visibility = View.GONE
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
-                    uiHandler?.postDelayed({sendRequest()}, AUTO_SEND_REQUEST_DELAY)
+                    uiHandler?.postDelayed({ sendRequest() }, AUTO_SEND_REQUEST_DELAY)
                 }
             }
 
@@ -264,5 +271,16 @@ class SearchActivity : AppCompatActivity() {
         binding.tracksRecyclerView.adapter = tracksAdapter
         binding.tracksRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun rotateTheProgressBar(doRotate: Boolean) {
+        if (doRotate) {
+            progressbarPercentage++
+            if (progressbarPercentage > 100) progressbarPercentage = 0
+            binding.progressBar.progress = progressbarPercentage
+            uiHandler?.postDelayed({ rotateTheProgressBar(true) }, PROGRESS_BAR_DELAY)
+        } else {
+            uiHandler?.removeCallbacks { rotateTheProgressBar(true) }
+        }
     }
 }
