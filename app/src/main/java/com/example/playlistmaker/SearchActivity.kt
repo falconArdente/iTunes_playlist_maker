@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar.*
 
 class SearchActivity : AppCompatActivity() {
     companion object {
@@ -30,7 +31,8 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_DEF = ""
         const val TRACK_KEY = "track"
         private const val AUTO_SEND_REQUEST_DELAY = 2000L
-        private const val PROGRESS_BAR_DELAY = 45L
+        private const val PROGRESS_BAR_DELAY = 90L
+        private const val CHOICE_DEBOUNCE_DELAY = 1000L
 
         enum class State {
             History,
@@ -45,22 +47,33 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var iTunesService: ITunesApi
     private var uiHandler: Handler? = null
     private var progressbarPercentage: Int = 0
+    private var choiceTimeStamp: Long = 0L
     private val searchTracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
     private var historyTracks: ArrayList<Track> = arrayListOf()
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
-            (applicationContext as App).history.addTrack(item)
-            val intent =
-                Intent(applicationContext, PlayerActivity::class.java)
-            val json = Gson()
-            intent.putExtra(TRACK_KEY, json.toJson(item))
-            ContextCompat.startActivity(applicationContext, intent, null)
+            if (canMakeAChoice()) {
+                (applicationContext as App).history.addTrack(item)
+                val intent =
+                    Intent(applicationContext, PlayerActivity::class.java)
+                val json = Gson()
+                intent.putExtra(TRACK_KEY, json.toJson(item))
+                ContextCompat.startActivity(applicationContext, intent, null)
+            }
         }
     }
     private val tracksAdapter = TrackAdapter(historyTracks, trackOnClickListener)
     private var searchPromptString: String = ""
     private lateinit var binding: ActivitySearchBinding
+    private fun canMakeAChoice(): Boolean {
+        val currentTime = getInstance().get(MILLISECOND).toLong()
+        return if ((currentTime - choiceTimeStamp) < CHOICE_DEBOUNCE_DELAY) {
+            choiceTimeStamp = currentTime
+            true
+        } else false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         uiHandler = Handler(Looper.getMainLooper())
@@ -109,6 +122,7 @@ class SearchActivity : AppCompatActivity() {
         when (state) {
             State.SearchGot -> {
                 rotateTheProgressBar(false)
+                binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.placeholderFrame.isVisible = false
@@ -121,6 +135,7 @@ class SearchActivity : AppCompatActivity() {
 
             State.SearchIsEmpty -> {
                 rotateTheProgressBar(false)
+                binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.updateButton.isVisible = false
@@ -137,6 +152,7 @@ class SearchActivity : AppCompatActivity() {
 
             State.Error -> {
                 rotateTheProgressBar(false)
+                binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.tracksRecyclerView.isVisible = false
@@ -154,6 +170,7 @@ class SearchActivity : AppCompatActivity() {
 
             State.History -> {
                 rotateTheProgressBar(false)
+                binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 if (tracksAdapter.tracks != historyTracks) {
@@ -167,6 +184,7 @@ class SearchActivity : AppCompatActivity() {
 
             State.CleanHistory -> {
                 rotateTheProgressBar(false)
+                binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
@@ -175,7 +193,13 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.WaitingForResponse -> {
+                binding.progressBar.isVisible = true
                 rotateTheProgressBar(true)
+                binding.placeholderFrame.isVisible = false
+                binding.updateButton.isVisible = false
+                binding.beenSearchedTitle.isVisible = false
+                binding.clearSearchList.isVisible = false
+                binding.tracksRecyclerView.isVisible = false
             }
         }
     }
