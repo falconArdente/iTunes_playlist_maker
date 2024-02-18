@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -32,7 +33,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: PlayerBinding
     private var playerState = PlayerState.Default
     private val mediaPlayer = MediaPlayer()
-    private var uiHandler: Handler? = null
+    private lateinit var uiHandler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PlayerBinding.inflate(layoutInflater)
@@ -40,22 +41,19 @@ class PlayerActivity : AppCompatActivity() {
         binding.header.setNavigationOnClickListener { finish() }
         track = getTrackFromIntent()
         placeTrackDataToElements(track)
-        binding.playButton.isEnabled=false
         uiHandler = Handler(Looper.getMainLooper())
-        mediaPlayer.setDataSource(track.previewUrl)
-        mediaPlayer.setOnPreparedListener {
-            binding.playButton.background =
-                AppCompatResources.getDrawable(this, R.drawable.play_button)
-            playerState = PlayerState.Prepared
-            binding.playButton.isEnabled=true
-        }
-        mediaPlayer.prepareAsync()
+        prepareMediaPlayerStuff()
         binding.playButton.setOnClickListener { pushPlayButton() }
     }
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
+        doPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
     }
 
     private fun getTrackFromIntent(): Track {
@@ -95,19 +93,11 @@ class PlayerActivity : AppCompatActivity() {
     private fun pushPlayButton() {
         when (playerState) {
             PlayerState.Prepared, PlayerState.Paused -> {
-                mediaPlayer.start()
-                playerState = PlayerState.Playing
-                binding.playButton.background =
-                    AppCompatResources.getDrawable(this, R.drawable.pause_button)
-                startDurationUpdate()
+                doPlay()
             }
 
             PlayerState.Playing -> {
-                mediaPlayer.pause()
-                playerState = PlayerState.Paused
-                binding.playButton.background =
-                    AppCompatResources.getDrawable(this, R.drawable.play_button)
-                uiHandler?.removeCallbacks { startDurationUpdate() }
+                doPause()
             }
 
             else -> Toast.makeText(this, getString(R.string.sound_stream_error), Toast.LENGTH_SHORT)
@@ -115,11 +105,52 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun startDurationUpdate() {
-        uiHandler?.postDelayed({
+    private fun doPause() {
+        uiHandler.removeCallbacks(startDurationUpdate)
+        mediaPlayer.pause()
+        playerState = PlayerState.Paused
+        binding.playButton.background =
+            AppCompatResources.getDrawable(this, R.drawable.play_button)
+    }
+
+    private fun doPlay() {
+        mediaPlayer.start()
+        playerState = PlayerState.Playing
+        binding.playButton.background =
+            AppCompatResources.getDrawable(this, R.drawable.pause_button)
+        startDurationUpdate.run()
+    }
+
+    private fun didStopped() {
+        Log.d("DurUpdate", "didStopped")
+        uiHandler.removeCallbacks(startDurationUpdate)
+        playerState = PlayerState.Prepared
+        binding.playButton.background =
+            AppCompatResources.getDrawable(this, R.drawable.play_button)
+        uiHandler.post { binding.currentPlayPosition.text = dateFormat.format(0L) }
+    }
+
+    private fun prepareMediaPlayerStuff() {
+        binding.playButton.isEnabled = false
+        mediaPlayer.setDataSource(track.previewUrl)
+        mediaPlayer.setOnPreparedListener { didPrepared() }
+        mediaPlayer.setOnCompletionListener { didStopped() }
+        mediaPlayer.prepareAsync()
+    }
+
+    private fun didPrepared() {
+        binding.playButton.background =
+            AppCompatResources.getDrawable(this, R.drawable.play_button)
+        playerState = PlayerState.Prepared
+        binding.playButton.isEnabled = true
+    }
+
+    private val startDurationUpdate: Runnable = object : Runnable {
+        override fun run() {
             binding.currentPlayPosition.text =
                 dateFormat.format(mediaPlayer.currentPosition.toLong())
-            startDurationUpdate()
-        }, DURATION_RENEWAL_DELAY)
+            uiHandler.postDelayed(this, DURATION_RENEWAL_DELAY)
+            Log.d("DurUpdate", mediaPlayer.currentPosition.toString())
+        }
     }
 }
