@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,6 +29,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
         const val TRACK_KEY = "track"
+        private const val AUTO_SEND_REQUEST_DELAY = 2000L
 
         enum class State {
             History,
@@ -34,10 +37,12 @@ class SearchActivity : AppCompatActivity() {
             SearchGot,
             SearchIsEmpty,
             Error,
+            WaitingForResponse,
         }
     }
 
     private lateinit var iTunesService: ITunesApi
+    private var uiHandler: Handler? = null
     private val searchTracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
     private var historyTracks: ArrayList<Track> = arrayListOf()
@@ -56,6 +61,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        uiHandler = Handler(Looper.getMainLooper())
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         iTunesService = Utility.initItunesService(this)
@@ -160,10 +166,16 @@ class SearchActivity : AppCompatActivity() {
                 binding.clearSearchList.isVisible = false
                 binding.tracksRecyclerView.isVisible = false
             }
+
+            State.WaitingForResponse -> {
+
+            }
         }
     }
 
     private fun sendRequest() {
+        showLayout(State.WaitingForResponse)
+        uiHandler?.removeCallbacks { sendRequest() }
         if (binding.searchBar.text.isNotEmpty()) {
             iTunesService.findTrack(binding.searchBar.text.toString()).enqueue(object :
                 Callback<TrackSearchResponse> {
@@ -231,6 +243,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.clearIcon.visibility = View.GONE
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
+                    uiHandler?.postDelayed({sendRequest()}, AUTO_SEND_REQUEST_DELAY)
                 }
             }
 
