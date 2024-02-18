@@ -37,4 +37,5 @@
     <string name="genre_mok">Жанр загружается</string>
     <string name="country_mok">Страна загружается</string>
     <string name="duration_dots_mok" translatable="false">00:00</string>
+    <string name="sound_stream_error" >Что-то не так с аудиопотоком</string>
 </resources>
