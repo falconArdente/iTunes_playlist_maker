@@ -5,7 +5,6 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -122,7 +121,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun didStopped() {
-        Log.d("DurUpdate", "didStopped")
         uiHandler.removeCallbacks(startDurationUpdate)
         playerState = PlayerState.Prepared
         binding.playButton.background =
@@ -150,7 +148,6 @@ class PlayerActivity : AppCompatActivity() {
             binding.currentPlayPosition.text =
                 dateFormat.format(mediaPlayer.currentPosition.toLong())
             uiHandler.postDelayed(this, DURATION_RENEWAL_DELAY)
-            Log.d("DurUpdate", mediaPlayer.currentPosition.toString())
         }
     }
 }
