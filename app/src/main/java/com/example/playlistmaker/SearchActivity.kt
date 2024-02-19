@@ -86,7 +86,7 @@ class SearchActivity : AppCompatActivity() {
         searchBarSetActionDone()//temporary use only
         clearTextAttach()
         startUpViewHolder()
-        binding.updateButton.setOnClickListener { uiHandler!!.post(sendRequest) }
+        binding.updateButton.setOnClickListener { uiHandler?.post(sendRequest) }
         clearHistoryButtonClickAttach()
     }
 
