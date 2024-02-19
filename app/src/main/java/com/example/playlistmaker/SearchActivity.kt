@@ -199,8 +199,8 @@ class SearchActivity : AppCompatActivity() {
 
     private val sendRequest: Runnable = object : Runnable {
         override fun run() {
-            showLayout(State.WaitingForResponse)
             uiHandler?.removeCallbacks(this)
+            showLayout(State.WaitingForResponse)
             if (binding.searchBar.text.isNotEmpty()) {
                 iTunesService.findTrack(binding.searchBar.text.toString()).enqueue(object :
                     Callback<TrackSearchResponse> {
