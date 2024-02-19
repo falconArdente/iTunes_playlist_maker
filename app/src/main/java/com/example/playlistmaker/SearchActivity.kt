@@ -56,10 +56,10 @@ class SearchActivity : AppCompatActivity() {
             if (canMakeAChoice()) {
                 (applicationContext as App).history.addTrack(item)
                 val intent =
-                    Intent(applicationContext, PlayerActivity::class.java)
+                    Intent(this@SearchActivity, PlayerActivity::class.java)
                 val json = Gson()
                 intent.putExtra(TRACK_KEY, json.toJson(item))
-                ContextCompat.startActivity(applicationContext, intent, null)
+                ContextCompat.startActivity(this@SearchActivity, intent, null)
             }
         }
     }
