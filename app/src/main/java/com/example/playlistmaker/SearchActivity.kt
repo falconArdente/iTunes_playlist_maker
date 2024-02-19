@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,15 +20,19 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.google.gson.Gson
+import kotlinx.coroutines.Runnable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar.*
 
 class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
         const val TRACK_KEY = "track"
+        private const val AUTO_SEND_REQUEST_DELAY = 2000L
+        private const val CHOICE_DEBOUNCE_DELAY = 1000L
 
         enum class State {
             History,
@@ -34,28 +40,42 @@ class SearchActivity : AppCompatActivity() {
             SearchGot,
             SearchIsEmpty,
             Error,
+            WaitingForResponse,
         }
     }
 
     private lateinit var iTunesService: ITunesApi
+    private var uiHandler: Handler? = null
+    private var choiceTimeStamp: Long = 0L
     private val searchTracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
     private var historyTracks: ArrayList<Track> = arrayListOf()
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
-            (applicationContext as App).history.addTrack(item)
-            val intent =
-                Intent(applicationContext, PlayerActivity::class.java)
-            val json = Gson()
-            intent.putExtra(TRACK_KEY, json.toJson(item))
-            ContextCompat.startActivity(applicationContext, intent, null)
+            if (canMakeAChoice()) {
+                (applicationContext as App).history.addTrack(item)
+                val intent =
+                    Intent(this@SearchActivity, PlayerActivity::class.java)
+                val json = Gson()
+                intent.putExtra(TRACK_KEY, json.toJson(item))
+                ContextCompat.startActivity(this@SearchActivity, intent, null)
+            }
         }
     }
     private val tracksAdapter = TrackAdapter(historyTracks, trackOnClickListener)
     private var searchPromptString: String = ""
     private lateinit var binding: ActivitySearchBinding
+    private fun canMakeAChoice(): Boolean {
+        val currentTime = getInstance().get(MILLISECOND).toLong()
+        return if ((currentTime - choiceTimeStamp) < CHOICE_DEBOUNCE_DELAY) {
+            choiceTimeStamp = currentTime
+            true
+        } else false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        uiHandler = Handler(Looper.getMainLooper())
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         iTunesService = Utility.initItunesService(this)
@@ -66,7 +86,7 @@ class SearchActivity : AppCompatActivity() {
         searchBarSetActionDone()//temporary use only
         clearTextAttach()
         startUpViewHolder()
-        binding.updateButton.setOnClickListener { sendRequest() }
+        binding.updateButton.setOnClickListener { uiHandler?.post(sendRequest) }
         clearHistoryButtonClickAttach()
     }
 
@@ -100,6 +120,7 @@ class SearchActivity : AppCompatActivity() {
     fun showLayout(state: State) {
         when (state) {
             State.SearchGot -> {
+                binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.placeholderFrame.isVisible = false
@@ -111,6 +132,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.SearchIsEmpty -> {
+                binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.updateButton.isVisible = false
@@ -126,6 +148,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.Error -> {
+                binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.tracksRecyclerView.isVisible = false
@@ -142,6 +165,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.History -> {
+                binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 if (tracksAdapter.tracks != historyTracks) {
@@ -154,52 +178,67 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.CleanHistory -> {
+                binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.tracksRecyclerView.isVisible = false
             }
+
+            State.WaitingForResponse -> {
+                binding.placeholderFrame.isVisible = false
+                binding.updateButton.isVisible = false
+                binding.beenSearchedTitle.isVisible = false
+                binding.clearSearchList.isVisible = false
+                binding.tracksRecyclerView.isVisible = false
+                binding.progressBar.visibility = View.VISIBLE
+            }
         }
     }
 
-    private fun sendRequest() {
-        if (binding.searchBar.text.isNotEmpty()) {
-            iTunesService.findTrack(binding.searchBar.text.toString()).enqueue(object :
-                Callback<TrackSearchResponse> {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onResponse(
-                    call: Call<TrackSearchResponse>,
-                    response: Response<TrackSearchResponse>
-                ) {
-                    if (response.code() == 200) {
-                        searchTracks.clear()
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            searchTracks.addAll(response.body()?.results!!)
-                            tracksAdapter.notifyDataSetChanged()
-                        }
-                        if (searchTracks.isEmpty()) {///!!!!
-                            showLayout(State.SearchIsEmpty)
-                        } else {
-                            showLayout(State.SearchGot)
-                        }
-                    } else {
-                        showLayout(State.Error)
+    private val sendRequest: Runnable = object : Runnable {
+        override fun run() {
+            uiHandler?.removeCallbacks(this)
+            showLayout(State.WaitingForResponse)
+            if (binding.searchBar.text.isNotEmpty()) {
+                iTunesService.findTrack(binding.searchBar.text.toString()).enqueue(object :
+                    Callback<TrackSearchResponse> {
+                    @SuppressLint("NotifyDataSetChanged")
+                    override fun onResponse(
+                        call: Call<TrackSearchResponse>,
+                        response: Response<TrackSearchResponse>
+                    ) {
                         Log.e("servRequests", "$response.code()")
+                        if (response.code() == 200) {
+                            searchTracks.clear()
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                searchTracks.addAll(response.body()?.results ?: emptyList())
+                                tracksAdapter.notifyDataSetChanged()
+                            }
+                            if (searchTracks.isEmpty()) {///!!!!
+                                showLayout(State.SearchIsEmpty)
+                            } else {
+                                showLayout(State.SearchGot)
+                            }
+                        } else {
+                            showLayout(State.Error)
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
-                    showLayout(State.Error)
-                }
-            })
+                    override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
+                        showLayout(State.Error)
+                    }
+                })
+            }
         }
+
     }
 
     private fun searchBarSetActionDone() {
         binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                sendRequest()
+                uiHandler?.post(sendRequest)
             }
             false
         }
@@ -231,6 +270,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.clearIcon.visibility = View.GONE
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
+                    uiHandler?.postDelayed(sendRequest, AUTO_SEND_REQUEST_DELAY)
                 }
             }
 
