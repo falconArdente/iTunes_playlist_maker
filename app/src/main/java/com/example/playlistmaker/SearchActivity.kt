@@ -187,12 +187,12 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.WaitingForResponse -> {
-                binding.progressBar.isVisible = true
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.tracksRecyclerView.isVisible = false
+                binding.progressBar.visibility = View.VISIBLE
             }
         }
     }
@@ -270,7 +270,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.clearIcon.visibility = View.GONE
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
-                    uiHandler?.postDelayed( sendRequest , AUTO_SEND_REQUEST_DELAY)
+                    uiHandler?.postDelayed(sendRequest, AUTO_SEND_REQUEST_DELAY)
                 }
             }
 
