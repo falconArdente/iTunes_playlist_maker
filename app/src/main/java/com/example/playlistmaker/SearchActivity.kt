@@ -213,7 +213,7 @@ class SearchActivity : AppCompatActivity() {
                         if (response.code() == 200) {
                             searchTracks.clear()
                             if (response.body()?.results?.isNotEmpty() == true) {
-                                searchTracks.addAll(response.body()?.results!!)
+                                searchTracks.addAll(response.body()?.results ?: emptyList())
                                 tracksAdapter.notifyDataSetChanged()
                             }
                             if (searchTracks.isEmpty()) {///!!!!
