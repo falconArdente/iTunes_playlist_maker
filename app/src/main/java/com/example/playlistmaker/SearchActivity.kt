@@ -20,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.google.gson.Gson
+import kotlinx.coroutines.Runnable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +32,6 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_DEF = ""
         const val TRACK_KEY = "track"
         private const val AUTO_SEND_REQUEST_DELAY = 2000L
-        private const val PROGRESS_BAR_DELAY = 90L
         private const val CHOICE_DEBOUNCE_DELAY = 1000L
 
         enum class State {
@@ -46,7 +46,6 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var iTunesService: ITunesApi
     private var uiHandler: Handler? = null
-    private var progressbarPercentage: Int = 0
     private var choiceTimeStamp: Long = 0L
     private val searchTracks: ArrayList<Track> = arrayListOf()
     private lateinit var history: SearchHistory
@@ -87,7 +86,7 @@ class SearchActivity : AppCompatActivity() {
         searchBarSetActionDone()//temporary use only
         clearTextAttach()
         startUpViewHolder()
-        binding.updateButton.setOnClickListener { sendRequest() }
+        binding.updateButton.setOnClickListener { uiHandler!!.post(sendRequest) }
         clearHistoryButtonClickAttach()
     }
 
@@ -121,7 +120,6 @@ class SearchActivity : AppCompatActivity() {
     fun showLayout(state: State) {
         when (state) {
             State.SearchGot -> {
-                rotateTheProgressBar(false)
                 binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
@@ -134,7 +132,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.SearchIsEmpty -> {
-                rotateTheProgressBar(false)
                 binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
@@ -151,7 +148,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.Error -> {
-                rotateTheProgressBar(false)
                 binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
@@ -169,7 +165,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.History -> {
-                rotateTheProgressBar(false)
                 binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
@@ -183,7 +178,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
             State.CleanHistory -> {
-                rotateTheProgressBar(false)
                 binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
@@ -194,7 +188,6 @@ class SearchActivity : AppCompatActivity() {
 
             State.WaitingForResponse -> {
                 binding.progressBar.isVisible = true
-                rotateTheProgressBar(true)
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
@@ -204,45 +197,48 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendRequest() {
-        showLayout(State.WaitingForResponse)
-        uiHandler?.removeCallbacks { sendRequest() }
-        if (binding.searchBar.text.isNotEmpty()) {
-            iTunesService.findTrack(binding.searchBar.text.toString()).enqueue(object :
-                Callback<TrackSearchResponse> {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onResponse(
-                    call: Call<TrackSearchResponse>,
-                    response: Response<TrackSearchResponse>
-                ) {
-                    if (response.code() == 200) {
-                        searchTracks.clear()
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            searchTracks.addAll(response.body()?.results!!)
-                            tracksAdapter.notifyDataSetChanged()
-                        }
-                        if (searchTracks.isEmpty()) {///!!!!
-                            showLayout(State.SearchIsEmpty)
-                        } else {
-                            showLayout(State.SearchGot)
-                        }
-                    } else {
-                        showLayout(State.Error)
+    private val sendRequest: Runnable = object : Runnable {
+        override fun run() {
+            showLayout(State.WaitingForResponse)
+            uiHandler?.removeCallbacks(this)
+            if (binding.searchBar.text.isNotEmpty()) {
+                iTunesService.findTrack(binding.searchBar.text.toString()).enqueue(object :
+                    Callback<TrackSearchResponse> {
+                    @SuppressLint("NotifyDataSetChanged")
+                    override fun onResponse(
+                        call: Call<TrackSearchResponse>,
+                        response: Response<TrackSearchResponse>
+                    ) {
                         Log.e("servRequests", "$response.code()")
+                        if (response.code() == 200) {
+                            searchTracks.clear()
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                searchTracks.addAll(response.body()?.results!!)
+                                tracksAdapter.notifyDataSetChanged()
+                            }
+                            if (searchTracks.isEmpty()) {///!!!!
+                                showLayout(State.SearchIsEmpty)
+                            } else {
+                                showLayout(State.SearchGot)
+                            }
+                        } else {
+                            showLayout(State.Error)
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
-                    showLayout(State.Error)
-                }
-            })
+                    override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
+                        showLayout(State.Error)
+                    }
+                })
+            }
         }
+
     }
 
     private fun searchBarSetActionDone() {
         binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                sendRequest()
+                uiHandler?.post(sendRequest)
             }
             false
         }
@@ -274,7 +270,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.clearIcon.visibility = View.GONE
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
-                    uiHandler?.postDelayed({ sendRequest() }, AUTO_SEND_REQUEST_DELAY)
+                    uiHandler?.postDelayed( sendRequest , AUTO_SEND_REQUEST_DELAY)
                 }
             }
 
@@ -295,16 +291,5 @@ class SearchActivity : AppCompatActivity() {
         binding.tracksRecyclerView.adapter = tracksAdapter
         binding.tracksRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-    }
-
-    private fun rotateTheProgressBar(doRotate: Boolean) {
-        if (doRotate) {
-            progressbarPercentage++
-            if (progressbarPercentage > 100) progressbarPercentage = 0
-            binding.progressBar.progress = progressbarPercentage
-            uiHandler?.postDelayed({ rotateTheProgressBar(true) }, PROGRESS_BAR_DELAY)
-        } else {
-            uiHandler?.removeCallbacks { rotateTheProgressBar(true) }
-        }
     }
 }

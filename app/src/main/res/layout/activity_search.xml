@@ -101,7 +101,7 @@
         android:layout_height="@dimen/search_progress_bar_size"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/search_progress_bar_top_margin"
-        android:indeterminate="false"
+        android:indeterminate="true"
         app:indicatorColor="?attr/colorSecondary"
         app:indicatorDirectionCircular="counterclockwise"
         app:trackColor="@color/YP_Blue" />
