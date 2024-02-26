@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.PlayerBinding
+import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import java.util.Locale
 
@@ -63,7 +65,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun placeTrackDataToElements(track: Track) {
-        binding.trackTitle.text = track.trackName
+        binding.trackTitle.text = track.trackTitle
         binding.artistName.text = track.artistName
         binding.durationValue.text = dateFormat.format(track.duration.toLong())
         binding.albumValue.text = track.collectionName
@@ -71,15 +73,15 @@ class PlayerActivity : AppCompatActivity() {
             0,
             4
         ) else track.releaseDate
-        binding.genreValue.text = track.primaryGenreName
+        binding.genreValue.text = track.genre
         binding.countryValue.text = track.country
         val pattern = getString(R.string.itunes_small_image_postfix)
-        val bigImagePath: String = if (track.artworkUrl100.lastIndexOf(pattern) > 0)
-            track.artworkUrl100.replace(
+        val bigImagePath: String = if (track.artwork.lastIndexOf(pattern) > 0)
+            track.artwork.replace(
                 pattern,
                 getString(R.string.itunes_big_image_postfix)
             )
-        else track.artworkUrl100
+        else track.artwork
         Glide.with(binding.trackImage)
             .load(bigImagePath)
             .placeholder(R.drawable.placeholder_search_bar)
@@ -130,7 +132,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun prepareMediaPlayerStuff() {
         binding.playButton.isEnabled = false
-        mediaPlayer.setDataSource(track.previewUrl)
+        mediaPlayer.setDataSource(track.trackPreview)
         mediaPlayer.setOnPreparedListener { didPrepared() }
         mediaPlayer.setOnCompletionListener { didStopped() }
         mediaPlayer.prepareAsync()

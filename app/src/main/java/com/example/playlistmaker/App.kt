@@ -10,14 +10,13 @@ private const val DARK_THEME_KEY = "dark_theme_is_on"
 class App : Application() {
     private var darkThemeIsOn: Boolean = false
     private lateinit var appPreferences: SharedPreferences
-    lateinit var history: SearchHistory
+
 
     override fun onCreate() {
         super.onCreate()
         appPreferences = getSharedPreferences(APP_PREFERENCES_FILE_NAME, MODE_PRIVATE)
         darkThemeIsOn = appPreferences.getBoolean(DARK_THEME_KEY, false)
         switchTheme(darkThemeIsOn)
-        history = SearchHistory(appPreferences)
     }
 
     private fun saveDarkThemeState() {
