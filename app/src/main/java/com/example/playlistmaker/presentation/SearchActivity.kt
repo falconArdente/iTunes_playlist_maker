@@ -36,7 +36,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_DEF = ""
         const val TRACK_KEY = "track"
         private const val AUTO_SEND_REQUEST_DELAY = 2000L
-        private const val CHOICE_DEBOUNCE_DELAY = 1000L
+        private const val CHOICE_DEBOUNCE_DELAY = 1100L
 
         enum class State {
             History,
@@ -56,7 +56,7 @@ class SearchActivity : AppCompatActivity() {
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
             if (canMakeAChoice()) {
-               history.addTrackToHistory(item)
+                history.addTrackToHistory(item)
                 val intent =
                     Intent(this@SearchActivity, PlayerActivity::class.java)
                 val json = Gson()
