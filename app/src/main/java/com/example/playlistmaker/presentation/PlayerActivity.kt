@@ -18,7 +18,7 @@ import com.google.gson.Gson
 import java.util.Locale
 
 private const val TRACK_KEY = "track"
-private const val DURATION_RENEWAL_DELAY: Long = 420L
+private const val DURATION_RENEWAL_DELAY: Long = 421L
 
 class PlayerActivity : AppCompatActivity() {
 
