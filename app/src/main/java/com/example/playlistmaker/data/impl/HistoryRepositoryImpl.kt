@@ -14,7 +14,7 @@ private const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
 
 class HistoryRepositoryImpl(context: Context) : HistoryRepository {
     private var appPreferences: SharedPreferences =
-      context.getSharedPreferences(APP_PREFERENCES_FILE_NAME, Application.MODE_PRIVATE)
+        context.getSharedPreferences(APP_PREFERENCES_FILE_NAME, Application.MODE_PRIVATE)
 
     private val tracks: ArrayList<Track> = arrayListOf()
     private val gson = Gson()
@@ -27,7 +27,7 @@ class HistoryRepositoryImpl(context: Context) : HistoryRepository {
     }
 
     override fun getTracksHistory(): List<Track> {
-        Log.d("history","try getTracksHistory")
+        Log.d("history", "try getTracksHistory")
         val vaultString = appPreferences.getString(SEARCH_LIST_KEY, null)
         return if (vaultString.isNullOrEmpty()) {
             Log.d("history", "is Empty")
@@ -51,7 +51,7 @@ class HistoryRepositoryImpl(context: Context) : HistoryRepository {
         Log.d("history", "done saving")
     }
 
-    override fun clearHistory():Boolean {
+    override fun clearHistory(): Boolean {
         tracks.clear()
         saveToVault()
         Log.d("history", "cleared")

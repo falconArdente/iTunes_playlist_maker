@@ -42,7 +42,7 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
         } else {
             Log.d("net", "sRepo launch Error consumer")
             errorConsumer.consume()
-            return emptyList<Track>()
+            return emptyList()
         }
     }
 

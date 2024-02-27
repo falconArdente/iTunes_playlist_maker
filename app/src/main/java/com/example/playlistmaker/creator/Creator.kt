@@ -25,8 +25,11 @@ object Creator {
         return HistoryInteractorImpl(context)
     }
 
-    fun provideMusicPlayerInteractor(musicPlayEventsConsumer:MusicPlayInteractor.MusicPlayEventsConsumer):MusicPlayInteractor {
-        return MusicPlayerInteractorImpl(player = MediaPlayerBasedImpl(), musicPlayEventsConsumer = musicPlayEventsConsumer)
+    fun provideMusicPlayerInteractor(musicPlayEventsConsumer: MusicPlayInteractor.MusicPlayEventsConsumer): MusicPlayInteractor {
+        return MusicPlayerInteractorImpl(
+            player = MediaPlayerBasedImpl(),
+            musicPlayEventsConsumer = musicPlayEventsConsumer
+        )
     }
 
 }

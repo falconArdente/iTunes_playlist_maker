@@ -9,6 +9,7 @@ interface MusicPlayInteractor {
         Playing,
         Paused,
     }
+
     fun play()
     fun pause()
     fun stop()
