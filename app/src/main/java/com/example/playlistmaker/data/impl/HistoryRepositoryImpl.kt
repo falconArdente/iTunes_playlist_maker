@@ -3,7 +3,6 @@ package com.example.playlistmaker.data.impl
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import com.example.playlistmaker.data.repository.HistoryRepository
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
@@ -27,10 +26,8 @@ class HistoryRepositoryImpl(context: Context) : HistoryRepository {
     }
 
     override fun getTracksHistory(): List<Track> {
-        Log.d("history", "try getTracksHistory")
         val vaultString = appPreferences.getString(SEARCH_LIST_KEY, null)
         return if (vaultString.isNullOrEmpty()) {
-            Log.d("history", "is Empty")
             emptyList()
         } else {
             tracks.clear()
@@ -39,7 +36,6 @@ class HistoryRepositoryImpl(context: Context) : HistoryRepository {
                     vaultString, Array<Track>::class.java
                 )
             )
-            Log.d("history", "Done get " + tracks.size + " items")
             tracks.toList()
         }
     }
@@ -48,13 +44,11 @@ class HistoryRepositoryImpl(context: Context) : HistoryRepository {
         appPreferences.edit()
             .putString(SEARCH_LIST_KEY, gson.toJson(tracks))
             .apply()
-        Log.d("history", "done saving")
     }
 
     override fun clearHistory(): Boolean {
         tracks.clear()
         saveToVault()
-        Log.d("history", "cleared")
         return true
     }
 }

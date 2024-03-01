@@ -9,7 +9,7 @@ import com.example.playlistmaker.domain.api.SearchInteractor
 import com.example.playlistmaker.domain.models.Track
 
 class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRepository {
-    private lateinit var succesConsumer: SearchInteractor.TracksConsumer
+    private var successConsumer: SearchInteractor.TracksConsumer? = null
     private var errorConsumer: SearchInteractor.ErrorConsumer =
         object : SearchInteractor.ErrorConsumer {
             override fun consume() {
@@ -19,9 +19,8 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
 
     override fun searchTracks(expression: String): List<Track> {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
-        Log.d("net", "sRepo code ${response.resultCode}")
         if (response.resultCode == 200) {
-            Log.d("net", "sRepo income ${(response as TracksSearchResponse)}")
+            (response as TracksSearchResponse)
             val tracksList: List<Track> = response.results.map {
                 Track(
                     it.id ?: "0",
@@ -33,14 +32,12 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
                     it.releaseDate ?: "0",
                     it.primaryGenreName ?: "0",
                     it.country ?: "0",
-                    it.previewUrl ?: "0"
+                    it.previewUrl ?: "0",
                 )
             }
-            Log.d("net", "sRepo remap $tracksList")
-            succesConsumer.consume(tracksList)
+            successConsumer?.consume(tracksList)
             return tracksList
         } else {
-            Log.d("net", "sRepo launch Error consumer")
             errorConsumer.consume()
             return emptyList()
         }
@@ -51,6 +48,6 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
     }
 
     override fun setOnSuccess(consumer: SearchInteractor.TracksConsumer) {
-        succesConsumer = consumer
+        successConsumer = consumer
     }
 }

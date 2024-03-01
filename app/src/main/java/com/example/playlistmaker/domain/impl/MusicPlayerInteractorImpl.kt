@@ -2,6 +2,7 @@ package com.example.playlistmaker.domain.impl
 
 import com.example.playlistmaker.data.mediaPlayer.Player
 import com.example.playlistmaker.domain.api.MusicPlayInteractor
+import com.example.playlistmaker.domain.api.PlayState
 import com.example.playlistmaker.domain.models.Track
 
 class MusicPlayerInteractorImpl(
@@ -30,6 +31,6 @@ class MusicPlayerInteractorImpl(
 
     override fun getCurrentPosition(): Int = player.getCurrentPosition()
 
-    override fun getCurrentState(): MusicPlayInteractor.PlayState = player.getCurrentState()
+    override fun getCurrentState(): PlayState = player.getCurrentState()
 
 }

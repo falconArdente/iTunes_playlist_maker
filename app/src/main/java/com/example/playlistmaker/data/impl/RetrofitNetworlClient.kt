@@ -1,6 +1,5 @@
 package com.example.playlistmaker.data.impl
 
-import android.util.Log
 import com.example.playlistmaker.data.dto.Response
 import com.example.playlistmaker.data.dto.TracksSearchRequest
 import com.example.playlistmaker.data.dto.TracksSearchResponse
@@ -21,25 +20,20 @@ class RetrofitNetworlClient : NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         if (dto is TracksSearchRequest) {
-            Log.d("net", "start reQ: ${dto.expression}")
             val resp: retrofit2.Response<TracksSearchResponse>
             try {
                 resp = iTunesService.findTrack(dto.expression).execute()
             } catch (e: Throwable) {
-                Log.d("net", "some retrofit error")
                 return Response().apply {
                     resultCode = 400
                 }
             }
-            Log.d("net", "$resp")
-            if (resp.code()!=200){
-                Log.d("net", "${resp.code()} retrofit error")
+            if (resp.code() != 200) {
                 return Response().apply {
                     resultCode = 404
                 }
             }
             val body = resp.body() ?: Response()
-
             return (body as TracksSearchResponse).apply {
                 expression = dto.expression
                 resultCode = resp.code()
@@ -50,5 +44,4 @@ class RetrofitNetworlClient : NetworkClient {
             }
         }
     }
-
 }

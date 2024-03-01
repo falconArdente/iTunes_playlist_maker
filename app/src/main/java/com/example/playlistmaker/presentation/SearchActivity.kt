@@ -9,7 +9,6 @@ import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -48,15 +47,15 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var history: HistoryInteractor
-    private lateinit var search: SearchInteractor
+    private var history: HistoryInteractor? = null
+    private var search: SearchInteractor? = null
     private var searchTracks = arrayListOf<Track>()
     private var uiHandler: Handler? = null
     private var choiceTimeStamp: Long = 0L
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
             if (canMakeAChoice()) {
-                history.addTrackToHistory(item)
+                history?.addTrackToHistory(item)
                 val intent =
                     Intent(this@SearchActivity, PlayerActivity::class.java)
                 val json = Gson()
@@ -65,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
-    private lateinit var tracksAdapter: TrackAdapter
+    private var tracksAdapter: TrackAdapter? = null
     private var searchPromptString: String = ""
     private lateinit var binding: ActivitySearchBinding
     private fun canMakeAChoice(): Boolean {
@@ -83,8 +82,8 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         history = Creator.provideHistoryInteractor(this)
-        Log.d("history", "done init")
-        tracksAdapter = TrackAdapter(history.getTracksHistory(), trackOnClickListener)
+        tracksAdapter =
+            TrackAdapter(history?.getTracksHistory() ?: emptyList(), trackOnClickListener)
         search = Creator.provideSearchInteractor()
         backButtonClickAttach()
         searchBarTextWatcherAttach()
@@ -93,12 +92,10 @@ class SearchActivity : AppCompatActivity() {
         startUpViewHolder()
         binding.updateButton.setOnClickListener { uiHandler?.post(doSearchTracksOfEditText) }
         clearHistoryButtonClickAttach()
-        Log.d("history", "Create phase Ended")
     }
 
     val searchConsumer = object : TracksConsumer {
         override fun consume(foundTracks: List<Track>) {
-            Log.d("net", "searchConsumerStarted")
             uiHandler?.post {
                 searchTracks.clear()
                 searchTracks.addAll(foundTracks)
@@ -115,7 +112,7 @@ class SearchActivity : AppCompatActivity() {
         override fun run() {
             uiHandler?.removeCallbacks(this)
             val prompt = binding.searchBar.text.toString()
-            if (prompt.isNotEmpty()) search.searchTracks(
+            if (prompt.isNotEmpty()) search?.searchTracks(
                 expression = prompt,
                 trackConsumer = searchConsumer,
                 errorConsumer = searchErrorConsumer
@@ -125,7 +122,6 @@ class SearchActivity : AppCompatActivity() {
 
     val searchErrorConsumer = object : SearchInteractor.ErrorConsumer {
         override fun consume() {
-            Log.d("net", "ERRORConsumerStarted")
             uiHandler?.post { showLayout(State.Error) }
         }
 
@@ -135,7 +131,7 @@ class SearchActivity : AppCompatActivity() {
         super.onResume()
         if (binding.searchBar.text.isNullOrEmpty()) {
             binding.clearIcon.visibility = View.GONE
-            val historyTracks = history.getTracksHistory()
+            val historyTracks = history?.getTracksHistory() ?: emptyList()
             if (historyTracks.isEmpty()) showLayout(State.CleanHistory)
             else showLayout(State.History)
         }
@@ -165,9 +161,9 @@ class SearchActivity : AppCompatActivity() {
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.placeholderFrame.isVisible = false
-                if (tracksAdapter.tracks != searchTracks) {
-                    tracksAdapter.tracks = searchTracks
-                    tracksAdapter.notifyDataSetChanged()
+                if (tracksAdapter?.tracks != searchTracks) {
+                    tracksAdapter?.tracks = searchTracks
+                    tracksAdapter?.notifyDataSetChanged()
                 }
                 binding.tracksRecyclerView.visibility = View.VISIBLE
             }
@@ -209,10 +205,11 @@ class SearchActivity : AppCompatActivity() {
                 binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
-                val historyTracks = history.getTracksHistory()
-                if (tracksAdapter.tracks != historyTracks) {
-                    tracksAdapter.tracks = historyTracks
-                    tracksAdapter.notifyDataSetChanged()
+                val historyTracks = history?.getTracksHistory() ?: emptyList()
+
+                if (tracksAdapter?.tracks != historyTracks) {
+                    tracksAdapter?.tracks = historyTracks
+                    tracksAdapter?.notifyDataSetChanged()
                 }
                 binding.beenSearchedTitle.visibility = View.VISIBLE
                 binding.clearSearchList.visibility = View.VISIBLE
@@ -239,7 +236,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
     private fun searchBarSetActionDone() {
         binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -251,7 +247,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun clearHistoryButtonClickAttach() {
         binding.clearSearchList.setOnClickListener {
-            history.clearHistory()
+            history?.clearHistory()
             showLayout(State.CleanHistory)
         }
     }

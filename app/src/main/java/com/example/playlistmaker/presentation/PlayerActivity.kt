@@ -4,7 +4,6 @@ import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.Glide
@@ -13,6 +12,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.PlayerBinding
 import com.example.playlistmaker.domain.api.MusicPlayInteractor
+import com.example.playlistmaker.domain.api.PlayState
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import java.util.Locale
@@ -23,10 +23,10 @@ private const val DURATION_RENEWAL_DELAY: Long = 421L
 class PlayerActivity : AppCompatActivity() {
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-    private lateinit var track: Track
+    private var track: Track = Track("", "", "", "", "", "", "", "", "", "")
     private lateinit var binding: PlayerBinding
-    private lateinit var playerInteractor: MusicPlayInteractor
-    private lateinit var uiHandler: Handler
+    private var playerInteractor: MusicPlayInteractor? = null
+    private var uiHandler: Handler? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PlayerBinding.inflate(layoutInflater)
@@ -40,29 +40,28 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun pushPlayButton() {
-        when (playerInteractor.getCurrentState()) {
-            MusicPlayInteractor.PlayState.ReadyToPlay, MusicPlayInteractor.PlayState.Paused -> {
-                playerInteractor.play()
+        when (playerInteractor?.getCurrentState()) {
+            PlayState.ReadyToPlay, PlayState.Paused -> {
+                playerInteractor?.play()
             }
 
-            MusicPlayInteractor.PlayState.Playing -> {
-                playerInteractor.pause()
+            PlayState.Playing -> {
+                playerInteractor?.pause()
             }
 
             else -> {
-                Log.d("player", "some button error")
             }
         }
     }
 
     override fun onPause() {
         super.onPause()
-        playerInteractor.pause()
+        playerInteractor?.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerInteractor.stop()
+        playerInteractor?.stop()
     }
 
     private fun getTrackFromIntent(): Track {
@@ -103,36 +102,35 @@ class PlayerActivity : AppCompatActivity() {
         override fun playEventConsume() {
             binding.playButton.background =
                 AppCompatResources.getDrawable(this@PlayerActivity, R.drawable.pause_button)
-            uiHandler.post(startDurationUpdate)
+            uiHandler?.post(startDurationUpdate)
         }
 
         override fun pauseEventConsume() {
-            uiHandler.removeCallbacks(startDurationUpdate)
+            uiHandler?.removeCallbacks(startDurationUpdate)
             binding.playButton.background =
                 AppCompatResources.getDrawable(this@PlayerActivity, R.drawable.play_button)
         }
 
         override fun readyToPlayEventConsume() {
-            uiHandler.removeCallbacks(startDurationUpdate)
+            uiHandler?.removeCallbacks(startDurationUpdate)
             binding.playButton.background =
                 AppCompatResources.getDrawable(this@PlayerActivity, R.drawable.play_button)
             binding.playButton.isEnabled = true
-            uiHandler.post { binding.currentPlayPosition.text = dateFormat.format(0L) }
+            uiHandler?.post { binding.currentPlayPosition.text = dateFormat.format(0L) }
         }
-
     }
 
     private fun prepareMediaPlayerStuff() {
         binding.playButton.isEnabled = false
         playerInteractor = Creator.provideMusicPlayerInteractor(musicPlayEventsConsumer)
-        playerInteractor.setTrack(trackToPlay = track)
+        playerInteractor?.setTrack(trackToPlay = track)
     }
 
     private val startDurationUpdate: Runnable = object : Runnable {
         override fun run() {
             binding.currentPlayPosition.text =
-                dateFormat.format(playerInteractor.getCurrentPosition())
-            uiHandler.postDelayed(this, DURATION_RENEWAL_DELAY)
+                dateFormat.format(playerInteractor?.getCurrentPosition())
+            uiHandler?.postDelayed(this, DURATION_RENEWAL_DELAY)
         }
     }
 }

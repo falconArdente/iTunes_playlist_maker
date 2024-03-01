@@ -3,13 +3,6 @@ package com.example.playlistmaker.domain.api
 import com.example.playlistmaker.domain.models.Track
 
 interface MusicPlayInteractor {
-    enum class PlayState {
-        NotReady,
-        ReadyToPlay,
-        Playing,
-        Paused,
-    }
-
     fun play()
     fun pause()
     fun stop()
