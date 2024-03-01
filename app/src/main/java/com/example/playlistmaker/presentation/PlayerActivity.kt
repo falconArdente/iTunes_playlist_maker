@@ -1,38 +1,32 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.icu.text.SimpleDateFormat
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.PlayerBinding
+import com.example.playlistmaker.domain.api.MusicPlayInteractor
+import com.example.playlistmaker.domain.api.PlayState
+import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import java.util.Locale
 
 private const val TRACK_KEY = "track"
-private const val DURATION_RENEWAL_DELAY: Long = 420L
+private const val DURATION_RENEWAL_DELAY: Long = 421L
 
 class PlayerActivity : AppCompatActivity() {
-    companion object {
-        enum class PlayerState {
-            Default,
-            Prepared,
-            Playing,
-            Paused,
-        }
-    }
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-    private lateinit var track: Track
+    private var track: Track = Track("", "", "", "", "", "", "", "", "", "")
     private lateinit var binding: PlayerBinding
-    private var playerState = PlayerState.Default
-    private val mediaPlayer = MediaPlayer()
-    private lateinit var uiHandler: Handler
+    private var playerInteractor: MusicPlayInteractor? = null
+    private var uiHandler: Handler? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PlayerBinding.inflate(layoutInflater)
@@ -45,14 +39,29 @@ class PlayerActivity : AppCompatActivity() {
         binding.playButton.setOnClickListener { pushPlayButton() }
     }
 
+    private fun pushPlayButton() {
+        when (playerInteractor?.getCurrentState()) {
+            PlayState.ReadyToPlay, PlayState.Paused -> {
+                playerInteractor?.play()
+            }
+
+            PlayState.Playing -> {
+                playerInteractor?.pause()
+            }
+
+            else -> {
+            }
+        }
+    }
+
     override fun onPause() {
         super.onPause()
-        doPause()
+        playerInteractor?.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        playerInteractor?.stop()
     }
 
     private fun getTrackFromIntent(): Track {
@@ -63,7 +72,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun placeTrackDataToElements(track: Track) {
-        binding.trackTitle.text = track.trackName
+        binding.trackTitle.text = track.trackTitle
         binding.artistName.text = track.artistName
         binding.durationValue.text = dateFormat.format(track.duration.toLong())
         binding.albumValue.text = track.collectionName
@@ -71,15 +80,15 @@ class PlayerActivity : AppCompatActivity() {
             0,
             4
         ) else track.releaseDate
-        binding.genreValue.text = track.primaryGenreName
+        binding.genreValue.text = track.genre
         binding.countryValue.text = track.country
         val pattern = getString(R.string.itunes_small_image_postfix)
-        val bigImagePath: String = if (track.artworkUrl100.lastIndexOf(pattern) > 0)
-            track.artworkUrl100.replace(
+        val bigImagePath: String = if (track.artwork.lastIndexOf(pattern) > 0)
+            track.artwork.replace(
                 pattern,
                 getString(R.string.itunes_big_image_postfix)
             )
-        else track.artworkUrl100
+        else track.artwork
         Glide.with(binding.trackImage)
             .load(bigImagePath)
             .placeholder(R.drawable.placeholder_search_bar)
@@ -89,65 +98,39 @@ class PlayerActivity : AppCompatActivity() {
             .into(binding.trackImage)
     }
 
-    private fun pushPlayButton() {
-        when (playerState) {
-            PlayerState.Prepared, PlayerState.Paused -> {
-                doPlay()
-            }
-
-            PlayerState.Playing -> {
-                doPause()
-            }
-
-            else -> Toast.makeText(this, getString(R.string.sound_stream_error), Toast.LENGTH_SHORT)
-                .show()
+    private val musicPlayEventsConsumer = object : MusicPlayInteractor.MusicPlayEventsConsumer {
+        override fun playEventConsume() {
+            binding.playButton.background =
+                AppCompatResources.getDrawable(this@PlayerActivity, R.drawable.pause_button)
+            uiHandler?.post(startDurationUpdate)
         }
-    }
 
-    private fun doPause() {
-        uiHandler.removeCallbacks(startDurationUpdate)
-        mediaPlayer.pause()
-        playerState = PlayerState.Paused
-        binding.playButton.background =
-            AppCompatResources.getDrawable(this, R.drawable.play_button)
-    }
+        override fun pauseEventConsume() {
+            uiHandler?.removeCallbacks(startDurationUpdate)
+            binding.playButton.background =
+                AppCompatResources.getDrawable(this@PlayerActivity, R.drawable.play_button)
+        }
 
-    private fun doPlay() {
-        mediaPlayer.start()
-        playerState = PlayerState.Playing
-        binding.playButton.background =
-            AppCompatResources.getDrawable(this, R.drawable.pause_button)
-        startDurationUpdate.run()
-    }
-
-    private fun didStopped() {
-        uiHandler.removeCallbacks(startDurationUpdate)
-        playerState = PlayerState.Prepared
-        binding.playButton.background =
-            AppCompatResources.getDrawable(this, R.drawable.play_button)
-        uiHandler.post { binding.currentPlayPosition.text = dateFormat.format(0L) }
+        override fun readyToPlayEventConsume() {
+            uiHandler?.removeCallbacks(startDurationUpdate)
+            binding.playButton.background =
+                AppCompatResources.getDrawable(this@PlayerActivity, R.drawable.play_button)
+            binding.playButton.isEnabled = true
+            uiHandler?.post { binding.currentPlayPosition.text = dateFormat.format(0L) }
+        }
     }
 
     private fun prepareMediaPlayerStuff() {
         binding.playButton.isEnabled = false
-        mediaPlayer.setDataSource(track.previewUrl)
-        mediaPlayer.setOnPreparedListener { didPrepared() }
-        mediaPlayer.setOnCompletionListener { didStopped() }
-        mediaPlayer.prepareAsync()
-    }
-
-    private fun didPrepared() {
-        binding.playButton.background =
-            AppCompatResources.getDrawable(this, R.drawable.play_button)
-        playerState = PlayerState.Prepared
-        binding.playButton.isEnabled = true
+        playerInteractor = Creator.provideMusicPlayerInteractor(musicPlayEventsConsumer)
+        playerInteractor?.setTrack(trackToPlay = track)
     }
 
     private val startDurationUpdate: Runnable = object : Runnable {
         override fun run() {
             binding.currentPlayPosition.text =
-                dateFormat.format(mediaPlayer.currentPosition.toLong())
-            uiHandler.postDelayed(this, DURATION_RENEWAL_DELAY)
+                dateFormat.format(playerInteractor?.getCurrentPosition())
+            uiHandler?.postDelayed(this, DURATION_RENEWAL_DELAY)
         }
     }
 }
