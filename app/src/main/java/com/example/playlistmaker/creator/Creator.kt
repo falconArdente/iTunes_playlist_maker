@@ -1,16 +1,16 @@
 package com.example.playlistmaker.creator
 
 import android.content.Context
-import com.example.playlistmaker.data.impl.RetrofitNetworlClient
-import com.example.playlistmaker.data.impl.SearchRepositoryImpl
-import com.example.playlistmaker.data.mediaPlayer.MediaPlayerBasedImpl
-import com.example.playlistmaker.data.repository.SearchRepository
-import com.example.playlistmaker.domain.api.HistoryInteractor
-import com.example.playlistmaker.domain.api.MusicPlayInteractor
-import com.example.playlistmaker.domain.api.SearchInteractor
-import com.example.playlistmaker.domain.impl.HistoryInteractorImpl
-import com.example.playlistmaker.domain.impl.MusicPlayerInteractorImpl
-import com.example.playlistmaker.domain.impl.SearchInteractorImpl
+import com.example.playlistmaker.search.data.network.RetrofitNetworlClient
+import com.example.playlistmaker.search.data.network.SearchRepositoryImpl
+import com.example.playlistmaker.player.data.MediaPlayerBasedImpl
+import com.example.playlistmaker.search.data.repository.SearchRepository
+import com.example.playlistmaker.search.domain.HistoryInteractor
+import com.example.playlistmaker.player.domain.MusicPlayInteractor
+import com.example.playlistmaker.search.domain.SearchInteractor
+import com.example.playlistmaker.search.data.repository.HistoryInteractorImpl
+import com.example.playlistmaker.player.data.MusicPlayerInteractorImpl
+import com.example.playlistmaker.search.data.repository.SearchInteractorImpl
 
 object Creator {
     private fun getSearchRepository(): SearchRepository {
