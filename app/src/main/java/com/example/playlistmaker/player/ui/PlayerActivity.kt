@@ -40,6 +40,7 @@ class PlayerActivity : ComponentActivity() {
     }
 
     private val playButtonOnClickListener = OnClickListener {
+        binding.playButton.isEnabled=false
         val curPlayState = viewModel.getPlayerScreenState().value?.playState
         if (curPlayState == ReadyToPlay || curPlayState == Paused) viewModel.play()
         if (curPlayState == Playing) viewModel.pause()
@@ -49,6 +50,7 @@ class PlayerActivity : ComponentActivity() {
         if (binding.trackTitle.text != screenState.track.trackTitle) placeTrackDataToElements(
             screenState.track
         )
+
         when (screenState.playState) {
             ReadyToPlay -> {
                 binding.playButton.background =
@@ -58,7 +60,7 @@ class PlayerActivity : ComponentActivity() {
                     )
                 binding.currentPlayPosition.text =
                     dateFormat.format(0L)
-
+                binding.playButton.isEnabled=true
             }
 
             Paused -> {
@@ -67,6 +69,7 @@ class PlayerActivity : ComponentActivity() {
                         this@PlayerActivity,
                         R.drawable.play_button
                     )
+                binding.playButton.isEnabled=true
             }
 
             Playing -> {
@@ -74,10 +77,14 @@ class PlayerActivity : ComponentActivity() {
                     dateFormat.format(screenState.currentPosition.toLong())
                 binding.playButton.background =
                     AppCompatResources.getDrawable(this@PlayerActivity, R.drawable.pause_button)
+                if (!binding.playButton.isEnabled)binding.playButton.isEnabled=true
             }
 
-            NotReady -> binding.playButton.background =
+            NotReady ->{
+                binding.playButton.isEnabled=false
+                binding.playButton.background =
                 AppCompatResources.getDrawable(this@PlayerActivity, R.drawable.pause_button)
+            }
         }
     }
 
