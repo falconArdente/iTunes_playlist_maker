@@ -85,7 +85,8 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     override fun onCleared() {
+        handler.removeCallbacks(startDurationUpdate)
+        player.destroy()
         super.onCleared()
-        player.stop()
     }
 }

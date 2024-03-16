@@ -7,6 +7,7 @@ interface MusicPlayInteractor {
     fun pause()
     fun stop()
     fun setTrack(trackToPlay: Track)
+    fun destroy()
     fun getCurrentPosition(): Int
     fun getCurrentState(): PlayState
     interface MusicPlayEventsConsumer {

@@ -29,6 +29,10 @@ class MusicPlayerInteractorImpl(
         player.setTrack(trackToPlay)
     }
 
+    override fun destroy() {
+        player.destroy()
+    }
+
     override fun getCurrentPosition(): Int = player.getCurrentPosition()
 
     override fun getCurrentState(): PlayState = player.getCurrentState()
