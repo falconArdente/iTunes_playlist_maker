@@ -7,11 +7,13 @@ import com.example.playlistmaker.search.data.repository.HistoryRepository
 import com.example.playlistmaker.search.domain.Track
 import com.google.gson.Gson
 
-const val SEARCH_LIST_KEY = "search_list"
-const val HISTORY_SIZE: Int = 9
-private const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
-
 class HistoryRepositoryImpl(context: Context) : HistoryRepository {
+    companion object {
+        const val SEARCH_LIST_KEY = "search_list"
+        const val HISTORY_SIZE: Int = 9
+        private const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
+    }
+
     private var appPreferences: SharedPreferences =
         context.getSharedPreferences(APP_PREFERENCES_FILE_NAME, Application.MODE_PRIVATE)
 

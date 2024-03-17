@@ -12,49 +12,39 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
-import com.example.playlistmaker.search.domain.HistoryInteractor
-import com.example.playlistmaker.search.domain.SearchInteractor
-import com.example.playlistmaker.search.domain.SearchInteractor.TracksConsumer
 import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.search.viewModel.SearchScreenState
+import com.example.playlistmaker.search.viewModel.SearchViewModel
 import com.google.gson.Gson
-import java.util.Calendar.*
+import java.util.Calendar.MILLISECOND
+import java.util.Calendar.getInstance
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : ComponentActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
         const val TRACK_KEY = "track"
-        private const val AUTO_SEND_REQUEST_DELAY = 2000L
+
         private const val CHOICE_DEBOUNCE_DELAY = 1100L
 
-        enum class State {
-            History,
-            CleanHistory,
-            SearchGot,
-            SearchIsEmpty,
-            Error,
-            WaitingForResponse,
-        }
     }
 
-    private var history: HistoryInteractor? = null
-    private var search: SearchInteractor? = null
-    private var searchTracks = arrayListOf<Track>()
+    private lateinit var searchViewModel: SearchViewModel
     private var uiHandler: Handler? = null
     private var choiceTimeStamp: Long = 0L
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
             if (canMakeAChoice()) {
-                history?.addTrackToHistory(item)
+                searchViewModel.addTrackToHistory(item)
                 val intent =
                     Intent(this@SearchActivity, PlayerActivity::class.java)
                 val json = Gson()
@@ -79,61 +69,19 @@ class SearchActivity : AppCompatActivity() {
         uiHandler = Handler(Looper.getMainLooper())
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        history = Creator.provideHistoryInteractor(this)
-        tracksAdapter =
-            TrackAdapter(history?.getTracksHistory() ?: emptyList(), trackOnClickListener)
-        search = Creator.provideSearchInteractor()
-        backButtonClickAttach()
+        searchViewModel = ViewModelProvider(
+            this,
+            SearchViewModel.getViewModelFactory()
+        )[SearchViewModel::class.java]
+        tracksAdapter = TrackAdapter(emptyList(), trackOnClickListener)
+        binding.header.setNavigationOnClickListener { finish() }
+        binding.clearSearchList.setOnClickListener { searchViewModel.doClearHistory() }
+        binding.updateButton.setOnClickListener { searchViewModel.doRepeatSearch() }
         searchBarTextWatcherAttach()
         searchBarSetActionDone()//temporary use only
         clearTextAttach()
         startUpViewHolder()
-        binding.updateButton.setOnClickListener { uiHandler?.post(doSearchTracksOfEditText) }
-        clearHistoryButtonClickAttach()
-    }
-
-    val searchConsumer = object : TracksConsumer {
-        override fun consume(foundTracks: List<Track>) {
-            uiHandler?.post {
-                searchTracks.clear()
-                searchTracks.addAll(foundTracks)
-                if (searchTracks.isEmpty()) {
-                    showLayout(State.SearchIsEmpty)
-                } else {
-                    showLayout(State.SearchGot)
-                }
-            }
-        }
-    }
-
-    val doSearchTracksOfEditText = object : Runnable {
-        override fun run() {
-            uiHandler?.removeCallbacks(this)
-            val prompt = binding.searchBar.text.toString()
-            if (prompt.isNotEmpty()) search?.searchTracks(
-                expression = prompt,
-                trackConsumer = searchConsumer,
-                errorConsumer = searchErrorConsumer
-            )
-        }
-    }
-
-    val searchErrorConsumer = object : SearchInteractor.ErrorConsumer {
-        override fun consume() {
-            uiHandler?.post { showLayout(State.Error) }
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (binding.searchBar.text.isNullOrEmpty()) {
-            binding.clearIcon.visibility = View.GONE
-            val historyTracks = history?.getTracksHistory() ?: emptyList()
-            if (historyTracks.isEmpty()) showLayout(State.CleanHistory)
-            else showLayout(State.History)
-        }
+        searchViewModel.getScreenState().observe(this) { render(it) }
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -153,21 +101,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun showLayout(state: State) {
-        when (state) {
-            State.SearchGot -> {
+    private fun render(screenState: SearchScreenState) {
+        when (screenState) {
+            is SearchScreenState.ResultHaveData -> {
                 binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.placeholderFrame.isVisible = false
-                if (tracksAdapter?.tracks != searchTracks) {
-                    tracksAdapter?.tracks = searchTracks
+                if (tracksAdapter?.tracks != screenState.tracks) {
+                    tracksAdapter?.tracks = screenState.tracks
                     tracksAdapter?.notifyDataSetChanged()
                 }
                 binding.tracksRecyclerView.visibility = View.VISIBLE
             }
 
-            State.SearchIsEmpty -> {
+            SearchScreenState.ResultIsEmpty -> {
                 binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
@@ -183,7 +131,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.placeholderFrame.visibility = View.VISIBLE
             }
 
-            State.Error -> {
+            SearchScreenState.Error -> {
                 binding.progressBar.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
@@ -200,14 +148,12 @@ class SearchActivity : AppCompatActivity() {
                 binding.placeholderFrame.visibility = View.VISIBLE
             }
 
-            State.History -> {
+            is SearchScreenState.HistoryHaveData -> {
                 binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
-                val historyTracks = history?.getTracksHistory() ?: emptyList()
-
-                if (tracksAdapter?.tracks != historyTracks) {
-                    tracksAdapter?.tracks = historyTracks
+                if (tracksAdapter?.tracks != screenState.tracks) {
+                    tracksAdapter?.tracks = screenState.tracks
                     tracksAdapter?.notifyDataSetChanged()
                 }
                 binding.beenSearchedTitle.visibility = View.VISIBLE
@@ -215,7 +161,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.tracksRecyclerView.visibility = View.VISIBLE
             }
 
-            State.CleanHistory -> {
+            SearchScreenState.HistoryIsEmpty -> {
                 binding.progressBar.isVisible = false
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
@@ -224,7 +170,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.tracksRecyclerView.isVisible = false
             }
 
-            State.WaitingForResponse -> {
+            SearchScreenState.Loading -> {
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
@@ -238,16 +184,9 @@ class SearchActivity : AppCompatActivity() {
     private fun searchBarSetActionDone() {
         binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                uiHandler?.post(doSearchTracksOfEditText)
+                searchViewModel.doSearchTracks(binding.searchBar.text.toString())
             }
             false
-        }
-    }
-
-    private fun clearHistoryButtonClickAttach() {
-        binding.clearSearchList.setOnClickListener {
-            history?.clearHistory()
-            showLayout(State.CleanHistory)
         }
     }
 
@@ -270,21 +209,17 @@ class SearchActivity : AppCompatActivity() {
                     binding.clearIcon.visibility = View.GONE
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
-                    uiHandler?.postDelayed(doSearchTracksOfEditText, AUTO_SEND_REQUEST_DELAY)
+                    searchViewModel.doSearchTracks("")
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
-                searchPromptString = binding.searchBar.text.toString()
-                if (searchPromptString.isEmpty()) showLayout(State.History)
+                if (!s.isNullOrEmpty())
+                    searchViewModel.doAutoSearchTracks(s.toString())
+                else searchViewModel.doSearchTracks("")
             }
         }
         binding.searchBar.addTextChangedListener(searchBarTextWatcher)
-    }
-
-    private fun backButtonClickAttach() {
-        val header = findViewById<androidx.appcompat.widget.Toolbar>(R.id.header)
-        header.setNavigationOnClickListener { finish() }
     }
 
     private fun startUpViewHolder() {
