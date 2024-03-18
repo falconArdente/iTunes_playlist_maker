@@ -1,6 +1,7 @@
 package com.example.playlistmaker.creator
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import com.example.playlistmaker.player.data.MediaPlayerBasedImpl
 import com.example.playlistmaker.player.data.MusicPlayerInteractorImpl
@@ -14,6 +15,9 @@ import com.example.playlistmaker.search.data.repository.SearchInteractorImpl
 import com.example.playlistmaker.search.data.repository.SearchRepository
 import com.example.playlistmaker.search.domain.HistoryInteractor
 import com.example.playlistmaker.search.domain.SearchInteractor
+import com.example.playlistmaker.sharing.data.EmailToSupportImpl
+import com.example.playlistmaker.sharing.data.GoToAgreementInfoUseCaseImpl
+import com.example.playlistmaker.sharing.data.ShareAnAppImpl
 
 object Creator {
     private fun getSearchRepository(): SearchRepository {
@@ -38,4 +42,8 @@ object Creator {
     fun provideTrackToPlayUseCase(activity: Activity): GetTrackToPlayUseCase {
         return GetTrackToPlayFromActivityIntentImpl(activity)
     }
+
+    fun provideShareAnAppUseCase() = ShareAnAppImpl()
+    fun provideEmailToSupportUseCase(application: Application)=EmailToSupportImpl(application)
+    fun provideGoToAgreementInfoUseCase(application: Application)=GoToAgreementInfoUseCaseImpl(application)
 }

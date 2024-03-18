@@ -26,11 +26,11 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         private const val AUTO_SEND_REQUEST_DELAY = 2000L
     }
 
-    private var screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)
-    private var history: HistoryInteractor = Creator.provideHistoryInteractor(getApplication())
-    private var search: SearchInteractor = Creator.provideSearchInteractor()
+    private val screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)
+    private val history: HistoryInteractor = Creator.provideHistoryInteractor(getApplication())
+    private val search: SearchInteractor = Creator.provideSearchInteractor()
     private var searchPrompt: String = ""
-    private var handler = Handler(Looper.getMainLooper()).apply { showHistory() }
+    private val handler = Handler(Looper.getMainLooper()).apply { showHistory() }
     fun getScreenState(): LiveData<SearchScreenState> = screenState
     fun doSearchTracks(prompt: String) {
         if (prompt.isNotEmpty()) {
