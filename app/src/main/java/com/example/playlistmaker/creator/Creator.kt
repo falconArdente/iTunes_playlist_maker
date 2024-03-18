@@ -15,6 +15,7 @@ import com.example.playlistmaker.search.data.repository.SearchInteractorImpl
 import com.example.playlistmaker.search.data.repository.SearchRepository
 import com.example.playlistmaker.search.domain.HistoryInteractor
 import com.example.playlistmaker.search.domain.SearchInteractor
+import com.example.playlistmaker.settings.data.ThemeSwitcherInteractorImpl
 import com.example.playlistmaker.sharing.data.EmailToSupportImpl
 import com.example.playlistmaker.sharing.data.GoToAgreementInfoUseCaseImpl
 import com.example.playlistmaker.sharing.data.ShareAnAppImpl
@@ -43,7 +44,11 @@ object Creator {
         return GetTrackToPlayFromActivityIntentImpl(activity)
     }
 
+    fun provideThemeSwitchIterator(application: Application) =
+        ThemeSwitcherInteractorImpl(application)
+
     fun provideShareAnAppUseCase() = ShareAnAppImpl()
-    fun provideEmailToSupportUseCase(application: Application)=EmailToSupportImpl(application)
-    fun provideGoToAgreementInfoUseCase(application: Application)=GoToAgreementInfoUseCaseImpl(application)
+    fun provideEmailToSupportUseCase(application: Application) = EmailToSupportImpl(application)
+    fun provideGoToAgreementInfoUseCase(application: Application) =
+        GoToAgreementInfoUseCaseImpl(application)
 }

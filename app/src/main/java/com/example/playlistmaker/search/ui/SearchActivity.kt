@@ -12,7 +12,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -28,14 +28,12 @@ import com.google.gson.Gson
 import java.util.Calendar.MILLISECOND
 import java.util.Calendar.getInstance
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PROMPT = "PROMPT"
         const val SEARCH_DEF = ""
         const val TRACK_KEY = "track"
-
         private const val CHOICE_DEBOUNCE_DELAY = 1100L
-
     }
 
     private lateinit var searchViewModel: SearchViewModel

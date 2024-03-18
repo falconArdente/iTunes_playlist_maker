@@ -15,7 +15,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         appPreferences = getSharedPreferences(APP_PREFERENCES_FILE_NAME, MODE_PRIVATE)
-        darkThemeIsOn = appPreferences.getBoolean(DARK_THEME_KEY, false)
+        darkThemeIsOn = getDarkThemeIsOnState()
         switchTheme(darkThemeIsOn)
     }
 
@@ -23,6 +23,9 @@ class App : Application() {
         appPreferences.edit()
             .putBoolean(DARK_THEME_KEY, darkThemeIsOn)
             .apply()
+    }
+    fun getDarkThemeIsOnState():Boolean{
+        return appPreferences.getBoolean(DARK_THEME_KEY, false)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
