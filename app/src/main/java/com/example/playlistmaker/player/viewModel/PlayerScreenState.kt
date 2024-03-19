@@ -1,7 +1,7 @@
 package com.example.playlistmaker.player.viewModel
 
-import com.example.playlistmaker.player.domain.PlayState
-import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.player.model.domain.PlayState
+import com.example.playlistmaker.search.model.domain.Track
 
 data class PlayerScreenState(
     var track: Track = Track(

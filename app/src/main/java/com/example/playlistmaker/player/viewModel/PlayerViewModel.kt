@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.player.domain.GetTrackToPlayUseCase
-import com.example.playlistmaker.player.domain.MusicPlayInteractor
-import com.example.playlistmaker.player.domain.PlayState
-import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
+import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
+import com.example.playlistmaker.player.model.domain.PlayState
+import com.example.playlistmaker.search.model.domain.Track
 
 class PlayerViewModel() : ViewModel() {
     companion object {
@@ -59,13 +59,8 @@ class PlayerViewModel() : ViewModel() {
         }
     }
 
-    fun play() {
-        player.play()
-    }
-
-    fun pause() {
-        player.pause()
-    }
+    fun play() = player.play()
+    fun pause() = player.pause()
 
     fun getPlayerScreenState(): LiveData<PlayerScreenState> = playerScreenState
     fun setTrackProvider(provider: GetTrackToPlayUseCase) {

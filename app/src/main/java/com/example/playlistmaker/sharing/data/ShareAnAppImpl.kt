@@ -6,8 +6,8 @@ import android.util.Log
 import com.example.playlistmaker.R
 import com.example.playlistmaker.sharing.domain.ShareAnAppUseCase
 
-class ShareAnAppImpl : ShareAnAppUseCase {
-    override fun execute(application: Application) {
+class ShareAnAppImpl(val application: Application) : ShareAnAppUseCase {
+    override fun execute() {
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"

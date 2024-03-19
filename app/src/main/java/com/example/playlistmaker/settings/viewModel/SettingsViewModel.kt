@@ -9,7 +9,8 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.settings.domain.ThemeSwitchInteractor
+import com.example.playlistmaker.settings.model.domain.ThemeState
+import com.example.playlistmaker.settings.model.domain.ThemeSwitchInteractor
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
@@ -22,15 +23,15 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private val darkThemeIterator: ThemeSwitchInteractor =
         Creator.provideThemeSwitchIterator(getApplication())
-    private var isDarkTheme = MutableLiveData<Boolean>(darkThemeIterator.getIsDarkNow())
+    private var isDarkTheme = MutableLiveData<ThemeState>(darkThemeIterator.getTheme())
 
-    fun getThemeSwitchState(): LiveData<Boolean> = isDarkTheme
-    fun doSwitchTheThemeState(toDarkOne: Boolean) {
-        darkThemeIterator.turnToDarkTheme(toDarkOne)
+    fun getThemeSwitchState(): LiveData<ThemeState> = isDarkTheme
+    fun doSwitchTheThemeState(themeState: ThemeState) {
+        darkThemeIterator.turnThemeTo(themeState)
     }
 
     fun emailToSupport() = Creator.provideEmailToSupportUseCase(getApplication()).execute()
     fun goToAgreement() = Creator.provideGoToAgreementInfoUseCase(getApplication()).execute()
-    fun doShareAnApp() = Creator.provideShareAnAppUseCase().execute(getApplication())
+    fun doShareAnApp() = Creator.provideShareAnAppUseCase(getApplication()).execute()
 
 }

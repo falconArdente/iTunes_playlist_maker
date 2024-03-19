@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search.viewModel
 
-import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.search.model.domain.Track
 
 sealed class SearchScreenState {
     data class HistoryHaveData(val tracks: List<Track>) : SearchScreenState()

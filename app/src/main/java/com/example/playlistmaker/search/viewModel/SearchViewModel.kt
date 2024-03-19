@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.search.domain.HistoryInteractor
-import com.example.playlistmaker.search.domain.SearchInteractor
-import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.search.model.domain.ErrorConsumer
+import com.example.playlistmaker.search.model.domain.HistoryInteractor
+import com.example.playlistmaker.search.model.domain.SearchInteractor
+import com.example.playlistmaker.search.model.domain.Track
+import com.example.playlistmaker.search.model.domain.TracksConsumer
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
@@ -67,7 +69,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         history.clearHistory()
     }
 
-    val searchConsumer = object : SearchInteractor.TracksConsumer {
+    val searchConsumer = object : TracksConsumer {
         override fun consume(foundTracks: List<Track>) {
             screenState.postValue(
                 if (foundTracks.isEmpty()) SearchScreenState.ResultIsEmpty
@@ -75,8 +77,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             )
         }
     }
-
-    val searchErrorConsumer = object : SearchInteractor.ErrorConsumer {
+    val searchErrorConsumer = object : ErrorConsumer {
         override fun consume() {
             screenState.postValue(SearchScreenState.Error)
         }
@@ -92,6 +93,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 errorConsumer = searchErrorConsumer
             )
         }
+    }
+    fun openTrack(trackToOpen:Track){
+        Creator.provideOpenTrackUseCase(getApplication()).sendToPlayer(trackToOpen)
     }
 
     override fun onCleared() {
