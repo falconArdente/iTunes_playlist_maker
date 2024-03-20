@@ -3,7 +3,7 @@ package com.example.playlistmaker.player.view
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.View.OnClickListener
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -20,7 +20,7 @@ import com.example.playlistmaker.player.viewModel.PlayerViewModel
 import com.example.playlistmaker.search.model.domain.Track
 import java.util.Locale
 
-class PlayerActivity : ComponentActivity() {
+class PlayerActivity : AppCompatActivity() {
     private lateinit var viewModel: PlayerViewModel
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private lateinit var binding: PlayerBinding
