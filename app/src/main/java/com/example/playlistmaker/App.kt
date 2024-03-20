@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.settings.model.domain.ThemeState
 
-
 class App : Application() {
 
     override fun onCreate() {

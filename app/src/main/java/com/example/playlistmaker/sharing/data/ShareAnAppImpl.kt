@@ -12,8 +12,9 @@ class ShareAnAppImpl(val application: Application) : ShareAnAppUseCase {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, application.getString(R.string.app_name))
-            val shareMessage = "\n${application.getString(R.string.to_share_text)}\n\n" +
-                    application.getString(R.string.playmarket_URL_base) + application.applicationInfo.uid
+            val shareMessage = "${application.getString(R.string.to_share_text)}\n" +
+                    application.getString(R.string.playmarket_URL_base) + application.applicationInfo.uid +
+            "\n${application.getString(R.string.course_annotation)}\n ${application.getString(R.string.android_developer_link)}"
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage.trimIndent())
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             application.startActivity(shareIntent)
