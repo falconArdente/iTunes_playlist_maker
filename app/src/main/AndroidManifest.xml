@@ -14,19 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.PlaylistMaker">
         <activity
-            android:name=".presentation.PlayerActivity"
+            android:name=".player.view.PlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".MediaActivity"
+            android:name=".media.view.MediaActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.SearchActivity"
+            android:name=".search.view.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".settings.view.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".main.view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

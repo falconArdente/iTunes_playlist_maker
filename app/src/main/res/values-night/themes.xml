@@ -1,8 +1,6 @@
 <resources>
-    <!-- Base application theme. -->
+
     <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/YP_White</item>
         <item name="colorOnPrimary">@color/YP_Black</item>
         <item name="backgroundColor">@color/YP_Black</item>
@@ -13,5 +11,6 @@
         <item name="thumbColor">@color/YP_Blue</item>
         <item name="colorSecondaryContainer">@color/YP_White</item>
         <item name="colorOnSecondaryContainer">@color/YP_Black</item>
+        <item name="android:statusBarColor">@color/YP_Black</item>
     </style>
 </resources>

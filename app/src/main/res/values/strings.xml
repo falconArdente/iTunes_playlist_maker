@@ -38,4 +38,7 @@
     <string name="country_mok">Страна загружается</string>
     <string name="duration_dots_mok" translatable="false">00:00</string>
     <string name="sound_stream_error" >Что-то не так с аудиопотоком</string>
+    <string name="TRACK_KEY" translatable="false">track</string>
+    <string name="android_developer_link" translatable="false">https://practicum.yandex.ru/android-developer/</string>
+    <string name="course_annotation">разрабатывается в рамках курса по ссылке</string>
 </resources>
