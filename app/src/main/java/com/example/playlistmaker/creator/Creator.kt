@@ -21,7 +21,7 @@ import com.example.playlistmaker.search.model.domain.SearchInteractor
 import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.settings.model.data.ThemeStateRepositorySharedPreferenceBasedImpl
 import com.example.playlistmaker.settings.model.data.ThemeSwitcherInteractorImpl
-import com.example.playlistmaker.settings.view.ui.TurnUIAppearanceThemeUseCaseAppBasedImpl
+import com.example.playlistmaker.settings.view.ui.TurnUIAppearanceThemeUsingDelegateDirectly
 import com.example.playlistmaker.sharing.data.EmailToSupportImpl
 import com.example.playlistmaker.sharing.data.GoToAgreementInfoUseCaseImpl
 import com.example.playlistmaker.sharing.data.ShareAnAppImpl
@@ -52,7 +52,7 @@ object Creator {
     fun provideThemeSwitchIterator(application: Application) =
         ThemeSwitcherInteractorImpl(
             ThemeStateRepositorySharedPreferenceBasedImpl(application),
-            TurnUIAppearanceThemeUseCaseAppBasedImpl(application)
+            TurnUIAppearanceThemeUsingDelegateDirectly()
         )
 
     fun provideOpenTrackUseCase(application: Application): SendTrackToPlayerUseCase =
