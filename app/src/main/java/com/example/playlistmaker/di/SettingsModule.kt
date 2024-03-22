@@ -1,5 +1,14 @@
 package com.example.playlistmaker.di
 
+import android.app.Activity
+import com.example.playlistmaker.player.model.controller.MusicPlayerInteractorImpl
+import com.example.playlistmaker.player.model.data.MediaPlayerBasedPlayer
+import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
+import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
+import com.example.playlistmaker.player.model.domain.Player
+import com.example.playlistmaker.player.model.repository.GetTrackToPlayUseCaseImpl
+import com.example.playlistmaker.player.view.ui.TrackFromIntentRepository
+import com.example.playlistmaker.player.viewModel.PlayerViewModel
 import com.example.playlistmaker.search.model.data.local.HistoryRepositorySharedPreferenceBased
 import com.example.playlistmaker.search.model.data.local.TrackToPlayerUsingIntentSender
 import com.example.playlistmaker.search.model.data.network.NetworkClient
@@ -59,4 +68,15 @@ val searchModule = module {
         SendTrackToPlayerProvider(get())
     }
     factory<TrackSender> { TrackToPlayerUsingIntentSender(androidApplication()) }
+}
+val playerModule=module{
+    viewModel { PlayerViewModel()}
+    factory<MusicPlayInteractor>{(consumer:MusicPlayInteractor.MusicPlayEventsConsumer)->
+        MusicPlayerInteractorImpl(get(),consumer)
+    }
+    factory<Player> { MediaPlayerBasedPlayer() }
+
+    factory<GetTrackToPlayUseCase> { (activity:Activity)->
+        GetTrackToPlayUseCaseImpl(TrackFromIntentRepository(activityToGetFrom = activity))
+    }
 }

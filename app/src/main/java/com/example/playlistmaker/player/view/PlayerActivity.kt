@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.view.View.OnClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.PlayerBinding
+import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.PlayState.NotReady
 import com.example.playlistmaker.player.model.domain.PlayState.Paused
 import com.example.playlistmaker.player.model.domain.PlayState.Playing
@@ -18,10 +17,13 @@ import com.example.playlistmaker.player.model.domain.PlayState.ReadyToPlay
 import com.example.playlistmaker.player.viewModel.PlayerScreenState
 import com.example.playlistmaker.player.viewModel.PlayerViewModel
 import com.example.playlistmaker.search.model.domain.Track
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel>()
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private lateinit var binding: PlayerBinding
 
@@ -30,11 +32,8 @@ class PlayerActivity : AppCompatActivity() {
 
         binding = PlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory()
-        )[PlayerViewModel::class.java]
-        viewModel.setTrackProvider(Creator.provideTrackToPlayUseCase(this))
+        val provider by inject<GetTrackToPlayUseCase> { parametersOf(this) }
+        viewModel.setTrackProvider(provider)
         binding.header.setNavigationOnClickListener { finish() }
         binding.playButton.setOnClickListener(playButtonOnClickListener)
         viewModel.getPlayerScreenState().observe(this) { render(it) }
