@@ -5,10 +5,10 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.settings.model.domain.ThemeState
 import com.example.playlistmaker.settings.viewModel.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
     companion object {
@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var settingsViewModel: SettingsViewModel
+    private val settingsViewModel: SettingsViewModel by viewModel()
     private lateinit var handler: Handler
     private var tempThemeForRunnable: ThemeState = ThemeState.NIGHT_THEME
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,10 +24,6 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         handler = Handler(Looper.getMainLooper())
-        settingsViewModel = ViewModelProvider(
-            this,
-            SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
         settingsViewModel.getThemeSwitchState().observe(this) { render(it) }
         binding.header.setNavigationOnClickListener { finish() }
         binding.emailToSupport.setOnClickListener { settingsViewModel.emailToSupport() }

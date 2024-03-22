@@ -22,9 +22,6 @@ import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.settings.model.data.ThemeStateRepositorySharedPreferenceBasedImpl
 import com.example.playlistmaker.settings.model.data.ThemeSwitcherInteractorImpl
 import com.example.playlistmaker.settings.view.ui.TurnUIAppearanceThemeUsingDelegateDirectly
-import com.example.playlistmaker.sharing.data.EmailToSupportImpl
-import com.example.playlistmaker.sharing.data.GoToAgreementInfoUseCaseImpl
-import com.example.playlistmaker.sharing.data.ShareAnAppImpl
 
 object Creator {
     private fun getSearchRepository(): SearchRepository {
@@ -58,8 +55,4 @@ object Creator {
     fun provideOpenTrackUseCase(application: Application): SendTrackToPlayerUseCase =
         SendTrackToPlayerProvider(TrackToPlayerUsingIntentSender(application))
 
-    fun provideShareAnAppUseCase(application: Application) = ShareAnAppImpl(application)
-    fun provideEmailToSupportUseCase(application: Application) = EmailToSupportImpl(application)
-    fun provideGoToAgreementInfoUseCase(application: Application) =
-        GoToAgreementInfoUseCaseImpl(application)
 }
