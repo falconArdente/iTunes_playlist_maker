@@ -8,34 +8,12 @@ import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
 import com.example.playlistmaker.player.model.repository.GetTrackToPlayUseCaseImpl
 import com.example.playlistmaker.player.view.ui.TrackFromIntentRepository
-import com.example.playlistmaker.search.model.data.local.HistoryRepositorySharedPreferenceBased
-import com.example.playlistmaker.search.model.data.local.TrackToPlayerUsingIntentSender
-import com.example.playlistmaker.search.model.data.network.RetrofitNetworlClient
-import com.example.playlistmaker.search.model.data.network.SearchRepositoryImpl
-import com.example.playlistmaker.search.model.data.repository.HistoryInteractorImpl
-import com.example.playlistmaker.search.model.data.repository.SearchInteractorImpl
-import com.example.playlistmaker.search.model.data.repository.SearchRepository
-import com.example.playlistmaker.search.model.data.repository.SendTrackToPlayerProvider
-import com.example.playlistmaker.search.model.domain.HistoryInteractor
-import com.example.playlistmaker.search.model.domain.SearchInteractor
-import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.settings.model.data.ThemeStateRepositorySharedPreferenceBasedImpl
 import com.example.playlistmaker.settings.model.data.ThemeSwitcherInteractorImpl
 import com.example.playlistmaker.settings.view.ui.TurnUIAppearanceThemeUsingDelegateDirectly
 
 object Creator {
-    private fun getSearchRepository(): SearchRepository {
-        return SearchRepositoryImpl(RetrofitNetworlClient())
-    }
-
-    fun provideSearchInteractor(): SearchInteractor {
-        return SearchInteractorImpl(getSearchRepository())
-    }
-
-    fun provideHistoryInteractor(application: Application): HistoryInteractor =
-        HistoryInteractorImpl(HistoryRepositorySharedPreferenceBased(application))
-
-    fun provideMusicPlayerInteractor(musicPlayEventsConsumer: MusicPlayInteractor.MusicPlayEventsConsumer): MusicPlayInteractor {
+     fun provideMusicPlayerInteractor(musicPlayEventsConsumer: MusicPlayInteractor.MusicPlayEventsConsumer): MusicPlayInteractor {
         return MusicPlayerInteractorImpl(
             player = MediaPlayerBasedPlayer(),
             musicPlayEventsConsumer = musicPlayEventsConsumer
@@ -51,8 +29,5 @@ object Creator {
             ThemeStateRepositorySharedPreferenceBasedImpl(application),
             TurnUIAppearanceThemeUsingDelegateDirectly()
         )
-
-    fun provideOpenTrackUseCase(application: Application): SendTrackToPlayerUseCase =
-        SendTrackToPlayerProvider(TrackToPlayerUsingIntentSender(application))
 
 }

@@ -6,7 +6,7 @@ import com.example.playlistmaker.search.model.data.dto.TracksSearchResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworlClient : NetworkClient {
+class RetrofitNetworkClient : NetworkClient {
     private val iTunesBaseUrl =
         "https://itunes.apple.com"//val baseURL = context.getString(R.string.base_url_for_search)
     private val retrofit = Retrofit.Builder()

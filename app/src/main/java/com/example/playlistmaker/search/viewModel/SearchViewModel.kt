@@ -1,36 +1,32 @@
 package com.example.playlistmaker.search.viewModel
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.search.model.domain.ErrorConsumer
 import com.example.playlistmaker.search.model.domain.HistoryInteractor
 import com.example.playlistmaker.search.model.domain.SearchInteractor
+import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.search.model.domain.Track
 import com.example.playlistmaker.search.model.domain.TracksConsumer
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+class SearchViewModel : ViewModel() {
     companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-
         private const val AUTO_SEND_REQUEST_DELAY = 2000L
     }
-
+object searchKoinInjector :KoinComponent{
+    val historyInteractor:HistoryInteractor by inject()
+    val searchInteractor:SearchInteractor by inject()
+    val trackToPleerUseCase:SendTrackToPlayerUseCase by inject()
+}
     private val screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)
-    private val history: HistoryInteractor = Creator.provideHistoryInteractor(getApplication())
-    private val search: SearchInteractor = Creator.provideSearchInteractor()
+
+    private val history: HistoryInteractor =searchKoinInjector.historyInteractor
+    private val search: SearchInteractor = searchKoinInjector.searchInteractor
     private var searchPrompt: String = ""
     private val handler = Handler(Looper.getMainLooper()).apply { showHistory() }
     fun getScreenState(): LiveData<SearchScreenState> = screenState
@@ -94,8 +90,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             )
         }
     }
-    fun openTrack(trackToOpen:Track){
-        Creator.provideOpenTrackUseCase(getApplication()).sendToPlayer(trackToOpen)
+
+    fun openTrack(trackToOpen: Track) {
+        searchKoinInjector.trackToPleerUseCase.sendToPlayer(trackToOpen)
     }
 
     override fun onCleared() {
