@@ -24,8 +24,8 @@ import com.example.playlistmaker.search.model.domain.HistoryInteractor
 import com.example.playlistmaker.search.model.domain.SearchInteractor
 import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.search.viewModel.SearchViewModel
-import com.example.playlistmaker.settings.model.data.ThemeStateRepositorySharedPreferenceBasedImpl
 import com.example.playlistmaker.settings.model.data.ThemeSwitcherInteractorImpl
+import com.example.playlistmaker.settings.model.data.repository.ThemeStateRepositorySharedPreferenceBasedImpl
 import com.example.playlistmaker.settings.model.domain.ThemeStateRepository
 import com.example.playlistmaker.settings.model.domain.ThemeSwitchInteractor
 import com.example.playlistmaker.settings.model.domain.TurnUIAppearanceUseCase
@@ -57,7 +57,6 @@ val searchModule = module {
     single<HistoryInteractor> {
         HistoryInteractorImpl(get())
     }
-    //to see on
     single<HistoryRepository> { HistoryRepositorySharedPreferenceBased(androidApplication()) }
     single<SearchInteractor> {
         SearchInteractorImpl(get())
@@ -69,14 +68,14 @@ val searchModule = module {
     }
     factory<TrackSender> { TrackToPlayerUsingIntentSender(androidApplication()) }
 }
-val playerModule=module{
-    viewModel { PlayerViewModel()}
-    factory<MusicPlayInteractor>{(consumer:MusicPlayInteractor.MusicPlayEventsConsumer)->
-        MusicPlayerInteractorImpl(get(),consumer)
+val playerModule = module {
+    viewModel { PlayerViewModel() }
+    factory<MusicPlayInteractor> { (consumer: MusicPlayInteractor.MusicPlayEventsConsumer) ->
+        MusicPlayerInteractorImpl(get(), consumer)
     }
     factory<Player> { MediaPlayerBasedPlayer() }
 
-    factory<GetTrackToPlayUseCase> { (activity:Activity)->
+    factory<GetTrackToPlayUseCase> { (activity: Activity) ->
         GetTrackToPlayUseCaseImpl(TrackFromIntentRepository(activityToGetFrom = activity))
     }
 }

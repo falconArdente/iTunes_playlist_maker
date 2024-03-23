@@ -6,7 +6,8 @@ import com.example.playlistmaker.player.model.repository.GetTrackToPlayRepositor
 import com.example.playlistmaker.search.model.domain.Track
 import com.google.gson.Gson
 
-class TrackFromIntentRepository(private val activityToGetFrom: Activity) : GetTrackToPlayRepository {
+class TrackFromIntentRepository(private val activityToGetFrom: Activity) :
+    GetTrackToPlayRepository {
     private val trackKeyConst = activityToGetFrom.getString(R.string.TRACK_KEY)
     override fun getTrack(): Track {
         val json = Gson()
