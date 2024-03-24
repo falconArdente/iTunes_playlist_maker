@@ -1,27 +1,17 @@
 package com.example.playlistmaker.settings.model.data.repository
 
-import android.app.Application
 import android.content.SharedPreferences
-import com.example.playlistmaker.R
 import com.example.playlistmaker.settings.model.domain.ThemeState
 import com.example.playlistmaker.settings.model.domain.ThemeStateRepository
 
-class ThemeStateRepositorySharedPreferenceBasedImpl(application: Application) :
-    ThemeStateRepository {
-    private val appPreferences: SharedPreferences
-    private val darkThemeKey: String
+private const val DARK_THEME_KEY = "dark_theme_is_on"
 
-    init {
-        appPreferences = application.getSharedPreferences(
-            application.getString(R.string.APP_PREFERENCES_FILE_NAME),
-            Application.MODE_PRIVATE
-        )
-        darkThemeKey = application.getString(R.string.DARK_THEME_KEY)
-    }
+class ThemeStateRepositorySharedPreferenceBasedImpl(private val appPreferences: SharedPreferences) :
+    ThemeStateRepository {
 
     override fun getThemeStateFromRepo(): ThemeState {
         return if (appPreferences.getBoolean(
-                darkThemeKey,
+                DARK_THEME_KEY,
                 false
             )
         ) ThemeState.NIGHT_THEME else ThemeState.DAY_THEME
@@ -29,7 +19,7 @@ class ThemeStateRepositorySharedPreferenceBasedImpl(application: Application) :
 
     override fun saveThemeStateToRepo(themeStateToSave: ThemeState) {
         appPreferences.edit()
-            .putBoolean(darkThemeKey, themeStateToSave == ThemeState.NIGHT_THEME)
+            .putBoolean(DARK_THEME_KEY, themeStateToSave == ThemeState.NIGHT_THEME)
             .apply()
     }
 }

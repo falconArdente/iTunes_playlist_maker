@@ -11,22 +11,15 @@ import com.example.playlistmaker.search.model.domain.SearchInteractor
 import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.search.model.domain.Track
 import com.example.playlistmaker.search.model.domain.TracksConsumer
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class SearchViewModel : ViewModel() {
-    companion object {
-        private const val AUTO_SEND_REQUEST_DELAY = 2000L
-    }
-object searchKoinInjector :KoinComponent{
-    val historyInteractor:HistoryInteractor by inject()
-    val searchInteractor:SearchInteractor by inject()
-    val trackToPleerUseCase:SendTrackToPlayerUseCase by inject()
-}
+private const val AUTO_SEND_REQUEST_DELAY = 2000L
+
+class SearchViewModel(
+    private val history: HistoryInteractor,
+    private val search: SearchInteractor,
+    private val trackToPlayer: SendTrackToPlayerUseCase
+) : ViewModel() {
     private val screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)
-
-    private val history: HistoryInteractor =searchKoinInjector.historyInteractor
-    private val search: SearchInteractor = searchKoinInjector.searchInteractor
     private var searchPrompt: String = ""
     private val handler = Handler(Looper.getMainLooper()).apply { showHistory() }
     fun getScreenState(): LiveData<SearchScreenState> = screenState
@@ -92,7 +85,7 @@ object searchKoinInjector :KoinComponent{
     }
 
     fun openTrack(trackToOpen: Track) {
-        searchKoinInjector.trackToPleerUseCase.sendToPlayer(trackToOpen)
+        trackToPlayer.sendToPlayer(trackToOpen)
     }
 
     override fun onCleared() {

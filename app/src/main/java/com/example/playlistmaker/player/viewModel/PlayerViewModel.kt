@@ -9,48 +9,39 @@ import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
 import com.example.playlistmaker.player.model.domain.PlayState
 import com.example.playlistmaker.search.model.domain.Track
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.koin.core.parameter.parametersOf
 
-class PlayerViewModel() : ViewModel() {
+class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
     companion object {
         private const val DURATION_RENEWAL_DELAY: Long = 421L
-
-    }
-    class PlayerKoinInjection(consumer: MusicPlayInteractor.MusicPlayEventsConsumer) :
-        KoinComponent {
-        val player: MusicPlayInteractor by inject() { parametersOf(consumer) }
     }
 
-    private val consumer = object : MusicPlayInteractor.MusicPlayEventsConsumer {
-        override fun playEventConsume() {
-            playerScreenState.value =
-                getPlayerScreenState().value?.copy(playState = PlayState.Playing)
-            startDurationUpdate.run()
-        }
+    init {
+        player.setConsumer(object : MusicPlayInteractor.MusicPlayEventsConsumer {
+            override fun playEventConsume() {
+                playerScreenState.value =
+                    getPlayerScreenState().value?.copy(playState = PlayState.Playing)
+                startDurationUpdate.run()
+            }
 
-        override fun pauseEventConsume() {
-            handler.removeCallbacks(startDurationUpdate)
-            playerScreenState.value =
-                getPlayerScreenState().value?.copy(playState = PlayState.Paused)
-        }
+            override fun pauseEventConsume() {
+                handler.removeCallbacks(startDurationUpdate)
+                playerScreenState.value =
+                    getPlayerScreenState().value?.copy(playState = PlayState.Paused)
+            }
 
-        override fun readyToPlayEventConsume() {
-            handler.removeCallbacks(startDurationUpdate)
-            playerScreenState.value =
-                getPlayerScreenState().value?.copy(
-                    playState = PlayState.ReadyToPlay,
-                    currentPosition = 0
-                )
-        }
-
+            override fun readyToPlayEventConsume() {
+                handler.removeCallbacks(startDurationUpdate)
+                playerScreenState.value =
+                    getPlayerScreenState().value?.copy(
+                        playState = PlayState.ReadyToPlay,
+                        currentPosition = 0
+                    )
+            }
+        })
     }
-    private val koinInjection = PlayerKoinInjection(consumer)
-    private val playerScreenState = MutableLiveData(PlayerScreenState())
+
+    val playerScreenState = MutableLiveData(PlayerScreenState())
     private val handler = Handler(Looper.getMainLooper())
-
-    private val player = koinInjection.player
 
     val startDurationUpdate: Runnable = object : Runnable {
         override fun run() {

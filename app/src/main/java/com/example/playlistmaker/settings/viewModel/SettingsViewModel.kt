@@ -8,28 +8,22 @@ import com.example.playlistmaker.settings.model.domain.ThemeSwitchInteractor
 import com.example.playlistmaker.sharing.domain.EmailToSupportUseCase
 import com.example.playlistmaker.sharing.domain.GoToAgreementInfoUseCase
 import com.example.playlistmaker.sharing.domain.ShareAnAppUseCase
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class SettingsViewModel() : ViewModel() {
-    object settingsKoinInjection : KoinComponent {
-        val themeSwitchInteractor: ThemeSwitchInteractor by inject()
-        val shareAnAppUseCase: ShareAnAppUseCase by inject()
-        val emailToSupport: EmailToSupportUseCase by inject()
-        val goToAgreementInfoUseCase: GoToAgreementInfoUseCase by inject()
-    }
+class SettingsViewModel(
+    private val themeSwitchInteractor: ThemeSwitchInteractor,
+    private val shareAnAppUseCase: ShareAnAppUseCase,
+    private val emailToSupport: EmailToSupportUseCase,
+    private val goToAgreementInfoUseCase: GoToAgreementInfoUseCase
+) : ViewModel() {
 
-    private val darkThemeIterator: ThemeSwitchInteractor =
-        settingsKoinInjection.themeSwitchInteractor
-    private var isDarkTheme = MutableLiveData<ThemeState>(darkThemeIterator.getTheme())
-
-    fun getThemeSwitchState(): LiveData<ThemeState> = isDarkTheme
+    private var isDarkThemeLiveData = MutableLiveData<ThemeState>(themeSwitchInteractor.getTheme())
+    fun getThemeSwitchState(): LiveData<ThemeState> = isDarkThemeLiveData
     fun doSwitchTheThemeState(themeState: ThemeState) {
-        settingsKoinInjection.themeSwitchInteractor.turnThemeTo(themeState)
+        themeSwitchInteractor.turnThemeTo(themeState)
     }
 
-    fun emailToSupport() = settingsKoinInjection.emailToSupport.execute()
-    fun goToAgreement() = settingsKoinInjection.goToAgreementInfoUseCase.execute()
-    fun doShareAnApp() = settingsKoinInjection.shareAnAppUseCase.execute()
+    fun emailToSupport() = emailToSupport.execute()
+    fun goToAgreement() = goToAgreementInfoUseCase.execute()
+    fun doShareAnApp() = shareAnAppUseCase.execute()
 
 }

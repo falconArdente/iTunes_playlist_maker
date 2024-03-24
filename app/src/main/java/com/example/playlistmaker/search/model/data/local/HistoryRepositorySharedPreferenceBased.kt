@@ -1,43 +1,28 @@
 package com.example.playlistmaker.search.model.data.local
 
-import android.app.Application
 import android.content.SharedPreferences
-import com.example.playlistmaker.R
 import com.example.playlistmaker.search.model.data.repository.HistoryRepository
 import com.example.playlistmaker.search.model.domain.Track
 import com.google.gson.Gson
 
-class HistoryRepositorySharedPreferenceBased(application: Application) :
-    HistoryRepository {
-    private val appPreferences: SharedPreferences
-    private val searchListKey: String
-    private val historySize: Int
+private const val SEARCH_LIST_KEY = "search_list"
+private const val HISTORY_SIZE: Int = 10
 
-    init {
-        appPreferences = application.getSharedPreferences(
-            application.getString(R.string.APP_PREFERENCES_FILE_NAME),
-            Application.MODE_PRIVATE
-        )
-        searchListKey = application.getString(R.string.SEARCH_LIST_KEY)
-        historySize = try {
-            application.getString(R.string.HISTORY_SIZE).toInt()
-        } catch (e: Throwable) {
-            9
-        }
-    }
-
+class HistoryRepositorySharedPreferenceBased(
+    private val appPreferences: SharedPreferences,
+    private val gson: Gson
+) : HistoryRepository {
     private val tracks: ArrayList<Track> = arrayListOf()
-    private val gson = Gson()
     override fun addTrackToHistory(track: Track) {
         if (tracks.contains(track)) tracks.remove(track)
         val size = tracks.size
-        if (size > historySize) tracks.removeLast()
+        if (size >= HISTORY_SIZE) tracks.removeLast()
         tracks.add(0, track)
         saveToVault()
     }
 
     override fun getTracksHistory(): List<Track> {
-        val vaultString = appPreferences.getString(searchListKey, null)
+        val vaultString = appPreferences.getString(SEARCH_LIST_KEY, null)
         return if (vaultString.isNullOrEmpty()) {
             emptyList()
         } else {
@@ -53,7 +38,7 @@ class HistoryRepositorySharedPreferenceBased(application: Application) :
 
     private fun saveToVault() {
         appPreferences.edit()
-            .putString(searchListKey, gson.toJson(tracks))
+            .putString(SEARCH_LIST_KEY, gson.toJson(tracks))
             .apply()
     }
 
