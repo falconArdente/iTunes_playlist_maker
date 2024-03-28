@@ -1,36 +1,25 @@
 package com.example.playlistmaker.search.viewModel
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.search.model.domain.ErrorConsumer
 import com.example.playlistmaker.search.model.domain.HistoryInteractor
 import com.example.playlistmaker.search.model.domain.SearchInteractor
+import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.search.model.domain.Track
 import com.example.playlistmaker.search.model.domain.TracksConsumer
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
+private const val AUTO_SEND_REQUEST_DELAY = 2000L
 
-        private const val AUTO_SEND_REQUEST_DELAY = 2000L
-    }
-
+class SearchViewModel(
+    private val history: HistoryInteractor,
+    private val search: SearchInteractor,
+    private val trackToPlayer: SendTrackToPlayerUseCase
+) : ViewModel() {
     private val screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)
-    private val history: HistoryInteractor = Creator.provideHistoryInteractor(getApplication())
-    private val search: SearchInteractor = Creator.provideSearchInteractor()
     private var searchPrompt: String = ""
     private val handler = Handler(Looper.getMainLooper()).apply { showHistory() }
     fun getScreenState(): LiveData<SearchScreenState> = screenState
@@ -94,8 +83,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             )
         }
     }
-    fun openTrack(trackToOpen:Track){
-        Creator.provideOpenTrackUseCase(getApplication()).sendToPlayer(trackToOpen)
+
+    fun openTrack(trackToOpen: Track) {
+        trackToPlayer.sendToPlayer(trackToOpen)
     }
 
     override fun onCleared() {

@@ -1,37 +1,29 @@
 package com.example.playlistmaker.settings.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.settings.model.domain.ThemeState
 import com.example.playlistmaker.settings.model.domain.ThemeSwitchInteractor
+import com.example.playlistmaker.sharing.domain.EmailToSupportUseCase
+import com.example.playlistmaker.sharing.domain.GoToAgreementInfoUseCase
+import com.example.playlistmaker.sharing.domain.ShareAnAppUseCase
 
-class SettingsViewModel(application: Application) : AndroidViewModel(application) {
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
+class SettingsViewModel(
+    private val themeSwitchInteractor: ThemeSwitchInteractor,
+    private val shareAnAppUseCase: ShareAnAppUseCase,
+    private val emailToSupport: EmailToSupportUseCase,
+    private val goToAgreementInfoUseCase: GoToAgreementInfoUseCase
+) : ViewModel() {
 
-    private val darkThemeIterator: ThemeSwitchInteractor =
-        Creator.provideThemeSwitchIterator(getApplication())
-    private var isDarkTheme = MutableLiveData<ThemeState>(darkThemeIterator.getTheme())
-
-    fun getThemeSwitchState(): LiveData<ThemeState> = isDarkTheme
+    private var isDarkThemeLiveData = MutableLiveData<ThemeState>(themeSwitchInteractor.getTheme())
+    fun getThemeSwitchState(): LiveData<ThemeState> = isDarkThemeLiveData
     fun doSwitchTheThemeState(themeState: ThemeState) {
-        darkThemeIterator.turnThemeTo(themeState)
+        themeSwitchInteractor.turnThemeTo(themeState)
     }
 
-    fun emailToSupport() = Creator.provideEmailToSupportUseCase(getApplication()).execute()
-    fun goToAgreement() = Creator.provideGoToAgreementInfoUseCase(getApplication()).execute()
-    fun doShareAnApp() = Creator.provideShareAnAppUseCase(getApplication()).execute()
+    fun emailToSupport() = emailToSupport.execute()
+    fun goToAgreement() = goToAgreementInfoUseCase.execute()
+    fun doShareAnApp() = shareAnAppUseCase.execute()
 
 }

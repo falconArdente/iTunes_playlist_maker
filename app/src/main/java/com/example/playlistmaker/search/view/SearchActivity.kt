@@ -14,13 +14,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.model.domain.Track
 import com.example.playlistmaker.search.viewModel.SearchScreenState
 import com.example.playlistmaker.search.viewModel.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar.MILLISECOND
 import java.util.Calendar.getInstance
 
@@ -31,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
         private const val CHOICE_DEBOUNCE_DELAY = 1100L
     }
 
-    private lateinit var searchViewModel: SearchViewModel
+    private val searchViewModel by viewModel<SearchViewModel>()
     private var uiHandler: Handler? = null
 
     private var trackOnClickListener = object : TrackOnClickListener {
@@ -63,10 +63,6 @@ class SearchActivity : AppCompatActivity() {
         uiHandler = Handler(Looper.getMainLooper())
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        searchViewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
         tracksAdapter = TrackAdapter(emptyList(), trackOnClickListener)
         binding.header.setNavigationOnClickListener { finish() }
         binding.clearSearchList.setOnClickListener { searchViewModel.doClearHistory() }

@@ -17,6 +17,9 @@ class MusicPlayerInteractorImpl(
     override fun pause() = player.pause()
     override fun stop() = player.stop()
     override fun setTrack(trackToPlay: Track) = player.setTrack(trackToPlay)
+    override fun setConsumer(consumer: MusicPlayInteractor.MusicPlayEventsConsumer) =
+        player.setConsumer(consumer)
+
     override fun destroy() = player.destroy()
     override fun getCurrentPosition(): Int = player.getCurrentPosition()
 

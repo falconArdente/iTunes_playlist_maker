@@ -5,30 +5,18 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
 import com.example.playlistmaker.player.model.domain.PlayState
 import com.example.playlistmaker.search.model.domain.Track
 
-class PlayerViewModel() : ViewModel() {
+class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
     companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel()
-            }
-        }
-
         private const val DURATION_RENEWAL_DELAY: Long = 421L
     }
 
-    private val playerScreenState = MutableLiveData(PlayerScreenState())
-    private val handler = Handler(Looper.getMainLooper())
-    private val player: MusicPlayInteractor =
-        Creator.provideMusicPlayerInteractor(object : MusicPlayInteractor.MusicPlayEventsConsumer {
+    init {
+        player.setConsumer(object : MusicPlayInteractor.MusicPlayEventsConsumer {
             override fun playEventConsume() {
                 playerScreenState.value =
                     getPlayerScreenState().value?.copy(playState = PlayState.Playing)
@@ -49,9 +37,13 @@ class PlayerViewModel() : ViewModel() {
                         currentPosition = 0
                     )
             }
-
         })
-    private val startDurationUpdate: Runnable = object : Runnable {
+    }
+
+    val playerScreenState = MutableLiveData(PlayerScreenState())
+    private val handler = Handler(Looper.getMainLooper())
+
+    val startDurationUpdate: Runnable = object : Runnable {
         override fun run() {
             playerScreenState.value =
                 getPlayerScreenState().value?.copy(currentPosition = player.getCurrentPosition())

@@ -7,11 +7,10 @@ import com.example.playlistmaker.player.model.domain.PlayState
 import com.example.playlistmaker.player.model.domain.Player
 import com.example.playlistmaker.search.model.domain.Track
 
-class MediaPlayerBasedPlayer : Player {
+class MediaPlayerBasedPlayer( private val mediaPlayer:MediaPlayer) : Player {
     private var track: Track? = null
     private var playerState = PlayState.NotReady
-    private val mediaPlayer = MediaPlayer()
-    private fun prepare() {
+        private fun prepare() {
         mediaPlayer.setOnPreparedListener { didPrepared() }
         mediaPlayer.setOnCompletionListener { didPrepared() }
         mediaPlayer.prepareAsync()

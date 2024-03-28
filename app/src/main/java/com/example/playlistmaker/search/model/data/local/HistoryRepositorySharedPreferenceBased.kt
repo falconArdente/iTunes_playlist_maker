@@ -1,28 +1,22 @@
 package com.example.playlistmaker.search.model.data.local
 
-import android.app.Application
 import android.content.SharedPreferences
 import com.example.playlistmaker.search.model.data.repository.HistoryRepository
 import com.example.playlistmaker.search.model.domain.Track
 import com.google.gson.Gson
 
-class HistoryRepositorySharedPreferenceBased(val application: Application) :
-    HistoryRepository {
-    companion object {
-        const val SEARCH_LIST_KEY = "search_list"
-        const val HISTORY_SIZE: Int = 9
-        private const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
-    }
+private const val SEARCH_LIST_KEY = "search_list"
+private const val HISTORY_SIZE: Int = 10
 
-    private var appPreferences: SharedPreferences =
-        application.getSharedPreferences(APP_PREFERENCES_FILE_NAME, Application.MODE_PRIVATE)
-
+class HistoryRepositorySharedPreferenceBased(
+    private val appPreferences: SharedPreferences,
+    private val gson: Gson
+) : HistoryRepository {
     private val tracks: ArrayList<Track> = arrayListOf()
-    private val gson = Gson()
     override fun addTrackToHistory(track: Track) {
         if (tracks.contains(track)) tracks.remove(track)
         val size = tracks.size
-        if (size > HISTORY_SIZE) tracks.removeLast()
+        if (size >= HISTORY_SIZE) tracks.removeLast()
         tracks.add(0, track)
         saveToVault()
     }
