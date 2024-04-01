@@ -8,7 +8,7 @@ import com.example.playlistmaker.search.model.domain.Track
 
 class FavoriteTracksFragmentViewModel(favoriteTracksInteractor: FavoriteTracksInteractor) :
     ViewModel() {
-    private var tracks: MutableLiveData<List<Track>> = MutableLiveData(listOf<Track>())
+    private var tracks: MutableLiveData<List<Track>> = MutableLiveData(listOf())
 
     init {
         tracks.value = favoriteTracksInteractor.provideTracks().toList()

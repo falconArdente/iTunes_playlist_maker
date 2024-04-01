@@ -1,7 +1,6 @@
 package com.example.playlistmaker.media.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,8 +35,6 @@ class FavoriteTracksListFragment : Fragment() {
     }
 
     private fun render(tracks: List<Track>) {
-        val isNoTracksBool = (tracks.isEmpty())
-        binding.placeholderFrame.isVisible = isNoTracksBool
-        if (!isNoTracksBool) Log.d("Fragments", "favorites have ${tracks.size} tracks")
+        binding.placeholderFrame.isVisible = tracks.isEmpty()
     }
 }
