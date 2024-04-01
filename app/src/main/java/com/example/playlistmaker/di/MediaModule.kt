@@ -9,14 +9,12 @@ import com.google.gson.Gson
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-private const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
-
 
 val mediaModule = module {
     viewModel {
         FavoriteTracksFragmentViewModel(get())
     }
-factory<FavoriteTracksInteractor> { FavoriteTracksIteractorImpl(get()) }
+    factory<FavoriteTracksInteractor> { FavoriteTracksIteractorImpl(get()) }
     factory<FavoriteTracksRepository> { mokUpFavoriteTracksRepository() }
     single { Gson() }
 }

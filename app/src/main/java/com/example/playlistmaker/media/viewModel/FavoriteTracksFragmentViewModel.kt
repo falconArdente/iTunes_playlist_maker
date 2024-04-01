@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.media.model.domain.FavoriteTracksInteractor
 import com.example.playlistmaker.search.model.domain.Track
 
-class FavoriteTracksFragmentViewModel(
-    private val favoriteTracksInteractor: FavoriteTracksInteractor
-) :
+class FavoriteTracksFragmentViewModel(favoriteTracksInteractor: FavoriteTracksInteractor) :
     ViewModel() {
     private var tracks: MutableLiveData<List<Track>> = MutableLiveData(listOf<Track>())
 
