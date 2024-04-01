@@ -139,4 +139,12 @@
         <item name="android:layout_marginVertical">@dimen/track_row_vertical_padding</item>
         <item name="android:src">@drawable/placeholder_search_bar</item>
     </style>
+
+    <style name="TabText" parent="Widget.AppCompat.ActionBar.TabText">
+        <item name="tabTextColor">@color/YP_Black</item>
+        <item name="tabSelectedTextColor">@color/YP_Black</item>
+        <item name="tabIndicatorColor">@color/YP_Black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+    </style>
 </resources>

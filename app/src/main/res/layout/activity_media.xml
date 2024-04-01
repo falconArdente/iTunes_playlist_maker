@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/header_height"
+    android:layout_height="match_parent"
     tools:context=".media.view.MediaActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/header"
-        style="@style/secondaryActivityHeader"
-        app:navigationIcon="@drawable/back_arrow_for_header"
-        app:title="@string/media">
+    <FrameLayout
+        android:id="@+id/header_frame"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_height"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <Button style="@style/hidden_search_button" />
-    </androidx.appcompat.widget.Toolbar>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/header"
+            style="@style/secondaryActivityHeader"
+            app:navigationIcon="@drawable/back_arrow_for_header"
+            app:title="@string/media">
 
-</FrameLayout>
+            <Button style="@style/hidden_search_button" />
+        </androidx.appcompat.widget.Toolbar>
+    </FrameLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabBar"
+        style="@style/TabText"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_view_height_media"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_frame"
+        app:tabIndicator="@drawable/indicator"
+        app:tabIndicatorFullWidth="true"
+ />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabBar"
+        app:layout_constraintVertical_weight="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

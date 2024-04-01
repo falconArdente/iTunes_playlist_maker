@@ -29,4 +29,8 @@
     <string name="country_mok">Downloading country</string>
     <string name="sound_stream_error">Audio stream problem</string>
     <string name="course_annotation">developed through course by this link</string>
+    <string name="favorites_tab_name">Favorite tracks</string>
+    <string name="playlist_tab_name">Playlists</string>
+    <string name="where_is_no_favorite_tracks_message">You have no favorite tracks</string>
+    <string name="where_is_no_playlists_message">Where is \nno playlists yet</string>
 </resources>

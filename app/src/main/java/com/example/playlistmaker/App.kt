@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.app.Application
+import com.example.playlistmaker.di.mediaModule
 import com.example.playlistmaker.di.playerModule
 import com.example.playlistmaker.di.searchModule
 import com.example.playlistmaker.di.settingsModule
@@ -15,7 +16,7 @@ class App : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@App)
-            modules(settingsModule, searchModule, playerModule)
+            modules(settingsModule, searchModule, playerModule, mediaModule)
         }
         val themeInteractor: ThemeSwitchInteractor by inject()
         themeInteractor.turnThemeTo(themeInteractor.getTheme())
