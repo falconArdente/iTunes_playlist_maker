@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TabText" parent="Widget.AppCompat.Light.ActionBar.TabText.Inverse">
+        <item name="tabTextColor">@color/YP_White</item>
+        <item name="tabSelectedTextColor">@color/YP_White</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+    </style>
+</resources>
