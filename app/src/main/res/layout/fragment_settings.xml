@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/fragment_common_style"
+    android:orientation="vertical"
+    tools:context=".settings.view.SettingsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/header"
+        style="@style/secondaryActivityHeader"
+        app:title="@string/settings"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        tools:ignore="RtlHardcoded">
+
+        <Switch
+            android:id="@+id/is_night_theme_switch"
+            style="@style/settingsTextView"
+            android:layout_marginHorizontal="@dimen/margin_padding_main"
+            android:text="@string/dark_theme_title"
+            android:trackTintMode="src_over"
+            app:thumbTint="?attr/thumbColor"
+            app:trackTint="?attr/trackColor" />
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/share_an_app"
+        style="@style/settingsTextView"
+        android:text="@string/share"
+        app:drawableEndCompat="@drawable/share" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/email_to_support"
+        style="@style/settingsTextView"
+        android:text="@string/support"
+        app:drawableEndCompat="@drawable/support" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/view_agreement"
+        style="@style/settingsTextView"
+        android:text="@string/agreement"
+        app:drawableEndCompat="@drawable/arr_forward" />
+
+</LinearLayout>

@@ -69,4 +69,8 @@
     <dimen name="tab_view_height_media">48dp</dimen>
     <dimen name="favorite_tracks_placeholder_top_margin">106dp</dimen>
     <dimen name="playlists_list_placeholder_top_margin">46dp</dimen>
+    <dimen name="bottom_navigation_bar_height">56dp</dimen>
+    <dimen name="bottom_navigation_bar_text_size">12sp</dimen>
+    <dimen name="bottom_navigation_bar_icon_size">24dp</dimen>
+    <dimen name="bottom_navigation_bar_item_padding">8dp</dimen>
 </resources>
