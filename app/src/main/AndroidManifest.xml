@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -12,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.PlaylistMaker">
         <activity
-            android:name=".RootActivity"
+            android:name=".root.RootActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
@@ -23,18 +22,5 @@
         <activity
             android:name=".player.view.PlayerActivity"
             android:exported="false" />
-        <activity
-            android:name=".media.view.MediaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".search.view.SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".settings.view.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".main.view.MainActivity"
-            android:exported="true" />
     </application>
-
 </manifest>

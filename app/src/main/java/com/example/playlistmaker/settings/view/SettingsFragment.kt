@@ -59,7 +59,6 @@ class SettingsFragment : Fragment() {
         CompoundButton.OnCheckedChangeListener { _, isChecked ->
             binding.isNightThemeSwitch.isEnabled = false
             tempThemeForRunnable = if (isChecked) ThemeState.NIGHT_THEME else ThemeState.DAY_THEME
-            Log.d("theme","goRunnable ${tempThemeForRunnable.toString()}")
             handler.postDelayed(delayedThemeSwitch, THEME_SWITCH_DEBOUNCE_DELAY)
         }
 }

@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.root
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.playlistmaker.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class RootActivity : AppCompatActivity(R.layout.activity_root) {

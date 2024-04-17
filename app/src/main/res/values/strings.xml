@@ -41,10 +41,6 @@
     <string name="TRACK_KEY" translatable="false">track</string>
     <string name="android_developer_link" translatable="false">https://practicum.yandex.ru/android-developer/</string>
     <string name="course_annotation">разрабатывается в рамках курса по ссылке</string>
-    <string name="APP_PREFERENCES_FILE_NAME" translatable="false">playlistMaker_shared_preference</string>
-    <string name="DARK_THEME_KEY" translatable="false">dark_theme_is_on</string>
-    <string name="SEARCH_LIST_KEY" translatable="false">search_list</string>
-    <string name="HISTORY_SIZE" translatable="false">10</string>
     <string name="favorites_tab_name">Избранные треки</string>
     <string name="playlist_tab_name">Плейлисты</string>
     <string name="where_is_no_favorite_tracks_message">Ваша медиатека пуста</string>

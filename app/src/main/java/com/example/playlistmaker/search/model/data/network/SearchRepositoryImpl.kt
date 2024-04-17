@@ -23,16 +23,16 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
             (response as TracksSearchResponse)
             val tracksList: List<Track> = response.results.map {
                 Track(
-                    it.id ?: "0",
-                    it.trackName ?: "0",
-                    it.artistName ?: "0",
-                    it.trackTimeMillis ?: "0",
-                    it.artworkUrl100 ?: "0",
-                    it.collectionName ?: "0",
-                    it.releaseDate ?: "0",
-                    it.primaryGenreName ?: "0",
-                    it.country ?: "0",
-                    it.previewUrl ?: "0",
+                    it.id.orEmpty(),
+                    it.trackName.orEmpty(),
+                    it.artistName.orEmpty(),
+                    it.trackTimeMillis.orEmpty(),
+                    it.artworkUrl100.orEmpty(),
+                    it.collectionName.orEmpty(),
+                    it.releaseDate.orEmpty(),
+                    it.primaryGenreName.orEmpty(),
+                    it.country.orEmpty(),
+                    it.previewUrl.orEmpty(),
                 )
             }
             successConsumer?.consume(tracksList)
