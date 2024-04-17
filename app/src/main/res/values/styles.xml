@@ -161,9 +161,14 @@
         <item name="itemPaddingTop">@dimen/bottom_navigation_bar_item_padding</item>
         <item name="itemTextColor">@drawable/bottom_navigation_view_color_selector</item>
         <item name="itemIconTint">@drawable/bottom_navigation_view_color_selector</item>
+        <item name="itemActiveIndicatorStyle">@style/transparent_indicator</item>
     </style>
 
-    <style name="bottom_nav_view_text_appearance" >
+    <style name="transparent_indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/transparent</item>
+    </style>
+
+    <style name="bottom_nav_view_text_appearance">
         <item name="android:textSize">@dimen/bottom_navigation_bar_text_size</item>
         <item name="fontFamily">@font/ys_display_regular</item>
     </style>

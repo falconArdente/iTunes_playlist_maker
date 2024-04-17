@@ -25,7 +25,6 @@
         android:layout_height="@dimen/tab_view_height_media"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header"
-        app:tabIndicator="@drawable/indicator"
         app:tabIndicatorFullWidth="true" />
 
     <androidx.viewpager2.widget.ViewPager2

@@ -29,15 +29,13 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("settFrag","binding")
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("settFrag","created")
-
+        Log.d("theme","ViewCreated")
         settingsViewModel.getThemeSwitchState().observe(viewLifecycleOwner) { render(it) }
         binding.emailToSupport.setOnClickListener { settingsViewModel.emailToSupport() }
         binding.viewAgreement.setOnClickListener { settingsViewModel.goToAgreement() }
@@ -61,6 +59,7 @@ class SettingsFragment : Fragment() {
         CompoundButton.OnCheckedChangeListener { _, isChecked ->
             binding.isNightThemeSwitch.isEnabled = false
             tempThemeForRunnable = if (isChecked) ThemeState.NIGHT_THEME else ThemeState.DAY_THEME
+            Log.d("theme","goRunnable ${tempThemeForRunnable.toString()}")
             handler.postDelayed(delayedThemeSwitch, THEME_SWITCH_DEBOUNCE_DELAY)
         }
 }

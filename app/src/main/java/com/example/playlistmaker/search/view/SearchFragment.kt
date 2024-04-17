@@ -1,6 +1,7 @@
 package com.example.playlistmaker.search.view
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -25,12 +27,11 @@ import java.util.Calendar.getInstance
 
 class SearchFragment : Fragment() {
     companion object {
-        const val SEARCH_PROMPT = "PROMPT"
-        const val SEARCH_DEF = ""
+
         private const val CHOICE_DEBOUNCE_DELAY = 1100L
     }
+
     private var tracksAdapter: TrackAdapter? = null
-    private var searchPromptString: String = ""
     private lateinit var binding: FragmentSearchBinding
     private val searchViewModel by viewModel<SearchViewModel>()
     private var uiHandler: Handler? = null
@@ -39,9 +40,10 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding=FragmentSearchBinding.inflate(inflater,container,false)
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         uiHandler = Handler(Looper.getMainLooper())
@@ -74,22 +76,6 @@ class SearchFragment : Fragment() {
             return result
         }
     }
-
-//    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-//        super.onSaveInstanceState(outState, outPersistentState)
-//        outState.putString(SEARCH_PROMPT, searchPromptString)
-//    }
-//
-//    override fun onRestoreInstanceState(
-//        savedInstanceState: Bundle?,
-//        persistentState: PersistableBundle?
-//    ) {
-//        super.onRestoreInstanceState(savedInstanceState, persistentState)
-//        binding.searchBar.setText(
-//            savedInstanceState?.getString(SEARCH_PROMPT)
-//                ?: SEARCH_DEF
-//        )
-//    }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun render(screenState: SearchScreenState) {
@@ -184,10 +170,11 @@ class SearchFragment : Fragment() {
     private fun clearTextAttach() {
         binding.clearIcon.setOnClickListener {
             binding.searchBar.setText("")
-            //requireActivity().currentFocus?.let { view ->
-            //    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            //    imm?.hideSoftInputFromWindow(view.windowToken, 0)
-            //}
+            requireActivity().currentFocus?.let { view ->
+                val imm =
+                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(view.windowToken, 0)
+            }
         }
     }
 
