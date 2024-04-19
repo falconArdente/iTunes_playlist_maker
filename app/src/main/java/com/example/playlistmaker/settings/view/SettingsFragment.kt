@@ -3,29 +3,40 @@ package com.example.playlistmaker.settings.view
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.CompoundButton
-import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.playlistmaker.settings.model.domain.ThemeState
 import com.example.playlistmaker.settings.viewModel.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : Fragment() {
     companion object {
         private const val THEME_SWITCH_DEBOUNCE_DELAY: Long = 270L
     }
 
-    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var binding: FragmentSettingsBinding
     private val settingsViewModel: SettingsViewModel by viewModel()
-    private lateinit var handler: Handler
+    private val handler = Handler(Looper.getMainLooper())
     private var tempThemeForRunnable: ThemeState = ThemeState.NIGHT_THEME
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        handler = Handler(Looper.getMainLooper())
-        settingsViewModel.getThemeSwitchState().observe(this) { render(it) }
-        binding.header.setNavigationOnClickListener { finish() }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("theme","ViewCreated")
+        settingsViewModel.getThemeSwitchState().observe(viewLifecycleOwner) { render(it) }
         binding.emailToSupport.setOnClickListener { settingsViewModel.emailToSupport() }
         binding.viewAgreement.setOnClickListener { settingsViewModel.goToAgreement() }
         binding.shareAnApp.setOnClickListener { settingsViewModel.doShareAnApp() }

@@ -5,18 +5,19 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.model.domain.Track
 import com.example.playlistmaker.search.viewModel.SearchScreenState
 import com.example.playlistmaker.search.viewModel.SearchViewModel
@@ -24,15 +25,37 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar.MILLISECOND
 import java.util.Calendar.getInstance
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
     companion object {
-        const val SEARCH_PROMPT = "PROMPT"
-        const val SEARCH_DEF = ""
+
         private const val CHOICE_DEBOUNCE_DELAY = 1100L
     }
 
+    private var tracksAdapter: TrackAdapter? = null
+    private lateinit var binding: FragmentSearchBinding
     private val searchViewModel by viewModel<SearchViewModel>()
     private var uiHandler: Handler? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        uiHandler = Handler(Looper.getMainLooper())
+        tracksAdapter = TrackAdapter(emptyList(), trackOnClickListener)
+        binding.clearSearchList.setOnClickListener { searchViewModel.doClearHistory() }
+        binding.updateButton.setOnClickListener { searchViewModel.doRepeatSearch() }
+        searchBarTextWatcherAttach()
+        searchBarSetActionDone()
+        clearTextAttach()
+        startUpViewHolder()
+        searchViewModel.getScreenState().observe(viewLifecycleOwner) { render(it) }
+    }
 
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
@@ -52,42 +75,6 @@ class SearchActivity : AppCompatActivity() {
             }
             return result
         }
-    }
-    private var tracksAdapter: TrackAdapter? = null
-    private var searchPromptString: String = ""
-    private lateinit var binding: ActivitySearchBinding
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        uiHandler = Handler(Looper.getMainLooper())
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        tracksAdapter = TrackAdapter(emptyList(), trackOnClickListener)
-        binding.header.setNavigationOnClickListener { finish() }
-        binding.clearSearchList.setOnClickListener { searchViewModel.doClearHistory() }
-        binding.updateButton.setOnClickListener { searchViewModel.doRepeatSearch() }
-        searchBarTextWatcherAttach()
-        searchBarSetActionDone()//temporary use only
-        clearTextAttach()
-        startUpViewHolder()
-        searchViewModel.getScreenState().observe(this) { render(it) }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outState.putString(SEARCH_PROMPT, searchPromptString)
-    }
-
-    override fun onRestoreInstanceState(
-        savedInstanceState: Bundle?,
-        persistentState: PersistableBundle?
-    ) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState)
-        binding.searchBar.setText(
-            savedInstanceState?.getString(SEARCH_PROMPT)
-                ?: SEARCH_DEF
-        )
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -114,7 +101,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.statusText.text = this.getString(R.string.search_status_nothing)
                 binding.statusImage.setImageDrawable(
                     AppCompatResources.getDrawable(
-                        this,
+                        requireActivity(),
                         R.drawable.image_sad_smile_mus
                     )
                 )
@@ -127,10 +114,10 @@ class SearchActivity : AppCompatActivity() {
                 binding.clearSearchList.isVisible = false
                 binding.tracksRecyclerView.isVisible = false
                 binding.statusText.text =
-                    applicationContext.getString(R.string.search_status_connection_problem)
+                    requireActivity().getString(R.string.search_status_connection_problem)
                 binding.statusImage.setImageDrawable(
                     AppCompatResources.getDrawable(
-                        this,
+                        requireActivity(),
                         R.drawable.image_no_wifi_mus
                     )
                 )
@@ -183,8 +170,9 @@ class SearchActivity : AppCompatActivity() {
     private fun clearTextAttach() {
         binding.clearIcon.setOnClickListener {
             binding.searchBar.setText("")
-            this.currentFocus?.let { view ->
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            requireActivity().currentFocus?.let { view ->
+                val imm =
+                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 imm?.hideSoftInputFromWindow(view.windowToken, 0)
             }
         }
@@ -215,6 +203,6 @@ class SearchActivity : AppCompatActivity() {
     private fun startUpViewHolder() {
         binding.tracksRecyclerView.adapter = tracksAdapter
         binding.tracksRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
     }
 }

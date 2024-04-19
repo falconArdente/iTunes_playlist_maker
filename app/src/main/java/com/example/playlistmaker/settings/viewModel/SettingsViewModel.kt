@@ -20,6 +20,7 @@ class SettingsViewModel(
     fun getThemeSwitchState(): LiveData<ThemeState> = isDarkThemeLiveData
     fun doSwitchTheThemeState(themeState: ThemeState) {
         themeSwitchInteractor.turnThemeTo(themeState)
+        isDarkThemeLiveData.value=themeSwitchInteractor.getTheme()
     }
 
     fun emailToSupport() = emailToSupport.execute()

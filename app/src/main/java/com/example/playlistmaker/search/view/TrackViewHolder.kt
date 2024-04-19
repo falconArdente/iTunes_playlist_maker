@@ -10,7 +10,7 @@ import com.example.playlistmaker.search.model.domain.Track
 import java.util.Locale
 
 class TrackViewHolder(private val binding: TrackRowAtSearchBinding) : RecyclerView.ViewHolder(
-    binding.root//built-in name of object is itemView
+    binding.root
 ) {
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     fun bind(item: Track, onClickListener: TrackOnClickListener) {
