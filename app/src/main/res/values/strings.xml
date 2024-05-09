@@ -46,4 +46,5 @@
     <string name="where_is_no_favorite_tracks_message">Ваша медиатека пуста</string>
     <string name="where_is_no_playlists_message">Вы не создали \nни одного плейлиста</string>
     <string name="new_playlist_button_text">Новый плейлист</string>
+    <string name="network_error">Проверьте подключение к интернету</string>
 </resources>

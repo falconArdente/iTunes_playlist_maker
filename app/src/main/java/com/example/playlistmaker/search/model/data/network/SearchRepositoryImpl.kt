@@ -1,23 +1,18 @@
 package com.example.playlistmaker.search.model.data.network
 
-import android.util.Log
+import android.app.Application
+import com.example.playlistmaker.R
 import com.example.playlistmaker.search.model.data.dto.TracksSearchRequest
 import com.example.playlistmaker.search.model.data.dto.TracksSearchResponse
 import com.example.playlistmaker.search.model.data.repository.SearchRepository
-import com.example.playlistmaker.search.model.domain.ErrorConsumer
 import com.example.playlistmaker.search.model.domain.Track
-import com.example.playlistmaker.search.model.domain.TracksConsumer
+import com.example.playlistmaker.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
-class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRepository {
-    private var successConsumer: TracksConsumer? = null
-    private var errorConsumer: ErrorConsumer =
-        object : ErrorConsumer {
-            override fun consume() {
-                Log.e("net", "Error with no action been set")
-            }
-        }
-
-    override fun searchTracks(expression: String): List<Track> {
+class SearchRepositoryImpl(private val networkClient: NetworkClient, private val application: Application) :
+    SearchRepository {
+    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         if (response.resultCode == 200) {
             (response as TracksSearchResponse)
@@ -35,19 +30,9 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
                     it.previewUrl.orEmpty(),
                 )
             }
-            successConsumer?.consume(tracksList)
-            return tracksList
+            emit(Resource.Success(tracksList))
         } else {
-            errorConsumer.consume()
-            return emptyList()
+            emit(Resource.Error(application.getString(R.string.network_error)))
         }
-    }
-
-    override fun setOnFailure(errorConsumer: ErrorConsumer) {
-        this.errorConsumer = errorConsumer
-    }
-
-    override fun setOnSuccess(consumer: TracksConsumer) {
-        successConsumer = consumer
     }
 }

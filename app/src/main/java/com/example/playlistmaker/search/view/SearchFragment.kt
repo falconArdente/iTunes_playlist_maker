@@ -3,8 +3,6 @@ package com.example.playlistmaker.search.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -15,26 +13,25 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.model.domain.Track
 import com.example.playlistmaker.search.viewModel.SearchScreenState
 import com.example.playlistmaker.search.viewModel.SearchViewModel
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Calendar.MILLISECOND
-import java.util.Calendar.getInstance
 
 class SearchFragment : Fragment() {
     companion object {
-
         private const val CHOICE_DEBOUNCE_DELAY = 1100L
     }
 
     private var tracksAdapter: TrackAdapter? = null
     private lateinit var binding: FragmentSearchBinding
     private val searchViewModel by viewModel<SearchViewModel>()
-    private var uiHandler: Handler? = null
+    private lateinit var trackOnClickDebounced: (Track) -> Unit
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +43,14 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        uiHandler = Handler(Looper.getMainLooper())
+        trackOnClickDebounced = debounce(
+            CHOICE_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            searchViewModel.addTrackToHistory(track)
+            searchViewModel.openTrack(track)
+        }
         tracksAdapter = TrackAdapter(emptyList(), trackOnClickListener)
         binding.clearSearchList.setOnClickListener { searchViewModel.doClearHistory() }
         binding.updateButton.setOnClickListener { searchViewModel.doRepeatSearch() }
@@ -59,21 +63,7 @@ class SearchFragment : Fragment() {
 
     private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
-            if (canMakeAChoice()) {
-                searchViewModel.addTrackToHistory(item)
-                searchViewModel.openTrack(item)
-            }
-        }
-
-        private var choiceTimeStamp: Long = getInstance().get(MILLISECOND).toLong()
-        private fun canMakeAChoice(): Boolean {
-            val currentTime = getInstance().get(MILLISECOND).toLong()
-            var result = true
-            if ((currentTime - choiceTimeStamp) > CHOICE_DEBOUNCE_DELAY) {
-                choiceTimeStamp = currentTime
-                result = false
-            }
-            return result
+            trackOnClickDebounced(item)
         }
     }
 
