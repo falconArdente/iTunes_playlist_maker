@@ -11,10 +11,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(
-    private val networkClient: NetworkClient, 
+    private val networkClient: NetworkClient,
     private val application: Application
 ) : SearchRepository {
-    SearchRepository {
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         if (response.resultCode == 200) {
