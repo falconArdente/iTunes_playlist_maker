@@ -38,7 +38,7 @@ val searchModule = module {
     factory<SearchInteractor> {
         SearchInteractorImpl(get())
     }
-    single<SearchRepository> { SearchRepositoryImpl(get()) }
+    single<SearchRepository> { SearchRepositoryImpl(get(),androidApplication()) }
     factory<NetworkClient> { RetrofitNetworkClient(get()) }
     factory<SendTrackToPlayerUseCase> {
         SendTrackToPlayerProvider(get())
