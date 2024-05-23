@@ -24,11 +24,12 @@ class FavoriteTracksRepositoryRoomImpl(private val favoritesTable: FavoriteTrack
         }
     }
 
-    override fun getAllTracks(): Flow<List<Track>> {
-        return favoritesTable.getAll().map { listOfEntity ->
+    override suspend fun getAllTracks(): Flow<List<Track>> = favoritesTable
+        .getAll()
+        .map { it.sortedByDescending { it.dateOfChange } }
+        .map { listOfEntity ->
             listOfEntity.map { TrackDbConverter.map(it) }
         }
-    }
 
     override fun getAllIds(): Flow<List<Long>> = favoritesTable.getRemoteIdList()
 }

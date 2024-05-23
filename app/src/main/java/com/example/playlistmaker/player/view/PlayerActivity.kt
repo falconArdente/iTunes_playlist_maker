@@ -61,9 +61,10 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun render(screenState: PlayerScreenState) {
-        if (binding.trackTitle.text != screenState.track.trackTitle) placeTrackDataToElements(
-            screenState.track
-        )
+        if (binding.trackTitle.text != screenState.track.trackTitle) {
+            reDraw_favorite_button(viewModel.getIsFavorite().value?:false)
+            placeTrackDataToElements(screenState.track)
+        }
 
         when (screenState.playState) {
             ReadyToPlay -> {

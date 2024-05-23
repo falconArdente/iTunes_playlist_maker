@@ -22,8 +22,6 @@ class PlayerViewModel(
         private const val DURATION_RENEWAL_DELAY: Long = 300L
     }
 
-    private val isFavoriteLiveData = MutableLiveData(false)
-
     init {
         player.setConsumer(object : MusicPlayInteractor.MusicPlayEventsConsumer {
             override fun playEventConsume() {
@@ -53,15 +51,13 @@ class PlayerViewModel(
                     )
             }
         })
-        viewModelScope.launch(Dispatchers.IO) {
-            currentFavoriteInteractor.isTrackFavorite()
-                .collect { isFavoriteLiveData.postValue(it) }
-        }
+
     }
 
     private val playerScreenState = MutableLiveData(PlayerScreenState())
     private var durationUpdateJob: Job? = null
-
+    private val isFavoriteLiveData = MutableLiveData(false)
+    private var isFavoriteInteractionJob: Job? = null
     fun getIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
     fun play() = player.play()
@@ -73,6 +69,7 @@ class PlayerViewModel(
         if (track != getPlayerScreenState().value?.track) {
             player.setTrack(track)
             currentFavoriteInteractor.setCurrentTrack(track)
+            launchIsFavoriteDataInteraction()
             playerScreenState.postValue(
                 PlayerScreenState(
                     track,
@@ -83,14 +80,22 @@ class PlayerViewModel(
         }
     }
 
+    private fun launchIsFavoriteDataInteraction() {
+        isFavoriteInteractionJob?.cancel()
+        isFavoriteInteractionJob=viewModelScope.launch(Dispatchers.IO) {
+            currentFavoriteInteractor.isTrackFavorite()
+                .collect { isFavoriteLiveData.postValue(it) }
+        }
+    }
+
     fun addToFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
             currentFavoriteInteractor.addTrackToFavorites()
         }
     }
 
-     fun removeFromFavorites() {
-        viewModelScope.launch (Dispatchers.IO){
+    fun removeFromFavorites() {
+        viewModelScope.launch(Dispatchers.IO) {
             currentFavoriteInteractor.removeTrackFromFavorites()
         }
     }

@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 class FavoriteTracksInteractorImpl(private val repository: FavoriteTracksRepository) :
     FavoriteTracksInteractor {
-    override fun getAllTracks(): Flow<List<Track>> = repository.getAllTracks()
+    override suspend fun getAllTracks(): Flow<List<Track>> = repository.getAllTracks()
+
 }

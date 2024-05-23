@@ -11,7 +11,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MediaFragment : Fragment() {
     private lateinit var binding: FragmentMediaBinding
-    private var tabMediator: TabLayoutMediator?=null
+    private var tabMediator: TabLayoutMediator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

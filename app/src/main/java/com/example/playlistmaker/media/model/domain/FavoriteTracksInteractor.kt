@@ -4,5 +4,5 @@ import com.example.playlistmaker.search.model.domain.Track
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteTracksInteractor {
-    fun getAllTracks(): Flow<List<Track>>
+    suspend fun getAllTracks(): Flow<List<Track>>
 }

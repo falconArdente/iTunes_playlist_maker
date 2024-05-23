@@ -16,7 +16,7 @@ import org.koin.dsl.module
 private const val DATABASE_NAME = "tracks_database.db"
 val mediaModule = module {
     viewModel {
-        FavoriteTracksFragmentViewModel()
+        FavoriteTracksFragmentViewModel(get(),get())
     }
     viewModel {
         PlaylistsFragmentViewModel()
