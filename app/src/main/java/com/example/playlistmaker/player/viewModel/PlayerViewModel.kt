@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.player.model.domain.CurrentFavoriteTrackInteractor
 import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
 import com.example.playlistmaker.player.model.domain.PlayState
@@ -12,10 +13,15 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
+class PlayerViewModel(
+    private val player: MusicPlayInteractor,
+    private val currentFavoriteInteractor: CurrentFavoriteTrackInteractor
+) : ViewModel() {
     companion object {
         private const val DURATION_RENEWAL_DELAY: Long = 300L
     }
+
+    private val isFavoriteLiveData = MutableLiveData(false)
 
     init {
         player.setConsumer(object : MusicPlayInteractor.MusicPlayEventsConsumer {
@@ -46,10 +52,16 @@ class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
                     )
             }
         })
+        viewModelScope.launch {
+            currentFavoriteInteractor.isTrackFavorite()
+                .collect { isFavoriteLiveData.postValue(it) }
+        }
     }
 
-    val playerScreenState = MutableLiveData(PlayerScreenState())
+    private val playerScreenState = MutableLiveData(PlayerScreenState())
     private var durationUpdateJob: Job? = null
+
+    fun isFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
     fun play() = player.play()
     fun pause() = player.pause()
@@ -59,6 +71,7 @@ class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
         val track: Track = provider.getTrackToPlay()
         if (track != getPlayerScreenState().value?.track) {
             player.setTrack(track)
+            currentFavoriteInteractor.setCurrentTrack(track)
             playerScreenState.postValue(
                 PlayerScreenState(
                     track,
@@ -69,6 +82,8 @@ class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
         }
     }
 
+    suspend fun addToFavorites() = currentFavoriteInteractor.addTrackToFavorites()
+    suspend fun removeFromFavorites() = currentFavoriteInteractor.removeTrackFromFavorites()
     override fun onCleared() {
         player.destroy()
         super.onCleared()

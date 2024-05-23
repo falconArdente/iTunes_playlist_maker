@@ -1,6 +1,5 @@
-package com.example.playlistmaker.media.model
+package com.example.playlistmaker.media.model.data.db
 
-import com.example.playlistmaker.media.model.data.db.TrackDbConverter
 import com.example.playlistmaker.media.model.data.db.dao.FavoriteTracksDao
 import com.example.playlistmaker.media.model.repository.FavoriteTracksRepository
 import com.example.playlistmaker.search.model.domain.Track
