@@ -44,20 +44,17 @@ class PlayerViewModel(
 
             override fun readyToPlayEventConsume() {
                 durationUpdateJob?.cancel()
-                playerScreenState.value =
-                    getPlayerScreenState().value?.copy(
-                        playState = PlayState.ReadyToPlay,
-                        currentPosition = 0
-                    )
+                playerScreenState.value = getPlayerScreenState().value?.copy(
+                    playState = PlayState.ReadyToPlay, currentPosition = 0
+                )
             }
         })
-
     }
 
     private val playerScreenState = MutableLiveData(PlayerScreenState())
     private var durationUpdateJob: Job? = null
     private val isFavoriteLiveData = MutableLiveData(false)
-    private var isFavoriteInteractionJob: Job? = null
+    private var isFavoriteDataInteractionJob: Job? = null
     fun getIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
     fun play() = player.play()
@@ -69,22 +66,19 @@ class PlayerViewModel(
         if (track != getPlayerScreenState().value?.track) {
             player.setTrack(track)
             currentFavoriteInteractor.setCurrentTrack(track)
-            launchIsFavoriteDataInteraction()
+            reLaunchIsFavoriteDataInteraction()
             playerScreenState.postValue(
                 PlayerScreenState(
-                    track,
-                    player.getCurrentState(),
-                    player.getCurrentPosition()
+                    track, player.getCurrentState(), player.getCurrentPosition()
                 )
             )
         }
     }
 
-    private fun launchIsFavoriteDataInteraction() {
-        isFavoriteInteractionJob?.cancel()
-        isFavoriteInteractionJob=viewModelScope.launch(Dispatchers.IO) {
-            currentFavoriteInteractor.isTrackFavorite()
-                .collect { isFavoriteLiveData.postValue(it) }
+    private fun reLaunchIsFavoriteDataInteraction() {
+        isFavoriteDataInteractionJob?.cancel()
+        isFavoriteDataInteractionJob = viewModelScope.launch(Dispatchers.IO) {
+            currentFavoriteInteractor.isTrackFavorite().collect { isFavoriteLiveData.postValue(it) }
         }
     }
 

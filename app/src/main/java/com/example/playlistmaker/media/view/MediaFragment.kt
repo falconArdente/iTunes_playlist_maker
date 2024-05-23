@@ -14,9 +14,7 @@ class MediaFragment : Fragment() {
     private var tabMediator: TabLayoutMediator? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMediaBinding.inflate(inflater, container, false)
         return binding.root

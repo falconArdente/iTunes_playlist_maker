@@ -9,7 +9,6 @@ import java.util.Date
 
 class FavoriteTracksRepositoryRoomImpl(private val favoritesTable: FavoriteTracksDao) :
     FavoriteTracksRepository {
-
     override suspend fun addTrackToFavorites(trackToAdd: Track) {
         val trackEntity = TrackDbConverter.map(trackToAdd)
         favoritesTable.deleteTrackEntity(trackEntity)
@@ -24,12 +23,15 @@ class FavoriteTracksRepositoryRoomImpl(private val favoritesTable: FavoriteTrack
         }
     }
 
-    override suspend fun getAllTracks(): Flow<List<Track>> = favoritesTable
-        .getAll()
-        .map { it.sortedByDescending { it.dateOfChange } }
-        .map { listOfEntity ->
-            listOfEntity.map { TrackDbConverter.map(it) }
-        }
+    override suspend fun getAllTracks(): Flow<List<Track>> =
+        favoritesTable.getAll().map { listOfEntity ->
+            listOfEntity.sortedByDescending { entity ->
+                entity.dateOfChange
+            }
+        }//можно было просто перевернуть recyclerView layout, но сортировка по датам показалась полезнее
+            .map { listOfEntity ->
+                listOfEntity.map { TrackDbConverter.map(it) }
+            }
 
     override fun getAllIds(): Flow<List<Long>> = favoritesTable.getRemoteIdList()
 }

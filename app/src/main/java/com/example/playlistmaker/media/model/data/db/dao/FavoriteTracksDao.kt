@@ -23,6 +23,7 @@ interface FavoriteTracksDao {
 
     @Query("SELECT remoteId FROM $TABLE_NAME")
     fun getRemoteIdList(): Flow<List<Long>>
+
     @Query("SELECT * FROM $TABLE_NAME WHERE remoteId=:remoteID")
-    fun getEntityListByRemoteId(remoteID:Long): List<TrackEntity>
+    fun getEntityListByRemoteId(remoteID: Long): List<TrackEntity>
 }

@@ -17,7 +17,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val playerModule = module {
-    viewModel { PlayerViewModel( player = get(), currentFavoriteInteractor = get()) }
+    viewModel { PlayerViewModel(player = get(), currentFavoriteInteractor = get()) }
     factory<MusicPlayInteractor> {
         MusicPlayerInteractorImpl(get())
     }

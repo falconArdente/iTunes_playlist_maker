@@ -28,9 +28,7 @@ class FavoriteTracksListFragment : Fragment() {
     private var favoriteTracksAdapter: FavoriteTracksAdapter? = null
     private lateinit var trackOnClickDebounced: (Track) -> Unit
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentFavoriteTrackListBinding.inflate(inflater, container, false)
         return binding.root
@@ -39,16 +37,14 @@ class FavoriteTracksListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         trackOnClickDebounced = debounce(
-            CHOICE_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
+            CHOICE_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track ->
             favoritesViewModel.openTrack(track)
         }
         favoriteTracksAdapter = FavoriteTracksAdapter(emptyList(), trackOnClickListener)
         binding.favTracksRecyclerView.adapter = favoriteTracksAdapter
         binding.favTracksRecyclerView.layoutManager =
-            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, true)
+            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         favoritesViewModel.screenState.observe(viewLifecycleOwner) { render(screenState = it) }
     }
 
