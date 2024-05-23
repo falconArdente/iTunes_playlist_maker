@@ -9,6 +9,7 @@ import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
 import com.example.playlistmaker.player.model.domain.PlayState
 import com.example.playlistmaker.search.model.domain.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -52,7 +53,7 @@ class PlayerViewModel(
                     )
             }
         })
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             currentFavoriteInteractor.isTrackFavorite()
                 .collect { isFavoriteLiveData.postValue(it) }
         }
@@ -61,7 +62,7 @@ class PlayerViewModel(
     private val playerScreenState = MutableLiveData(PlayerScreenState())
     private var durationUpdateJob: Job? = null
 
-    fun isFavorite(): LiveData<Boolean> = isFavoriteLiveData
+    fun getIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
     fun play() = player.play()
     fun pause() = player.pause()
@@ -82,8 +83,18 @@ class PlayerViewModel(
         }
     }
 
-    suspend fun addToFavorites() = currentFavoriteInteractor.addTrackToFavorites()
-    suspend fun removeFromFavorites() = currentFavoriteInteractor.removeTrackFromFavorites()
+    fun addToFavorites() {
+        viewModelScope.launch(Dispatchers.IO) {
+            currentFavoriteInteractor.addTrackToFavorites()
+        }
+    }
+
+     fun removeFromFavorites() {
+        viewModelScope.launch (Dispatchers.IO){
+            currentFavoriteInteractor.removeTrackFromFavorites()
+        }
+    }
+
     override fun onCleared() {
         player.destroy()
         super.onCleared()

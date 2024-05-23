@@ -120,7 +120,7 @@
         android:id="@+id/favorite_button"
         android:layout_width="@dimen/add_and_fav_buttons_size"
         android:layout_height="@dimen/add_and_fav_buttons_size"
-        android:background="@drawable/favorite_button"
+        android:background="@drawable/favorite_off_button"
         app:layout_constraintBottom_toBottomOf="@id/play_button"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintHorizontal_bias="1"

@@ -36,7 +36,9 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.setTrackProvider(provider)
         binding.header.setNavigationOnClickListener { finish() }
         binding.playButton.setOnClickListener(playButtonOnClickListener)
+        binding.favoriteButton.setOnClickListener(favoriteButtonOnClickListener)
         viewModel.getPlayerScreenState().observe(this) { render(it) }
+        viewModel.getIsFavorite().observe(this) { reDraw_favorite_button(it) }
     }
 
     private val playButtonOnClickListener = OnClickListener {
@@ -44,6 +46,18 @@ class PlayerActivity : AppCompatActivity() {
         val curPlayState = viewModel.getPlayerScreenState().value?.playState
         if (curPlayState == ReadyToPlay || curPlayState == Paused) viewModel.play()
         if (curPlayState == Playing) viewModel.pause()
+    }
+
+    private fun reDraw_favorite_button(isFavorite: Boolean) {
+        if (isFavorite) binding.favoriteButton.setImageResource(R.drawable.favorite_on_button)
+        else binding.favoriteButton.setImageResource(R.drawable.favorite_off_button)
+        binding.favoriteButton.isEnabled = true
+    }
+
+    private val favoriteButtonOnClickListener: OnClickListener = OnClickListener {
+        binding.favoriteButton.isEnabled = false
+        if (viewModel.getIsFavorite().value == true) viewModel.removeFromFavorites()
+        else viewModel.addToFavorites()
     }
 
     private fun render(screenState: PlayerScreenState) {
