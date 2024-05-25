@@ -175,16 +175,16 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     binding.clearIcon.visibility = View.GONE
+                    searchViewModel.cancelSearchSequence()
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
-                    searchViewModel.doSearchTracks("")
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty())
                     searchViewModel.doAutoSearchTracks(s.toString())
-                else searchViewModel.doSearchTracks("")
+                else searchViewModel.showHistory()
             }
         }
         binding.searchBar.addTextChangedListener(searchBarTextWatcher)
