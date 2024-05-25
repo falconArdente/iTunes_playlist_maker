@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="7"
-        tools:listitem="@layout/track_row_at_favorites" />
+        tools:listitem="@layout/track_row_at_search" />
 
     <Space
         android:id="@+id/empty_space_under_favs"

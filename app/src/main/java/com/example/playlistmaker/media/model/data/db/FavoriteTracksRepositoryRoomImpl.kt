@@ -5,14 +5,13 @@ import com.example.playlistmaker.media.model.repository.FavoriteTracksRepository
 import com.example.playlistmaker.search.model.domain.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.Date
 
 class FavoriteTracksRepositoryRoomImpl(private val favoritesTable: FavoriteTracksDao) :
     FavoriteTracksRepository {
     override suspend fun addTrackToFavorites(trackToAdd: Track) {
         val trackEntity = TrackDbConverter.map(trackToAdd)
         favoritesTable.deleteTrackEntity(trackEntity)
-        trackEntity.dateOfChange = Date().time
+        trackEntity.dateOfChange = System.currentTimeMillis()
         favoritesTable.addTrackEntity(trackEntity)
     }
 

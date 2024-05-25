@@ -12,6 +12,8 @@ import com.example.playlistmaker.databinding.FragmentFavoriteTrackListBinding
 import com.example.playlistmaker.media.viewModel.FavoriteTracksFragmentViewModel
 import com.example.playlistmaker.media.viewModel.FavoriteTracksScreenState
 import com.example.playlistmaker.search.model.domain.Track
+import com.example.playlistmaker.search.view.TrackAdapter
+import com.example.playlistmaker.search.view.TrackOnClickListener
 import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,7 +27,7 @@ class FavoriteTracksListFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoriteTrackListBinding
     private val favoritesViewModel by viewModel<FavoriteTracksFragmentViewModel>()
-    private var favoriteTracksAdapter: FavoriteTracksAdapter? = null
+    private var favoriteTracksAdapter: TrackAdapter? = null
     private lateinit var trackOnClickDebounced: (Track) -> Unit
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -41,7 +43,7 @@ class FavoriteTracksListFragment : Fragment() {
         ) { track ->
             favoritesViewModel.openTrack(track)
         }
-        favoriteTracksAdapter = FavoriteTracksAdapter(emptyList(), trackOnClickListener)
+        favoriteTracksAdapter = TrackAdapter(emptyList(), trackOnClickListener)
         binding.favTracksRecyclerView.adapter = favoriteTracksAdapter
         binding.favTracksRecyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
@@ -64,7 +66,7 @@ class FavoriteTracksListFragment : Fragment() {
         }
     }
 
-    private var trackOnClickListener = object : FavoriteTrackOnClickListener {
+    private var trackOnClickListener = object : TrackOnClickListener {
         override fun onClick(item: Track) {
             trackOnClickDebounced(item)
         }
