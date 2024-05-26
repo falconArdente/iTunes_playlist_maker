@@ -26,6 +26,18 @@ class PlayerActivity : AppCompatActivity() {
     private val viewModel by viewModel<PlayerViewModel>()
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private lateinit var binding: PlayerBinding
+    private val playButtonOnClickListener = OnClickListener {
+        binding.playButton.isEnabled = false
+        val curPlayState = viewModel.getPlayerScreenState().value?.playState
+        if (curPlayState == ReadyToPlay || curPlayState == Paused) viewModel.play()
+        if (curPlayState == Playing) viewModel.pause()
+    }
+
+    private val favoriteButtonOnClickListener: OnClickListener = OnClickListener {
+        binding.favoriteButton.isEnabled = false
+        if (viewModel.getIsFavorite().value == true) viewModel.removeFromFavorites()
+        else viewModel.addToFavorites()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,39 +48,36 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.setTrackProvider(provider)
         binding.header.setNavigationOnClickListener { finish() }
         binding.playButton.setOnClickListener(playButtonOnClickListener)
+        binding.favoriteButton.setOnClickListener(favoriteButtonOnClickListener)
         viewModel.getPlayerScreenState().observe(this) { render(it) }
+        viewModel.getIsFavorite().observe(this) { reDrawFavoriteButton(it) }
     }
 
-    private val playButtonOnClickListener = OnClickListener {
-        binding.playButton.isEnabled = false
-        val curPlayState = viewModel.getPlayerScreenState().value?.playState
-        if (curPlayState == ReadyToPlay || curPlayState == Paused) viewModel.play()
-        if (curPlayState == Playing) viewModel.pause()
+    private fun reDrawFavoriteButton(isFavorite: Boolean) {
+        if (isFavorite) binding.favoriteButton.setImageResource(R.drawable.favorite_on_button)
+        else binding.favoriteButton.setImageResource(R.drawable.favorite_off_button)
+        binding.favoriteButton.isEnabled = true
     }
 
     private fun render(screenState: PlayerScreenState) {
-        if (binding.trackTitle.text != screenState.track.trackTitle) placeTrackDataToElements(
-            screenState.track
-        )
+        if (binding.trackTitle.text != screenState.track.trackTitle) {
+            reDrawFavoriteButton(viewModel.getIsFavorite().value ?: false)
+            placeTrackDataToElements(screenState.track)
+        }
 
         when (screenState.playState) {
             ReadyToPlay -> {
-                binding.playButton.background =
-                    AppCompatResources.getDrawable(
-                        this@PlayerActivity,
-                        R.drawable.play_button
-                    )
-                binding.currentPlayPosition.text =
-                    dateFormat.format(0L)
+                binding.playButton.background = AppCompatResources.getDrawable(
+                    this@PlayerActivity, R.drawable.play_button
+                )
+                binding.currentPlayPosition.text = dateFormat.format(0L)
                 binding.playButton.isEnabled = true
             }
 
             Paused -> {
-                binding.playButton.background =
-                    AppCompatResources.getDrawable(
-                        this@PlayerActivity,
-                        R.drawable.play_button
-                    )
+                binding.playButton.background = AppCompatResources.getDrawable(
+                    this@PlayerActivity, R.drawable.play_button
+                )
                 binding.playButton.isEnabled = true
             }
 
@@ -94,23 +103,18 @@ class PlayerActivity : AppCompatActivity() {
         binding.durationValue.text = dateFormat.format(track.duration.toLong())
         binding.albumValue.text = track.collectionName
         binding.yearValue.text = if (track.releaseDate.length > 3) track.releaseDate.substring(
-            0,
-            4
+            0, 4
         ) else track.releaseDate
         binding.genreValue.text = track.genre
         binding.countryValue.text = track.country
         val pattern = getString(R.string.itunes_small_image_postfix)
-        val bigImagePath: String = if (track.artwork.lastIndexOf(pattern) > 0)
-            track.artwork.replace(
-                pattern,
-                getString(R.string.itunes_big_image_postfix)
+        val bigImagePath: String =
+            if (track.artwork.lastIndexOf(pattern) > 0) track.artwork.replace(
+                pattern, getString(R.string.itunes_big_image_postfix)
             )
-        else track.artwork
-        Glide.with(binding.trackImage)
-            .load(bigImagePath)
-            .placeholder(R.drawable.placeholder_search_bar)
-            .fitCenter()
-            .centerCrop()
+            else track.artwork
+        Glide.with(binding.trackImage).load(bigImagePath)
+            .placeholder(R.drawable.placeholder_search_bar).fitCenter().centerCrop()
             .transform(RoundedCorners(binding.trackImage.resources.getDimensionPixelSize(R.dimen.track_row_image_corners)))
             .into(binding.trackImage)
     }

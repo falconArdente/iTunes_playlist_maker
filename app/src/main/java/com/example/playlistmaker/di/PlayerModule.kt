@@ -4,9 +4,11 @@ import android.app.Activity
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.model.controller.MusicPlayerInteractorImpl
 import com.example.playlistmaker.player.model.data.MediaPlayerBasedPlayer
+import com.example.playlistmaker.player.model.domain.CurrentFavoriteTrackInteractor
 import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
 import com.example.playlistmaker.player.model.domain.Player
+import com.example.playlistmaker.player.model.repository.CurrentFavoriteTrackInteractorImpl
 import com.example.playlistmaker.player.model.repository.GetTrackToPlayUseCaseImpl
 import com.example.playlistmaker.player.view.ui.TrackFromIntentRepository
 import com.example.playlistmaker.player.viewModel.PlayerViewModel
@@ -15,7 +17,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val playerModule = module {
-    viewModel { PlayerViewModel(get()) }
+    viewModel { PlayerViewModel(player = get(), currentFavoriteInteractor = get()) }
     factory<MusicPlayInteractor> {
         MusicPlayerInteractorImpl(get())
     }
@@ -23,6 +25,9 @@ val playerModule = module {
     factory { MediaPlayer() }
     factory<GetTrackToPlayUseCase> { (activity: Activity) ->
         GetTrackToPlayUseCaseImpl(TrackFromIntentRepository(activityToGetFrom = activity, get()))
+    }
+    factory<CurrentFavoriteTrackInteractor> {
+        CurrentFavoriteTrackInteractorImpl(get())
     }
     single { Gson() }
 }

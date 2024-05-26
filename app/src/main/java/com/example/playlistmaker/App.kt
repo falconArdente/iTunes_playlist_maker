@@ -16,7 +16,7 @@ class App : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@App)
-            modules(settingsModule, searchModule, playerModule, mediaModule)
+            modules(settingsModule, searchModule, mediaModule, playerModule)
         }
         val themeInteractor: ThemeSwitchInteractor by inject()
         themeInteractor.turnThemeTo(themeInteractor.getTheme())

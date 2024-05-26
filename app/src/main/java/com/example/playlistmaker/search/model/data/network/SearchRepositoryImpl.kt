@@ -19,8 +19,13 @@ class SearchRepositoryImpl(
         if (response.resultCode == 200) {
             (response as TracksSearchResponse)
             val tracksList: List<Track> = response.results.map {
+                val idToAdd = try {
+                    it.remoteId.toLong()
+                } catch (e: Throwable) {
+                    0L
+                }
                 Track(
-                    it.id.orEmpty(),
+                    idToAdd,
                     it.trackName.orEmpty(),
                     it.artistName.orEmpty(),
                     it.trackTimeMillis.orEmpty(),

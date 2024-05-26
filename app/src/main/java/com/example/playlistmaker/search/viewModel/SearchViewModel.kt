@@ -24,24 +24,22 @@ class SearchViewModel(
     private val screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)
     private var searchPrompt: String = "".apply { showHistory() }
     private var autoSearchJob: Job? = null
+    private var searchJob: Job? = null
 
     fun getScreenState(): LiveData<SearchScreenState> = screenState
     fun doSearchTracks(prompt: String) {
-        if (prompt.isNotEmpty()) {
-            searchPrompt = prompt
-            autoSearchJob?.cancel()
-            if (screenState.value != SearchScreenState.Loading) screenState.postValue(
-                SearchScreenState.Loading
-            )
-            viewModelScope.launch {
-                search
-                    .searchTracks(expression = searchPrompt).flowOn(Dispatchers.IO)
-                    .collect { pair ->
-                        processSearchResult(pair.first, pair.second)
-                    }
-            }
-        } else {
-            showHistory()
+        if (prompt.isEmpty() || searchPrompt.compareTo(prompt) == 0) return
+        searchPrompt = prompt
+        autoSearchJob?.cancel()
+        if (screenState.value != SearchScreenState.Loading) screenState.postValue(
+            SearchScreenState.Loading
+        )
+        searchJob=viewModelScope.launch {
+            search
+                .searchTracks(expression = searchPrompt).flowOn(Dispatchers.IO)
+                .collect { pair ->
+                    processSearchResult(pair.first, pair.second)
+                }
         }
     }
 
@@ -54,7 +52,7 @@ class SearchViewModel(
         }
     }
 
-    private fun showHistory() {
+    fun showHistory() {
         val tracks = history.getTracksHistory()
         screenState.postValue(
             if (tracks.isEmpty()) SearchScreenState.HistoryIsEmpty
@@ -74,6 +72,10 @@ class SearchViewModel(
         doSearchTracks(searchPrompt)
     }
 
+    fun cancelSearchSequence() {
+        autoSearchJob?.cancel()
+        searchJob?.cancel()
+    }
     fun addTrackToHistory(track: Track) {
         history.addTrackToHistory(track)
     }

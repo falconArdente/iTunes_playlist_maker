@@ -1,7 +1,11 @@
 package com.example.playlistmaker.search.model.data.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class TrackDto(
-    val id: String,
+    @SerializedName("trackId")
+    val remoteId: String,
+    @SerializedName("wrapperType")
     val type: String,
     val trackName: String,//trackTitle
     val artistName: String,

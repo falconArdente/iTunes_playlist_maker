@@ -11,12 +11,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MediaFragment : Fragment() {
     private lateinit var binding: FragmentMediaBinding
-    private var tabMediator: TabLayoutMediator?=null
+    private var tabMediator: TabLayoutMediator? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMediaBinding.inflate(inflater, container, false)
         return binding.root

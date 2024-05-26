@@ -29,8 +29,8 @@
     <dimen name="track_row_height">61dp</dimen>
     <dimen name="track_row_horizontal_margin">8dp</dimen>
     <dimen name="track_row_writings_vertical_margin">14dp</dimen>
-    <dimen name="track_row_track_composition_name_height">20dp</dimen>
-    <dimen name="track_row_track_artist_name_height">12dp</dimen>
+    <dimen name="track_row_track_composition_name_height">19dp</dimen>
+    <dimen name="track_row_track_artist_name_height">13dp</dimen>
     <dimen name="track_row_duration_time_width">64dp</dimen>
     <dimen name="track_row_text_size_big">16sp</dimen>
     <dimen name="track_row_text_size_small">11sp</dimen>
@@ -73,4 +73,5 @@
     <dimen name="bottom_navigation_bar_text_size">12sp</dimen>
     <dimen name="bottom_navigation_bar_icon_size">24dp</dimen>
     <dimen name="bottom_navigation_bar_item_padding">8dp</dimen>
+    <dimen name="recycler_view_at_media_top_margin">16dp</dimen>
 </resources>

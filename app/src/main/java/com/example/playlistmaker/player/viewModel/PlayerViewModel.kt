@@ -4,15 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.player.model.domain.CurrentFavoriteTrackInteractor
 import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
 import com.example.playlistmaker.player.model.domain.PlayState
 import com.example.playlistmaker.search.model.domain.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
+class PlayerViewModel(
+    private val player: MusicPlayInteractor,
+    private val currentFavoriteInteractor: CurrentFavoriteTrackInteractor
+) : ViewModel() {
     companion object {
         private const val DURATION_RENEWAL_DELAY: Long = 300L
     }
@@ -39,17 +44,18 @@ class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
 
             override fun readyToPlayEventConsume() {
                 durationUpdateJob?.cancel()
-                playerScreenState.value =
-                    getPlayerScreenState().value?.copy(
-                        playState = PlayState.ReadyToPlay,
-                        currentPosition = 0
-                    )
+                playerScreenState.value = getPlayerScreenState().value?.copy(
+                    playState = PlayState.ReadyToPlay, currentPosition = 0
+                )
             }
         })
     }
 
-    val playerScreenState = MutableLiveData(PlayerScreenState())
+    private val playerScreenState = MutableLiveData(PlayerScreenState())
     private var durationUpdateJob: Job? = null
+    private val isFavoriteLiveData = MutableLiveData(false)
+    private var isFavoriteDataInteractionJob: Job? = null
+    fun getIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
     fun play() = player.play()
     fun pause() = player.pause()
@@ -59,13 +65,32 @@ class PlayerViewModel(private val player: MusicPlayInteractor) : ViewModel() {
         val track: Track = provider.getTrackToPlay()
         if (track != getPlayerScreenState().value?.track) {
             player.setTrack(track)
+            currentFavoriteInteractor.setCurrentTrack(track)
+            reLaunchIsFavoriteDataInteraction()
             playerScreenState.postValue(
                 PlayerScreenState(
-                    track,
-                    player.getCurrentState(),
-                    player.getCurrentPosition()
+                    track, player.getCurrentState(), player.getCurrentPosition()
                 )
             )
+        }
+    }
+
+    private fun reLaunchIsFavoriteDataInteraction() {
+        isFavoriteDataInteractionJob?.cancel()
+        isFavoriteDataInteractionJob = viewModelScope.launch(Dispatchers.IO) {
+            currentFavoriteInteractor.isTrackFavorite().collect { isFavoriteLiveData.postValue(it) }
+        }
+    }
+
+    fun addToFavorites() {
+        viewModelScope.launch(Dispatchers.IO) {
+            currentFavoriteInteractor.addTrackToFavorites()
+        }
+    }
+
+    fun removeFromFavorites() {
+        viewModelScope.launch(Dispatchers.IO) {
+            currentFavoriteInteractor.removeTrackFromFavorites()
         }
     }
 
