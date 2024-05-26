@@ -56,6 +56,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
+    //noinspection KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:$roomVersion") // Kotlin-кодогенератор
     implementation("androidx.room:room-ktx:$roomVersion")   // AdapterDelegates
     testImplementation("junit:junit:4.13.2")
