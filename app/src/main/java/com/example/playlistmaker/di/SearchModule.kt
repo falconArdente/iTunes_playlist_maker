@@ -30,21 +30,26 @@ private const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
 private const val BASE_URL = "https://itunes.apple.com"
 
 val searchModule = module {
-    viewModel { SearchViewModel(get(), get(), get()) }
+    viewModel { SearchViewModel(history = get(), search = get(), trackToPlayerUseCase = get()) }
     factory<HistoryInteractor> {
-        HistoryInteractorImpl(get())
+        HistoryInteractorImpl(historyRepository = get())
     }
-    single<HistoryRepository> { HistoryRepositorySharedPreferenceBased(get(), get()) }
+    single<HistoryRepository> {
+        HistoryRepositorySharedPreferenceBased(
+            appPreferences = get(),
+            gson = get()
+        )
+    }
     factory<SearchInteractor> {
-        SearchInteractorImpl(get())
+        SearchInteractorImpl(repository = get())
     }
-    single<SearchRepository> { SearchRepositoryImpl(get(),androidApplication()) }
-    factory<NetworkClient> { RetrofitNetworkClient(get()) }
+    single<SearchRepository> { SearchRepositoryImpl(networkClient = get(), androidApplication()) }
+    factory<NetworkClient> { RetrofitNetworkClient(retrofit = get()) }
     factory<SendTrackToPlayerUseCase> {
-        SendTrackToPlayerProvider(get())
+        SendTrackToPlayerProvider(opener = get())
     }
     factory<TrackSender> {
-        TrackToPlayerUsingIntentSender(get(), get(), androidApplication())
+        TrackToPlayerUsingIntentSender(intent = get(), gson = get(), androidApplication())
     }
     factory { Intent(androidApplication(), PlayerActivity::class.java) }
     single<SharedPreferences> {

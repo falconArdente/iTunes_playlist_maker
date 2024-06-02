@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class FavoriteTracksFragmentViewModel(
     private val favoriteTracksInteractor: FavoriteTracksInteractor,
-    private val trackToPlayer: SendTrackToPlayerUseCase
+    private val trackToPlayerUseCase: SendTrackToPlayerUseCase
 ) : ViewModel() {
     private val screenStateLiveData =
         MutableLiveData<FavoriteTracksScreenState>(FavoriteTracksScreenState.NoTracks)
@@ -34,7 +34,7 @@ class FavoriteTracksFragmentViewModel(
     }
 
     fun openTrack(trackToOpen: Track) {
-        trackToPlayer.sendToPlayer(trackToOpen)
+        trackToPlayerUseCase.sendToPlayer(trackToOpen)
     }
 }
 

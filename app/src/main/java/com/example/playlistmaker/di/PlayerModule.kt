@@ -19,15 +19,20 @@ import org.koin.dsl.module
 val playerModule = module {
     viewModel { PlayerViewModel(player = get(), currentFavoriteInteractor = get()) }
     factory<MusicPlayInteractor> {
-        MusicPlayerInteractorImpl(get())
+        MusicPlayerInteractorImpl(player = get())
     }
-    factory<Player> { MediaPlayerBasedPlayer(get()) }
+    factory<Player> { MediaPlayerBasedPlayer(mediaPlayer = get()) }
     factory { MediaPlayer() }
     factory<GetTrackToPlayUseCase> { (activity: Activity) ->
-        GetTrackToPlayUseCaseImpl(TrackFromIntentRepository(activityToGetFrom = activity, get()))
+        GetTrackToPlayUseCaseImpl(
+            TrackFromIntentRepository(
+                activityToGetFrom = activity,
+                json = get()
+            )
+        )
     }
     factory<CurrentFavoriteTrackInteractor> {
-        CurrentFavoriteTrackInteractorImpl(get())
+        CurrentFavoriteTrackInteractorImpl(repository = get())
     }
     single { Gson() }
 }

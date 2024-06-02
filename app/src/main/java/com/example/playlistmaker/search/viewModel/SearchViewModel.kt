@@ -19,7 +19,7 @@ private const val AUTO_SEND_REQUEST_DELAY = 2000L
 class SearchViewModel(
     private val history: HistoryInteractor,
     private val search: SearchInteractor,
-    private val trackToPlayer: SendTrackToPlayerUseCase
+    private val trackToPlayerUseCase: SendTrackToPlayerUseCase
 ) : ViewModel() {
     private val screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)
     private var searchPrompt: String = "".apply { showHistory() }
@@ -86,6 +86,6 @@ class SearchViewModel(
     }
 
     fun openTrack(trackToOpen: Track) {
-        trackToPlayer.sendToPlayer(trackToOpen)
+        trackToPlayerUseCase.sendToPlayer(trackToOpen)
     }
 }
