@@ -74,4 +74,24 @@
     <dimen name="bottom_navigation_bar_icon_size">24dp</dimen>
     <dimen name="bottom_navigation_bar_item_padding">8dp</dimen>
     <dimen name="recycler_view_at_media_top_margin">16dp</dimen>
+    <dimen name="create_playlist_fields_horizontal_margin">16dp</dimen>
+    <dimen name="create_playlist_image_size">312dp</dimen>
+    <dimen name="create_playlist_image_corner_radius">8dp</dimen>
+    <dimen name="create_playlist_image_stroke_width">1dp</dimen>
+    <dimen name="create_playlist_image_stroke_dash_interval">29.6dp</dimen>
+    <dimen name="create_playlist_image_margin_top">82dp</dimen>
+    <dimen name="create_playlist_field_height">56dp</dimen>
+    <dimen name="create_playlist_field_text_size">16sp</dimen>
+    <dimen name="create_playlist_button_height">44dp</dimen>
+    <dimen name="create_playlist_button_horizontal_margin">1dp</dimen>
+    <dimen name="create_playlist_button_bottom_margin">32dp</dimen>
+    <dimen name="create_playlist_title_field_top_margin">32dp</dimen>
+    <dimen name="create_playlist_description_field_top_margin">16dp</dimen>
+    <dimen name="create_playlist_field_corner_radius">4dp</dimen>
+    <dimen name="create_playlist_field_up_string_text_size">12sp</dimen>
+    <dimen name="create_playlist_field_up_string_margin_start">12dp</dimen>
+    <dimen name="create_playlist_field_up_string_padding_horizontal">4dp</dimen>
+    <dimen name="create_playlist_title_field_up_string_margin_top">25dp</dimen>
+    <dimen name="create_playlist_description_field_up_string_margin_top">10dp</dimen>
+    <dimen name="create_playlist_create_button_corner_radius">8dp</dimen>
 </resources>

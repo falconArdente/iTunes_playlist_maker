@@ -35,4 +35,8 @@
     <string name="where_is_no_playlists_message">Where is \nno playlists yet</string>
     <string name="new_playlist_button_text">New playlist</string>
     <string name="network_error">Please check internet connection</string>
+    <string name="create_playlist_caption">New playlist</string>
+    <string name="create_playlist_title_field">Title*</string>
+    <string name="create_playlist_description_field">Description</string>
+    <string name="create_playlist_create_button">Create</string>
 </resources>

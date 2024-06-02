@@ -47,4 +47,8 @@
     <string name="where_is_no_playlists_message">Вы не создали \nни одного плейлиста</string>
     <string name="new_playlist_button_text">Новый плейлист</string>
     <string name="network_error">Проверьте подключение к интернету</string>
+    <string name="create_playlist_caption">Новый плейлист</string>
+    <string name="create_playlist_title_field">Название*</string>
+    <string name="create_playlist_description_field">Описание</string>
+    <string name="create_playlist_create_button">Создать</string>
 </resources>

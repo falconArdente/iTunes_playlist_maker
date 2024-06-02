@@ -172,4 +172,36 @@
         <item name="android:textSize">@dimen/bottom_navigation_bar_text_size</item>
         <item name="fontFamily">@font/ys_display_regular</item>
     </style>
+
+    <style name="create_playlist_field">
+        <item name="android:textSize">@dimen/create_playlist_field_text_size</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginTop">@dimen/create_playlist_title_field_top_margin</item>
+        <item name="textFillColor">?attr/colorOnSecondary</item>
+        <item name="android:background">@drawable/create_playlist_field_active_background</item>
+    </style>
+
+    <style name="create_playlist_up_string">
+        <item name="android:textSize">@dimen/create_playlist_field_up_string_text_size</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:layout_marginStart">
+            @dimen/create_playlist_field_up_string_margin_start
+        </item>
+        <item name="android:paddingHorizontal">
+            @dimen/create_playlist_field_up_string_padding_horizontal
+        </item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">?attr/colorSecondary</item>
+        <item name="android:textColor">@color/YP_Blue</item>
+    </style>
+    <style name="create_playlist_create_button">
+        <item name="android:textSize">@dimen/create_playlist_field_text_size</item>
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/YP_White</item>
+        <item name="android:background">@drawable/create_playlist_create_button_background</item>
+    </style>
 </resources>
