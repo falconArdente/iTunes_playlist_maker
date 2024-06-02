@@ -11,12 +11,12 @@ private const val TRACK_KEY = "track"
 
 class TrackToPlayerUsingIntentSender(
     private val intent: Intent,
-    private val json: Gson,
+    private val gson: Gson,
     private val application: Application
 ) : TrackSender {
 
     override fun sendTrack(trackToSend: Track) {
-        intent.putExtra(TRACK_KEY, json.toJson(trackToSend))
+        intent.putExtra(TRACK_KEY, gson.toJson(trackToSend))
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         ContextCompat.startActivity(application, intent, null)
     }

@@ -16,7 +16,10 @@ import org.koin.dsl.module
 private const val DATABASE_NAME = "tracks_database.db"
 val mediaModule = module {
     viewModel {
-        FavoriteTracksFragmentViewModel(get(), get())
+        FavoriteTracksFragmentViewModel(
+            favoriteTracksInteractor = get(),
+            trackToPlayerUseCase = get()
+        )
     }
     viewModel {
         PlaylistsFragmentViewModel()
@@ -28,9 +31,9 @@ val mediaModule = module {
         get<AppDbRoomBased>().favoriteTracksDao()
     }
     factory<FavoriteTracksRepository> {
-        FavoriteTracksRepositoryRoomImpl(get())
+        FavoriteTracksRepositoryRoomImpl(favoritesTable = get())
     }
     factory<FavoriteTracksInteractor> {
-        FavoriteTracksInteractorImpl(get())
+        FavoriteTracksInteractorImpl(repository = get())
     }
 }

@@ -9,7 +9,7 @@ private const val TABLE_NAME = "favorite_tracks_table"
 
 @Entity(tableName = TABLE_NAME, indices = [Index(value = arrayOf("remoteId"), unique = true)])
 data class TrackEntity(
-    @PrimaryKey val localId: Int?=null,
+    @PrimaryKey(autoGenerate = true) val localId: Int? = null,
     @ColumnInfo(name = "remoteId", typeAffinity = ColumnInfo.INTEGER) val remoteId: Long,
     @ColumnInfo(name = "trackName") val trackName: String,
     @ColumnInfo(name = "artistName") val artistName: String,
@@ -25,5 +25,5 @@ data class TrackEntity(
         typeAffinity = ColumnInfo.INTEGER,
         defaultValue = "CURRENT_TIMESTAMP"
     )
-    var dateOfChange: Long?=null,
+    var dateOfChange: Long? = null,
 )

@@ -22,11 +22,18 @@ import org.koin.dsl.module
 private const val APP_PREFERENCES_FILE_NAME = "playlistMaker_shared_preference"
 
 val settingsModule = module {
-    viewModel { SettingsViewModel(get(), get(), get(), get()) }
-    factory<ThemeSwitchInteractor> {
-        ThemeSwitcherInteractorImpl(get(), get())
+    viewModel {
+        SettingsViewModel(
+            themeSwitchInteractor = get(),
+            shareAnAppUseCase = get(),
+            emailToSupport = get(),
+            goToAgreementInfoUseCase = get()
+        )
     }
-    single<ThemeStateRepository> { ThemeStateRepositorySharedPreferenceBasedImpl(get()) }
+    factory<ThemeSwitchInteractor> {
+        ThemeSwitcherInteractorImpl(repository = get(), themeSwitcher = get())
+    }
+    single<ThemeStateRepository> { ThemeStateRepositorySharedPreferenceBasedImpl(appPreferences = get()) }
     factory<TurnUIAppearanceUseCase> { TurnUIAppearanceThemeUsingDelegateDirectly() }
     factory<ShareAnAppUseCase> { ShareAnAppImpl(androidApplication()) }
     factory<EmailToSupportUseCase> { EmailToSupportImpl(androidApplication()) }
