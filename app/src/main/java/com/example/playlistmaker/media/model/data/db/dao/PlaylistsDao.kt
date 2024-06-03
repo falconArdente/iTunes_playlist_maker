@@ -26,7 +26,7 @@ interface PlaylistsDao {
     fun getAllPlaylists(): Flow<List<PlaylistEntity>>
 
     @Query("SELECT * FROM $TABLE_NAME WHERE playlistId=:playlistId")
-    suspend fun getPlaylistById(playlistId: Int): Flow<List<PlaylistEntity>>
+    fun getPlaylistById(playlistId: Int): Flow<List<PlaylistEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPTrack(playlistTrackEntity: PlaylistTrackEntity)
@@ -35,9 +35,9 @@ interface PlaylistsDao {
     suspend fun removePTrack(playlistTrackEntity: PlaylistTrackEntity): Int
 
     @Query("SELECT * FROM $TRACKS_TABLE_NAME WHERE playlistId=:playlistId")
-    suspend fun getTracksOfPlaylist(playlistId: Int): Flow<List<PlaylistTrackEntity>>
+    fun getTracksOfPlaylist(playlistId: Int): Flow<List<PlaylistTrackEntity>>
 
     @Transaction
-    @Query("SELECT * FROM $TRACKS_TABLE_NAME")
+    @Query("SELECT * FROM $TRACKS_TABLE_NAME, $TABLE_NAME")
     fun getPlaylistsWithTracks(): Flow<List<PlaylistsWithTracks>>
 }
