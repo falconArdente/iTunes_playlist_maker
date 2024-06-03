@@ -3,13 +3,13 @@
     <item android:state_enabled="true">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/create_playlist_create_button_corner_radius" />
-            <solid android:color="@color/YP_Blue"></solid>
+            <solid android:color="@color/YP_Blue" />
         </shape>
     </item>
     <item android:state_enabled="false">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/create_playlist_create_button_corner_radius" />
-            <solid android:color="@color/YP_Text_Gray"></solid>
+            <solid android:color="@color/YP_Text_Gray" />
         </shape>
     </item>
 </selector>

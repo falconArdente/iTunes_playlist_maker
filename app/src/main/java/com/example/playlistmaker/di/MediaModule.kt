@@ -3,10 +3,15 @@ package com.example.playlistmaker.di
 import androidx.room.Room
 import com.example.playlistmaker.media.model.data.db.AppDbRoomBased
 import com.example.playlistmaker.media.model.data.db.FavoriteTracksRepositoryRoomImpl
+import com.example.playlistmaker.media.model.data.db.PlaylistsRepositoryRoomImpl
 import com.example.playlistmaker.media.model.data.db.dao.FavoriteTracksDao
+import com.example.playlistmaker.media.model.data.db.dao.PlaylistsDao
 import com.example.playlistmaker.media.model.domain.FavoriteTracksInteractor
+import com.example.playlistmaker.media.model.domain.PlaylistsInteractor
 import com.example.playlistmaker.media.model.repository.FavoriteTracksInteractorImpl
 import com.example.playlistmaker.media.model.repository.FavoriteTracksRepository
+import com.example.playlistmaker.media.model.repository.PlaylistsInteractorImpl
+import com.example.playlistmaker.media.model.repository.PlaylistsRepository
 import com.example.playlistmaker.media.viewModel.FavoriteTracksFragmentViewModel
 import com.example.playlistmaker.media.viewModel.PlaylistsFragmentViewModel
 import org.koin.android.ext.koin.androidContext
@@ -30,10 +35,19 @@ val mediaModule = module {
     single<FavoriteTracksDao> {
         get<AppDbRoomBased>().favoriteTracksDao()
     }
+    single<PlaylistsDao> {
+        get<AppDbRoomBased>().playlistsDao()
+    }
     factory<FavoriteTracksRepository> {
         FavoriteTracksRepositoryRoomImpl(favoritesTable = get())
     }
     factory<FavoriteTracksInteractor> {
         FavoriteTracksInteractorImpl(repository = get())
+    }
+    factory<PlaylistsRepository> {
+        PlaylistsRepositoryRoomImpl(playlistsTable = get())
+    }
+    factory<PlaylistsInteractor> {
+        PlaylistsInteractorImpl(repository = get())
     }
 }
