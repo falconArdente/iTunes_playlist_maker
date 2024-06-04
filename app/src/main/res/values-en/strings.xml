@@ -39,4 +39,7 @@
     <string name="create_playlist_title_field">Title*</string>
     <string name="create_playlist_description_field">Description</string>
     <string name="create_playlist_create_button">Create</string>
+    <string name="rationale_for_image_picker">Choosing playlist image is need data read acces</string>
+    <string name="no_image_been_chosen_message">No image been chosen</string>
+    <string name="rationale_for_playlist_image_save">Choosing playlist image is need data write acces</string>
 </resources>

@@ -63,6 +63,7 @@ dependencies {
     //noinspection KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:$roomVersion") // Kotlin-кодогенератор
     implementation("androidx.room:room-ktx:$roomVersion")   // AdapterDelegates
+    implementation ("com.markodevcic:peko:3.0.5")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

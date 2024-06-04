@@ -1,7 +1,7 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.media.viewModel
 
 import androidx.lifecycle.ViewModel
 
 class CreatePlaylistViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+
 }

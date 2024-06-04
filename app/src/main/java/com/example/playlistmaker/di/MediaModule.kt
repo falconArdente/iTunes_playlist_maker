@@ -10,8 +10,11 @@ import com.example.playlistmaker.media.model.domain.FavoriteTracksInteractor
 import com.example.playlistmaker.media.model.domain.PlaylistsInteractor
 import com.example.playlistmaker.media.model.repository.FavoriteTracksInteractorImpl
 import com.example.playlistmaker.media.model.repository.FavoriteTracksRepository
+import com.example.playlistmaker.media.model.repository.ImageSelectionRepository
 import com.example.playlistmaker.media.model.repository.PlaylistsInteractorImpl
 import com.example.playlistmaker.media.model.repository.PlaylistsRepository
+import com.example.playlistmaker.media.view.ui.ImageSelectionRepositoryPhotoPickerBased
+import com.example.playlistmaker.media.viewModel.CreatePlaylistViewModel
 import com.example.playlistmaker.media.viewModel.FavoriteTracksFragmentViewModel
 import com.example.playlistmaker.media.viewModel.PlaylistsFragmentViewModel
 import org.koin.android.ext.koin.androidContext
@@ -28,6 +31,9 @@ val mediaModule = module {
     }
     viewModel {
         PlaylistsFragmentViewModel()
+    }
+    viewModel {
+        CreatePlaylistViewModel()
     }
     single<AppDbRoomBased> {
         Room.databaseBuilder(androidContext(), AppDbRoomBased::class.java, DATABASE_NAME).build()
@@ -49,5 +55,11 @@ val mediaModule = module {
     }
     factory<PlaylistsInteractor> {
         PlaylistsInteractorImpl(repository = get())
+    }
+    factory<ImageSelectionRepositoryPhotoPickerBased> {
+        ImageSelectionRepositoryPhotoPickerBased()
+    }
+    factory<ImageSelectionRepository> {
+        get()
     }
 }
