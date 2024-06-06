@@ -7,6 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".media.view.PlaylistsFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/begin_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/playlist_guidelines_padding" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/playlist_guidelines_padding" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/new_playlist_button"
         android:layout_width="@dimen/clear_history_button_width"
@@ -25,6 +39,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlists_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/playlist_vh_horizontal_margin"
+        android:paddingBottom="@dimen/playlist_recycler_bottom_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/end_guide"
+        app:layout_constraintStart_toStartOf="@id/begin_guide"
+        app:layout_constraintTop_toBottomOf="@id/new_playlist_button"
+        app:layout_constraintVertical_bias="0" />
 
     <LinearLayout
         android:id="@+id/placeholder_frame"

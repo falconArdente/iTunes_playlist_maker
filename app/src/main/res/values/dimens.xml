@@ -94,4 +94,14 @@
     <dimen name="create_playlist_title_field_up_string_margin_top">25dp</dimen>
     <dimen name="create_playlist_description_field_up_string_margin_top">10dp</dimen>
     <dimen name="create_playlist_create_button_corner_radius">8dp</dimen>
+    <dimen name="playlist_thumbnail_size">160dp</dimen>
+    <dimen name="playlist_vh_height">196dp</dimen>
+    <dimen name="playlist_vh_horizontal_margin">12dp</dimen>
+    <dimen name="playlist_row_text_size">12sp</dimen>
+    <dimen name="playlist_row_height">16sp</dimen>
+    <dimen name="playlist_row_top_padding">4dp</dimen>
+    <dimen name="playlist_row_top_margin">16dp</dimen>
+    <dimen name="playlist_row_horizontal_margin">4dp</dimen>
+    <dimen name="playlist_recycler_bottom_padding">60dp</dimen>
+    <dimen name="playlist_guidelines_padding">12dp</dimen>
 </resources>

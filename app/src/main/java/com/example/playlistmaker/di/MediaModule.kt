@@ -35,7 +35,7 @@ val mediaModule = module {
         )
     }
     viewModel {
-        PlaylistsFragmentViewModel()
+        PlaylistsFragmentViewModel(get())
     }
     viewModel {
         CreatePlaylistViewModel(androidContext(),get(),get(),get())

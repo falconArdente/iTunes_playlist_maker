@@ -2,6 +2,7 @@ package com.example.playlistmaker.media.viewModel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -103,10 +104,11 @@ class CreatePlaylistViewModel(
 
     fun exitSequence() {
         (screenStateToObserve.value as CreatePlaylistScreenState).let { state ->
-            if (state.title.isNotEmpty() ||
-                state.description.isNotEmpty() ||
+            if (state.title != androidContext.getString(R.string.create_playlist_title_field) ||
+                state.description != androidContext.getString(R.string.create_playlist_description_field) ||
                 state.imageUri != Uri.EMPTY
             ) {
+                Log.d("EXIT", "${state.title} ${state.description} ${state.imageUri.toString()}")
                 fragment?.runExitConfirmationDialog()
             } else (fragment as Fragment).findNavController().navigateUp()
         }

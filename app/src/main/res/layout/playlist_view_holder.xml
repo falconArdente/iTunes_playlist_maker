@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_playlist_view_holder"
+    android:layout_width="@dimen/playlist_thumbnail_size"
+    android:layout_height="@dimen/playlist_vh_height"
+    android:background="?attr/colorSecondary"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="@dimen/playlist_row_top_margin"
+    android:layout_marginHorizontal="@dimen/playlist_row_horizontal_margin">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/playlist_thumbnail"
+        android:layout_width="@dimen/playlist_thumbnail_size"
+        android:layout_height="@dimen/playlist_thumbnail_size"
+        android:background="@drawable/placeholder_search_bar"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />"
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/playlist_title"
+        style="@style/playlist_row_text"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/playlist_row_top_padding"
+        app:layout_constraintTop_toBottomOf="@+id/playlist_thumbnail" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/playlist_tracks_count"
+        style="@style/playlist_row_text"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playlist_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

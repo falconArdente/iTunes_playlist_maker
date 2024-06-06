@@ -20,7 +20,8 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) :
                     id = entity.playlistId ?: -1,
                     title = entity.title,
                     description = entity.description ?: "",
-                    imageUri = entity.imageUri?.toUri()
+                    imageUri = entity.imageUri?.toUri(),
+                    tracks = getTracksOfPlaylistStraight(entity)
                 )
             }
         }
@@ -28,7 +29,11 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) :
     override suspend fun createPlaylist(title: String, description: String, imageUri: Uri?) =
         playlistsTable
             .createPlaylist(
-                PlaylistEntity(title = title, description = description, imageUri = imageUri.toString().orEmpty())
+                PlaylistEntity(
+                    title = title,
+                    description = description,
+                    imageUri = imageUri.toString().orEmpty()
+                )
             )
 
     override suspend fun deletePlaylist(playlist: Playlist) = playlistsTable
@@ -60,4 +65,13 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) :
                 TrackDbConverter.map(pTrackEntity)
             }
         }
+
+    private fun getTracksOfPlaylistStraight(playlist: PlaylistEntity): List<Track> =
+        playlistsTable
+            .getTracksOfPlaylistStraight(playlist.playlistId!!)
+            .map { listOfEntity ->
+                listOfEntity.let { pTrackEntity ->
+                    TrackDbConverter.map(pTrackEntity)
+                }
+            }
 }

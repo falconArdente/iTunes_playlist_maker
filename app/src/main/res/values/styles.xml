@@ -130,7 +130,15 @@
         <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
-
+    <style name="playlist_row_text" parent="track_row_text">
+        <item name="android:layout_height">@dimen/playlist_row_height</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/playlist_row_text_size</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="drawableTint">?attr/colorSecondaryVariant</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
     <style name="track_row_image">
         <item name="android:layout_width">@dimen/track_row_image_size</item>
         <item name="android:layout_height">@dimen/track_row_image_size</item>

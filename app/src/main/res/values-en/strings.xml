@@ -48,4 +48,12 @@
     <string name="create_playlist_exit_dialog_confirm">Stop creation</string>
     <string name="create_playlist_exit_dialog_reject">Continue playlist creation</string>
     <string name="create_playlist_exit_dialog_message">Unsaved data will be lost</string>
+    <plurals name="tracks_count">
+        <item quantity="zero">no tracks</item>
+        <item quantity="one">%1$d track</item>
+        <item quantity="two">%1$d tracks</item>
+        <item quantity="few">%1$d tracks</item>
+        <item quantity="many">%1$d tracks</item>
+        <item quantity="other">%1$d trackoos</item>
+    </plurals>
 </resources>
