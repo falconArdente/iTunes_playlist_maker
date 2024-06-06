@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.model.domain.Playlist
 import com.example.playlistmaker.media.viewModel.PlaylistsFragmentViewModel
@@ -30,6 +32,9 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playlistsViewModel.observePlaylists().observe(viewLifecycleOwner) { render(it) }
+        binding.newPlaylistButton.setOnClickListener{
+            findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
+        }
     }
 
     private fun render(playlists: List<Playlist>) {

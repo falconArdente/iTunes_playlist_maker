@@ -1,8 +1,10 @@
 package com.example.playlistmaker.media.viewModel
 
-import com.example.playlistmaker.search.model.domain.Track
+import android.net.Uri
 
-sealed class CreatePlaylistScreenState {
-    data object NoTracks : CreatePlaylistScreenState()
-    data class HaveTracks(val tracks: List<Track>) : CreatePlaylistScreenState()
-}
+data class CreatePlaylistScreenState(
+    var imageUri: Uri = Uri.EMPTY,
+    var title: String = "",
+    var description: String = "",
+    var isReadyToCreate: Boolean = false
+)

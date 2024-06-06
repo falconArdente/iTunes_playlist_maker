@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class SelectAnImageUseCaseImpl(private val repository: ImageSelectionRepository) :
+class SelectAnImageUseCasePickerCompatibleImpl(private val repository: ImageSelectionRepository) :
     SelectAnImageUseCase {
     var isNeedToBeAttached: Boolean = false
         get() = repository is ImageSelectionRepositoryPhotoPickerBased

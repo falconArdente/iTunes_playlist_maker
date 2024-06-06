@@ -54,4 +54,10 @@
     <string name="rationale_for_image_picker">Разрешение на доступ к памяти необходимо для выбора изображения плейлиста</string>
     <string name="no_image_been_chosen_message">Изображение не выбрано</string>
     <string name="rationale_for_playlist_image_save">Разрешение на доступ к памяти необходимо для сохранения изображения плейлиста</string>
+    <string name="playlist_created_prefix">Плейлист</string>
+    <string name="playlist_created_postfix">создан</string>
+    <string name="create_playlist_exit_dialog_title">Завершить создание плейлиста?</string>
+    <string name="create_playlist_exit_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="create_playlist_exit_dialog_confirm">Завершить</string>
+    <string name="create_playlist_exit_dialog_reject">Отмена</string>
 </resources>

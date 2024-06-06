@@ -6,13 +6,18 @@ import com.example.playlistmaker.media.model.data.db.FavoriteTracksRepositoryRoo
 import com.example.playlistmaker.media.model.data.db.PlaylistsRepositoryRoomImpl
 import com.example.playlistmaker.media.model.data.db.dao.FavoriteTracksDao
 import com.example.playlistmaker.media.model.data.db.dao.PlaylistsDao
+import com.example.playlistmaker.media.model.data.storage.PrivateStorageImageRepositoryImpl
 import com.example.playlistmaker.media.model.domain.FavoriteTracksInteractor
 import com.example.playlistmaker.media.model.domain.PlaylistsInteractor
+import com.example.playlistmaker.media.model.domain.SaveImageToStorageUseCase
+import com.example.playlistmaker.media.model.domain.SelectAnImageUseCase
 import com.example.playlistmaker.media.model.repository.FavoriteTracksInteractorImpl
 import com.example.playlistmaker.media.model.repository.FavoriteTracksRepository
 import com.example.playlistmaker.media.model.repository.ImageSelectionRepository
 import com.example.playlistmaker.media.model.repository.PlaylistsInteractorImpl
 import com.example.playlistmaker.media.model.repository.PlaylistsRepository
+import com.example.playlistmaker.media.model.repository.SaveImageToStorageUseCaseImpl
+import com.example.playlistmaker.media.model.repository.SelectAnImageUseCasePickerCompatibleImpl
 import com.example.playlistmaker.media.view.ui.ImageSelectionRepositoryPhotoPickerBased
 import com.example.playlistmaker.media.viewModel.CreatePlaylistViewModel
 import com.example.playlistmaker.media.viewModel.FavoriteTracksFragmentViewModel
@@ -33,7 +38,7 @@ val mediaModule = module {
         PlaylistsFragmentViewModel()
     }
     viewModel {
-        CreatePlaylistViewModel()
+        CreatePlaylistViewModel(androidContext(),get(),get(),get())
     }
     single<AppDbRoomBased> {
         Room.databaseBuilder(androidContext(), AppDbRoomBased::class.java, DATABASE_NAME).build()
@@ -56,10 +61,15 @@ val mediaModule = module {
     factory<PlaylistsInteractor> {
         PlaylistsInteractorImpl(repository = get())
     }
-    factory<ImageSelectionRepositoryPhotoPickerBased> {
-        ImageSelectionRepositoryPhotoPickerBased()
+    factory<SelectAnImageUseCase> {
+        SelectAnImageUseCasePickerCompatibleImpl(repository = get())
     }
     factory<ImageSelectionRepository> {
-        get()
+        ImageSelectionRepositoryPhotoPickerBased()
+    }
+    factory<SaveImageToStorageUseCase> {
+        SaveImageToStorageUseCaseImpl(
+            repository = PrivateStorageImageRepositoryImpl(androidContext())
+        )
     }
 }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreatePlaylistFragment">
+    android:background="?attr/colorSecondary"
+    tools:context=".media.view.CreatePlaylistFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/header"
@@ -38,7 +39,8 @@
         android:layout_marginTop="@dimen/create_playlist_image_margin_top"
         android:background="@drawable/create_playlist_image_background"
         android:clickable="true"
-        android:scaleType="center"
+        android:scaleType="fitXY"
+        android:focusedByDefault="true"
         app:layout_constraintBottom_toTopOf="@+id/title"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
@@ -116,6 +118,8 @@
         android:layout_height="@dimen/create_playlist_button_height"
         android:layout_marginHorizontal="@dimen/create_playlist_button_horizontal_margin"
         android:layout_marginBottom="@dimen/create_playlist_button_bottom_margin"
+        android:enabled="false"
+        android:outlineProvider="none"
         android:text="@string/create_playlist_create_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/endGuide"

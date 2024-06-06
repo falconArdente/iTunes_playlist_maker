@@ -19,11 +19,12 @@ class ImageSelectionRepositoryPhotoPickerBased() :
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private var mutableUri: MutableLiveData<Uri> = MutableLiveData(Uri.EMPTY)
     fun attachPickerToFragmentLifecycle(fragment: Fragment) {// should run inside fragment`s create section
+        if (fragment == null) return
         this.fragment = fragment
         pickMedia =
             fragment.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    mutableUri.postValue(uri)
+                    mutableUri.postValue(uri!!)
                 } else {
                     Toast.makeText(
                         fragment!!.requireActivity(),

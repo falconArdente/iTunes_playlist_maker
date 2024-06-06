@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/createPlaylistFragment">
+    app:startDestination="@id/mediaFragment">
 
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.playlistmaker.search.view.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_playerActivity"
             app:destination="@id/playerActivity" />
@@ -18,7 +18,11 @@
         android:id="@+id/mediaFragment"
         android:name="com.example.playlistmaker.media.view.MediaFragment"
         android:label="fragment_media"
-        tools:layout="@layout/fragment_media" />
+        tools:layout="@layout/fragment_media" >
+        <action
+            android:id="@+id/action_mediaFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.playlistmaker.settings.view.SettingsFragment"
@@ -27,10 +31,16 @@
     <activity
         android:id="@+id/playerActivity"
         android:name="com.example.playlistmaker.player.view.PlayerActivity"
-        android:label="PlayerActivity" />
+        android:label="PlayerActivity"
+        tools:layout="@layout/player" />
     <fragment
         android:id="@+id/createPlaylistFragment"
-        android:name="com.example.playlistmaker.CreatePlaylistFragment"
+        android:name="com.example.playlistmaker.media.view.CreatePlaylistFragment"
         android:label="fragment_create_playlist"
         tools:layout="@layout/fragment_create_playlist" />
+    <fragment
+        android:id="@+id/playlistsFragment"
+        android:name="com.example.playlistmaker.media.view.PlaylistsFragment"
+        android:label="PlaylistsFragment"
+        tools:layout="@layout/fragment_playlists"/>
 </navigation>
