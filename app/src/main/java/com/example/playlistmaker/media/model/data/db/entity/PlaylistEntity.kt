@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-private const val TABLE_NAME = "playlists_table"
+private const val PLAYLIST_TABLE = "playlists_table"
 
-@Entity(tableName = TABLE_NAME)
+@Entity(tableName = PLAYLIST_TABLE)
 data class PlaylistEntity(
     @PrimaryKey(autoGenerate = true) val playlistId: Int?=null,
     @ColumnInfo(name = "title") val title: String,

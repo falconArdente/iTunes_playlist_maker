@@ -1,9 +1,9 @@
 package com.example.playlistmaker.media.viewModel
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,32 +16,36 @@ import com.example.playlistmaker.media.model.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.media.model.domain.SaveImageToStorageUseCase
 import com.example.playlistmaker.media.model.domain.SelectAnImageUseCase
 import com.example.playlistmaker.media.model.repository.SelectAnImageUseCasePickerCompatibleImpl
+import com.example.playlistmaker.media.view.MESSAGE_DURATION
+import com.example.playlistmaker.media.view.MESSAGE_TEXT
 import com.example.playlistmaker.media.view.ui.FragmentWithExitConfirmationDialog
+import com.example.playlistmaker.media.view.ui.PlaylistMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+const val MESSAGE_DELAY = 3000L
+
 class CreatePlaylistViewModel(
-    private val androidContext: Context,
     private val imageSelector: SelectAnImageUseCase,
     private val saverForImage: SaveImageToStorageUseCase,
-    private val dataTable: PlaylistsDao
+    private val dataTable: PlaylistsDao,
+    androidContext: Context,
 ) : ViewModel() {
-    private var mutableScreeState: MutableLiveData<CreatePlaylistScreenState>
+    private val playlistCreatedPrefix: String =
+        androidContext.getString(R.string.playlist_created_prefix)
+    private val playlistCreatedPostfix: String =
+        androidContext.getString(R.string.playlist_created_postfix)
 
-    init {
-        with(androidContext) {
-            mutableScreeState = MutableLiveData(
-                CreatePlaylistScreenState(
-                    title = getString(R.string.create_playlist_title_field),
-                    description = getString(R.string.create_playlist_description_field),
-                    isReadyToCreate = false
-                )
-            )
-        }
-    }
-
+    private var mutableScreeState = MutableLiveData(
+        CreatePlaylistScreenState(
+            title = "", description = "", isReadyToCreate = false
+        )
+    )
+    private var playlistMessage = MutableLiveData<PlaylistMessage>(PlaylistMessage.Empty)
+    var finishActivityWhenDone: Boolean = false
     private var fragment: FragmentWithExitConfirmationDialog? = null
     var screenStateToObserve: LiveData<CreatePlaylistScreenState> = mutableScreeState
+    var playlistMessageToObserve: LiveData<PlaylistMessage> = playlistMessage
     fun attachFragmentAtCreation(fragment: FragmentWithExitConfirmationDialog) {
         this.fragment = fragment
         if (imageSelector !is SelectAnImageUseCasePickerCompatibleImpl) return
@@ -51,8 +55,7 @@ class CreatePlaylistViewModel(
     fun changeTitle(title: String) {
         (mutableScreeState.value as CreatePlaylistScreenState).apply {
             this.title = title
-            this.isReadyToCreate =
-                !(title.isEmpty() || title == androidContext.getString(R.string.create_playlist_title_field))
+            this.isReadyToCreate = title.isNotEmpty()
             mutableScreeState.postValue(this)
         }
     }
@@ -66,51 +69,64 @@ class CreatePlaylistViewModel(
 
     fun selectAnImage() {
         viewModelScope.launch(Dispatchers.IO) {
-            imageSelector
-                .selectImage()
-                .collect { uri ->
-                    (mutableScreeState.value as CreatePlaylistScreenState).let { state ->
-                        state.imageUri = uri
-                        mutableScreeState.postValue(state)
-                    }
+            imageSelector.selectImage().collect { uri ->
+                (mutableScreeState.value as CreatePlaylistScreenState).let { state ->
+                    state.imageUri = uri
+                    mutableScreeState.postValue(state)
                 }
+            }
         }
     }
 
     fun createPlaylist() {
         with(screenStateToObserve.value as CreatePlaylistScreenState) {
             val uriToDB = saverForImage.saveImageByUri(imageUri = imageUri, fileName = title)
-            val descriptionForDB =
-                if (description == androidContext.getString(R.string.create_playlist_description_field))
-                    "" else description
             viewModelScope.launch(Dispatchers.IO) {
                 dataTable.createPlaylist(
                     PlaylistEntity(
-                        title = title,
-                        description = descriptionForDB,
-                        imageUri = uriToDB.toString()
+                        title = title, description = description, imageUri = uriToDB.toString()
                     )
                 )
             }
-            Toast.makeText(
-                androidContext,
-                androidContext.getString(R.string.playlist_created_prefix) +
-                        title + androidContext.getString(R.string.playlist_created_postfix),
-                Toast.LENGTH_LONG
-            ).show()
-            (fragment as Fragment).findNavController().navigateUp()
+            if (finishActivityWhenDone) {
+                ((fragment as Fragment).requireActivity()).let { activity ->
+                    val intent: Intent = activity.intent.putExtra(
+                        MESSAGE_TEXT, createMessageText(title)
+                    ).putExtra(MESSAGE_DURATION, MESSAGE_DELAY)
+                    activity.setResult(Activity.RESULT_OK, intent)
+                }
+            } else {
+                playlistMessage.postValue(
+                    PlaylistMessage.HaveData(
+                        message = createMessageText(title), showTimeMillis = MESSAGE_DELAY
+                    )
+                )
+            }
+            exitView()
         }
     }
 
-    fun exitSequence() {
+    private fun createMessageText(playlistName: String): String =
+        "$playlistCreatedPrefix $playlistName $playlistCreatedPostfix"
+
+    fun runExitSequence() {
+        if (isNeedDialog()) {
+            fragment?.runExitConfirmationDialog()
+        } else {
+            exitView()
+        }
+    }
+
+    fun exitView() {
+        with((fragment as Fragment)) {
+            if (finishActivityWhenDone) requireActivity().finish()
+            else findNavController().navigateUp()
+        }
+    }
+
+    private fun isNeedDialog(): Boolean {
         (screenStateToObserve.value as CreatePlaylistScreenState).let { state ->
-            if (state.title != androidContext.getString(R.string.create_playlist_title_field) ||
-                state.description != androidContext.getString(R.string.create_playlist_description_field) ||
-                state.imageUri != Uri.EMPTY
-            ) {
-                Log.d("EXIT", "${state.title} ${state.description} ${state.imageUri.toString()}")
-                fragment?.runExitConfirmationDialog()
-            } else (fragment as Fragment).findNavController().navigateUp()
+            return (state.title.isNotEmpty() || state.description.isNotEmpty() || state.imageUri != Uri.EMPTY)
         }
     }
 }

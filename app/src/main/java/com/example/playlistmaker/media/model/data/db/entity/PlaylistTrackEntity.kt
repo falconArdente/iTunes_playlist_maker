@@ -4,11 +4,16 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-private const val TABLE_NAME = "playlists_tracks_table"
-@Entity(tableName = TABLE_NAME)
+private const val TRACKS_TABLE = "playlists_tracks_table"
+
+@Entity(
+    tableName = TRACKS_TABLE
+)
 data class PlaylistTrackEntity(
-    @PrimaryKey(autoGenerate = true) val pTrackId: Int?=null,
-    @ColumnInfo(name = "playlistId", typeAffinity = ColumnInfo.INTEGER) val playlistId: Int,
+    @PrimaryKey(autoGenerate = true) val pTrackId: Int? = null,
+    @ColumnInfo(
+        name = "playlistRelationId", typeAffinity = ColumnInfo.INTEGER
+    ) val playlistRelationId: Int,
     @ColumnInfo(name = "remoteId", typeAffinity = ColumnInfo.INTEGER) val remoteId: Long,
     @ColumnInfo(name = "trackName", defaultValue = "") val trackName: String,
     @ColumnInfo(name = "artistName", defaultValue = "") val artistName: String,

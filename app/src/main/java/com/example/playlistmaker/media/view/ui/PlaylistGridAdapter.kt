@@ -1,18 +1,24 @@
-package com.example.playlistmaker.media.view
+package com.example.playlistmaker.media.view.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.databinding.PlaylistViewHolderBinding
+import com.example.playlistmaker.databinding.PlaylistViewHolderGridBinding
 import com.example.playlistmaker.media.model.domain.Playlist
 
-class PlaylistAdapter(
+class PlaylistGridAdapter(
     var playlists: List<Playlist>
 ) : RecyclerView.Adapter<PlaylistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
-        return PlaylistViewHolder(PlaylistViewHolderBinding.inflate(layoutInspector, parent, false))
+        return PlaylistViewHolder(
+            PlaylistViewHolderGridBinding.inflate(
+                layoutInspector,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {

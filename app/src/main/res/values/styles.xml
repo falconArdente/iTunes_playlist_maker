@@ -189,7 +189,7 @@
         <item name="android:layout_marginTop">@dimen/create_playlist_title_field_top_margin</item>
         <item name="textFillColor">?attr/colorOnSecondary</item>
         <item name="android:background">@drawable/create_playlist_field_init_background</item>
-        <item name="android:importantForAutofill">no</item>
+        <item name="android:textColorHint">?attr/colorOnSecondary</item>
         <item name="android:focusedByDefault">false</item>
         <item name="android:inputType">text|textNoSuggestions</item>
         <item name="android:singleLine">true</item>

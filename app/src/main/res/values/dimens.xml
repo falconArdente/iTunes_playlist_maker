@@ -95,8 +95,8 @@
     <dimen name="create_playlist_description_field_up_string_margin_top">10dp</dimen>
     <dimen name="create_playlist_create_button_corner_radius">8dp</dimen>
     <dimen name="playlist_thumbnail_size">160dp</dimen>
-    <dimen name="playlist_vh_height">196dp</dimen>
-    <dimen name="playlist_vh_horizontal_margin">12dp</dimen>
+    <dimen name="playlist_vh_grid_height">196dp</dimen>
+    <dimen name="playlist_vh_grid_horizontal_margin">12dp</dimen>
     <dimen name="playlist_row_text_size">12sp</dimen>
     <dimen name="playlist_row_height">16sp</dimen>
     <dimen name="playlist_row_top_padding">4dp</dimen>
@@ -104,4 +104,23 @@
     <dimen name="playlist_row_horizontal_margin">4dp</dimen>
     <dimen name="playlist_recycler_bottom_padding">60dp</dimen>
     <dimen name="playlist_guidelines_padding">12dp</dimen>
+    <dimen name="add_playlist_corner_radius">16dp</dimen>
+    <dimen name="bottom_sheet_pin_top_margin">8dp</dimen>
+    <dimen name="bottom_sheet_title_text_size">19sp</dimen>
+    <dimen name="add_playlist_pin_top_margin">42dp</dimen>
+    <dimen name="add_playlist_bottom_sheet_pickHeight">505dp</dimen>
+    <dimen name="bottom_sheet_button_top_margin">92dp</dimen>
+    <dimen name="bottom_sheet_recycler_top_margin">24dp</dimen>
+    <dimen name="bottom_sheet_recycler_horizontal_padding">13dp</dimen>
+    <dimen name="playlist_vh_row_height">61dp</dimen>
+    <dimen name="playlist_vh_row_thumbnail_size">45dp</dimen>
+    <dimen name="playlist_vh_row_title_top_margin">14dp</dimen>
+    <dimen name="playlist_vh_row_title_text_size">16sp</dimen>
+    <dimen name="playlist_vh_row_count_text_size">11sp</dimen>
+    <dimen name="playlist_vh_row_thumbnail_vertical_margin">8dp</dimen>
+    <dimen name="playlist_vh_row_thumbnail_end_margin">8dp</dimen>
+    <dimen name="playlist_message_height">48dp</dimen>
+    <dimen name="playlist_message_horizontal_padding">8dp</dimen>
+    <dimen name="playlist_message_bottom_margin">16dp</dimen>
+    <dimen name="playlist_message_text_size">14sp</dimen>
 </resources>

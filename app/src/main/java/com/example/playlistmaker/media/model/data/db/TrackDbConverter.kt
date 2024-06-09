@@ -20,7 +20,7 @@ object TrackDbConverter {
         previewUrl = track.trackPreview
     )
     fun map(track: Track,playlist: Playlist) = PlaylistTrackEntity(
-        playlistId = playlist.id,
+        playlistRelationId = playlist.id,
         remoteId = track.id,
         trackName = track.trackTitle,
         artistName = track.artistName,

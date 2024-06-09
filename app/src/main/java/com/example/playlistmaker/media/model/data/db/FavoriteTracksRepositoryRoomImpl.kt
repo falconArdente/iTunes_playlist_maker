@@ -27,7 +27,7 @@ class FavoriteTracksRepositoryRoomImpl(private val favoritesTable: FavoriteTrack
             listOfEntity.sortedByDescending { entity ->
                 entity.dateOfChange
             }
-        }//можно было просто перевернуть recyclerView layout, но сортировка по датам показалась полезнее
+        }
             .map { listOfEntity ->
                 listOfEntity.map { TrackDbConverter.map(it) }
             }

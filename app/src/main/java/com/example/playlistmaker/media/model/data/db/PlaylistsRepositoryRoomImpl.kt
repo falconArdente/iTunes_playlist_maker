@@ -10,68 +10,71 @@ import com.example.playlistmaker.search.model.domain.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) :
-    PlaylistsRepository {
+class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : PlaylistsRepository {
 
-    override suspend fun getAllPlaylists(): Flow<List<Playlist>> = playlistsTable.getAllPlaylists()
-        .map { playlistEntitys ->
-            playlistEntitys.map { entity ->
+    override suspend fun getAllPlaylists(): Flow<List<Playlist>> =
+        playlistsTable.getPlaylistsWithCountOfTracks().map { listOfPlaylistWithCount ->
+            listOfPlaylistWithCount.map { onePlaylistWithCount ->
                 Playlist(
-                    id = entity.playlistId ?: -1,
-                    title = entity.title,
-                    description = entity.description ?: "",
-                    imageUri = entity.imageUri?.toUri(),
-                    tracks = getTracksOfPlaylistStraight(entity)
+                    id = onePlaylistWithCount.playlistEntity.playlistId ?: -1,
+                    title = onePlaylistWithCount.playlistEntity.title,
+                    description = onePlaylistWithCount.playlistEntity.description ?: "",
+                    imageUri = onePlaylistWithCount.playlistEntity.imageUri.toUri(),
+                    tracks = emptyList(),
+                    tracksCount = onePlaylistWithCount.tracksCount
                 )
             }
         }
 
-    override suspend fun createPlaylist(title: String, description: String, imageUri: Uri?) =
-        playlistsTable
-            .createPlaylist(
-                PlaylistEntity(
-                    title = title,
-                    description = description,
-                    imageUri = imageUri.toString().orEmpty()
-                )
-            )
+    fun getAllPlaylistsTracksIncluded(): Flow<List<Playlist>> =
+        playlistsTable.getPlaylistsWithTracks().map { listOfPlaylistWithPtracks ->
+            listOfPlaylistWithPtracks.map { onePlaylistWithPtracks ->
+                Playlist(id = onePlaylistWithPtracks.playlistEntity.playlistId ?: -1,
+                    title = onePlaylistWithPtracks.playlistEntity.title,
+                    description = onePlaylistWithPtracks.playlistEntity.description ?: "",
+                    imageUri = onePlaylistWithPtracks.playlistEntity.imageUri.toUri(),
+                    tracks = onePlaylistWithPtracks.playlistTracks.map { trackEntity ->
+                        TrackDbConverter.map(trackEntity)
+                    })
+            }
+        }
 
-    override suspend fun deletePlaylist(playlist: Playlist) = playlistsTable
-        .getPlaylistById(playlist.id)
-        .collect { list ->
+    override suspend fun createPlaylist(title: String, description: String, imageUri: Uri?) =
+        playlistsTable.createPlaylist(
+            PlaylistEntity(
+                title = title, description = description, imageUri = imageUri.toString()
+            )
+        )
+
+    override suspend fun deletePlaylist(playlist: Playlist) =
+        playlistsTable.getPlaylistById(playlist.id).collect { list ->
             list.forEach { playlistEntity ->
                 playlistsTable.deletePlaylistEntity(playlistEntity)
             }
         }
 
-    override suspend fun addTrackToPlaylist(trackToAdd: Track, playlist: Playlist) = playlistsTable
-        .addPTrack(
+    override fun addTrackToPlaylist(trackToAdd: Track, playlist: Playlist): Boolean {
+        val idsOfTracks =
+            playlistsTable.getTracksRemoteIDsByPlaylistStraight(playlistId = playlist.id)
+        if (idsOfTracks.contains(trackToAdd.id)) return false //already have this track case
+        playlistsTable.addPTrack(
             TrackDbConverter.map(trackToAdd, playlist)
         )
-
-    override suspend fun removeTrackFromPlaylist(trackToRemove: Track, playlist: Playlist) {
-        playlistsTable.getTracksOfPlaylist(playlist.id)
-            .collect { pTrackList ->
-                pTrackList.forEach { pTrackEntity ->
-                    playlistsTable.removePTrack(pTrackEntity)
-                }
-            }
+        return true
     }
 
-    override suspend fun getTracksOfPlaylist(playlist: Playlist): Flow<List<Track>> = playlistsTable
-        .getTracksOfPlaylist(playlist.id)
-        .map { listOfEntity ->
+    override suspend fun removeTrackFromPlaylist(trackToRemove: Track, playlist: Playlist) {
+        playlistsTable.getTracksOfPlaylist(playlist.id).collect { pTrackList ->
+            pTrackList.forEach { pTrackEntity ->
+                playlistsTable.removePTrack(pTrackEntity)
+            }
+        }
+    }
+
+    override suspend fun getTracksOfPlaylist(playlist: Playlist): Flow<List<Track>> =
+        playlistsTable.getTracksOfPlaylist(playlist.id).map { listOfEntity ->
             listOfEntity.map { pTrackEntity ->
                 TrackDbConverter.map(pTrackEntity)
             }
         }
-
-    private fun getTracksOfPlaylistStraight(playlist: PlaylistEntity): List<Track> =
-        playlistsTable
-            .getTracksOfPlaylistStraight(playlist.playlistId!!)
-            .map { listOfEntity ->
-                listOfEntity.let { pTrackEntity ->
-                    TrackDbConverter.map(pTrackEntity)
-                }
-            }
 }

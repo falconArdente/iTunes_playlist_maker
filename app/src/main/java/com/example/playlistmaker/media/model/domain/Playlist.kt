@@ -8,5 +8,6 @@ data class Playlist(
     val title: String,
     val description: String,
     val imageUri: Uri?,
-    val tracks: List<Track>
+    val tracks: List<Track> = emptyList(),
+    val tracksCount:Int?=null
 )

@@ -36,8 +36,7 @@ val searchModule = module {
     }
     single<HistoryRepository> {
         HistoryRepositorySharedPreferenceBased(
-            appPreferences = get(),
-            gson = get()
+            appPreferences = get(), gson = get()
         )
     }
     factory<SearchInteractor> {
@@ -54,15 +53,12 @@ val searchModule = module {
     factory { Intent(androidApplication(), PlayerActivity::class.java) }
     single<SharedPreferences> {
         androidApplication().getSharedPreferences(
-            APP_PREFERENCES_FILE_NAME,
-            Application.MODE_PRIVATE
+            APP_PREFERENCES_FILE_NAME, Application.MODE_PRIVATE
         )
     }
-    single { Gson() }
+    single<Gson> { Gson() }
     single<Retrofit> {
-        return@single Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        return@single Retrofit.Builder().baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create()).build()
     }
 }

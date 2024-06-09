@@ -30,15 +30,19 @@ private const val DATABASE_NAME = "tracks_database.db"
 val mediaModule = module {
     viewModel {
         FavoriteTracksFragmentViewModel(
-            favoriteTracksInteractor = get(),
-            trackToPlayerUseCase = get()
+            favoriteTracksInteractor = get(), trackToPlayerUseCase = get()
         )
     }
     viewModel {
         PlaylistsFragmentViewModel(get())
     }
     viewModel {
-        CreatePlaylistViewModel(androidContext(),get(),get(),get())
+        CreatePlaylistViewModel(
+            imageSelector = get(),
+            saverForImage = get(),
+            dataTable = get(),
+            androidContext = androidContext()
+        )
     }
     single<AppDbRoomBased> {
         Room.databaseBuilder(androidContext(), AppDbRoomBased::class.java, DATABASE_NAME).build()

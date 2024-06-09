@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.media.view.ui.PlaylistGridAdapter
 import com.example.playlistmaker.media.viewModel.PlaylistScreenState
 import com.example.playlistmaker.media.viewModel.PlaylistsFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,7 +27,7 @@ class PlaylistsFragment : Fragment() {
 
     private lateinit var binding: FragmentPlaylistsBinding
     private val playlistsViewModel by viewModel<PlaylistsFragmentViewModel>()
-    private val playlistsAdapter = PlaylistAdapter(emptyList())
+    private val playlistsAdapter = PlaylistGridAdapter(emptyList())
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -44,6 +46,7 @@ class PlaylistsFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun render(screenState: PlaylistScreenState) {
         when (screenState) {
             is PlaylistScreenState.Empty -> {
