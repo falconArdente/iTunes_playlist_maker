@@ -13,11 +13,19 @@ import com.example.playlistmaker.player.model.repository.GetTrackToPlayUseCaseIm
 import com.example.playlistmaker.player.view.ui.TrackFromIntentRepository
 import com.example.playlistmaker.player.viewModel.PlayerViewModel
 import com.google.gson.Gson
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val playerModule = module {
-    viewModel { PlayerViewModel(player = get(), currentFavoriteInteractor = get()) }
+    viewModel {
+        PlayerViewModel(
+            player = get(),
+            currentFavoriteInteractor = get(),
+            playlistDataSource = get(),
+            appContext = androidContext()
+        )
+    }
     factory<MusicPlayInteractor> {
         MusicPlayerInteractorImpl(player = get())
     }

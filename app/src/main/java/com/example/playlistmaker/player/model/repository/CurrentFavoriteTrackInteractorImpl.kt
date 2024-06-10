@@ -23,9 +23,11 @@ class CurrentFavoriteTrackInteractorImpl(
         repository.removeTrackFromFavorites(currentTrack)
     }
 
-    override fun isTrackFavorite(): Flow<Boolean> = flow {
-        repository.getAllIds().collect { listOfRemoteIds ->
-            emit(listOfRemoteIds.contains(currentTrack.id))
+    override fun isTrackFavorite(): Flow<Boolean> {
+        return flow {
+            repository.getAllIds().collect { listOfRemoteIds ->
+                emit(listOfRemoteIds.contains(currentTrack.id))
+            }
         }
     }
 }

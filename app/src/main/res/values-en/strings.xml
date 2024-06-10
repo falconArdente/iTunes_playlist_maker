@@ -35,4 +35,24 @@
     <string name="where_is_no_playlists_message">Where is \nno playlists yet</string>
     <string name="new_playlist_button_text">New playlist</string>
     <string name="network_error">Please check internet connection</string>
+    <string name="create_playlist_caption">New playlist</string>
+    <string name="create_playlist_title_field">Title*</string>
+    <string name="create_playlist_description_field">Description</string>
+    <string name="create_playlist_create_button">Create</string>
+    <string name="rationale_for_image_picker">Choosing playlist image is need data read acces</string>
+    <string name="no_image_been_chosen_message">No image been chosen</string>
+    <string name="rationale_for_playlist_image_save">Choosing playlist image is need data write acces</string>
+    <string name="playlist_created_postfix">" created successfully"</string>
+    <string name="playlist_created_prefix">"Playlist "</string>
+    <string name="create_playlist_exit_dialog_title">Do you wish to stop playlist creation?</string>
+    <string name="create_playlist_exit_dialog_confirm">Stop creation</string>
+    <string name="create_playlist_exit_dialog_reject">Continue playlist creation</string>
+    <string name="create_playlist_exit_dialog_message">Unsaved data will be lost</string>
+    <plurals name="tracks_count">
+        <item quantity="one">track</item>
+        <item quantity="other">tracks</item>
+    </plurals>
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="alredy_have_in_playlist_prefix">Track is alredy presented in</string>
+    <string name="add_to_playlist_success_prefix">Been add to playlist</string>
 </resources>

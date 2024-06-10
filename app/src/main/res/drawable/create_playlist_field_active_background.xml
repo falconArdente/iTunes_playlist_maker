@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="@dimen/create_playlist_field_corner_radius" />
+    <stroke
+        android:width="@dimen/create_playlist_image_stroke_width"
+        android:color="@color/YP_Blue" />
+</shape>

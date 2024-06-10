@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/playlist_vh_row_height"
+    android:layout_gravity="start"
+    android:background="?attr/colorSecondary">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/playlist_thumbnail"
+        android:layout_width="@dimen/playlist_vh_row_thumbnail_size"
+        android:layout_height="@dimen/playlist_vh_row_thumbnail_size"
+        android:layout_marginVertical="@dimen/playlist_vh_row_thumbnail_vertical_margin"
+        android:background="@drawable/placeholder_search_bar"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/playlist_title"
+        style="@style/playlist_row_text"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/playlist_vh_row_title_top_margin"
+        android:paddingStart="@dimen/playlist_vh_row_thumbnail_end_margin"
+        android:textSize="@dimen/playlist_vh_row_title_text_size"
+        app:layout_constraintBottom_toTopOf="@id/playlist_tracks_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/playlist_thumbnail"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlSymmetry,TextSizeCheck" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/playlist_tracks_count"
+        style="@style/playlist_row_text"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="@dimen/playlist_vh_row_title_top_margin"
+        android:paddingStart="@dimen/playlist_vh_row_thumbnail_end_margin"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/playlist_thumbnail"
+        app:layout_constraintTop_toBottomOf="@id/playlist_title"
+        tools:ignore="RtlSymmetry,TextSizeCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

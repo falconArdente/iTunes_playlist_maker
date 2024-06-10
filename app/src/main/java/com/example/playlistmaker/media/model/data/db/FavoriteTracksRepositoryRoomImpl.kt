@@ -22,15 +22,18 @@ class FavoriteTracksRepositoryRoomImpl(private val favoritesTable: FavoriteTrack
         }
     }
 
-    override suspend fun getAllTracks(): Flow<List<Track>> =
-        favoritesTable.getAll().map { listOfEntity ->
+    override suspend fun getAllTracks(): Flow<List<Track>> {
+       return favoritesTable.getAll().map { listOfEntity ->
             listOfEntity.sortedByDescending { entity ->
                 entity.dateOfChange
             }
-        }//можно было просто перевернуть recyclerView layout, но сортировка по датам показалась полезнее
+        }
             .map { listOfEntity ->
                 listOfEntity.map { TrackDbConverter.map(it) }
             }
+    }
 
-    override fun getAllIds(): Flow<List<Long>> = favoritesTable.getRemoteIdList()
+    override fun getAllIds(): Flow<List<Long>>{
+        return favoritesTable.getRemoteIdList()
+    }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <size
+                android:width="@dimen/create_playlist_image_size"
+                android:height="@dimen/create_playlist_image_size" />
+            <stroke
+                android:width="@dimen/create_playlist_image_stroke_width"
+                android:color="@color/YP_Text_Gray"
+                android:dashWidth="@dimen/create_playlist_image_stroke_dash_interval"
+                android:dashGap="@dimen/create_playlist_image_stroke_dash_interval" />
+            <corners android:radius="@dimen/create_playlist_image_corner_radius" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/add_playlist_image"
+        android:gravity="center" />
+</layer-list>

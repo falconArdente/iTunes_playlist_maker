@@ -42,9 +42,14 @@ android {
 dependencies {
     implementation("io.insert-koin:koin-android:3.5.6")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
+    implementation("androidx.fragment:fragment-ktx:1.7.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("androidx.viewpager2:viewpager2:1.1.0")
-    implementation("com.google.android.material:material:1.12.0")
+    //noinspection GradleDependency
+    implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("com.google.code.gson:gson:2.10.1")
@@ -59,6 +64,7 @@ dependencies {
     //noinspection KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:$roomVersion") // Kotlin-кодогенератор
     implementation("androidx.room:room-ktx:$roomVersion")   // AdapterDelegates
+    implementation ("com.markodevcic:peko:3.0.5")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

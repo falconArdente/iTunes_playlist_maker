@@ -47,4 +47,28 @@
     <string name="where_is_no_playlists_message">Вы не создали \nни одного плейлиста</string>
     <string name="new_playlist_button_text">Новый плейлист</string>
     <string name="network_error">Проверьте подключение к интернету</string>
+    <string name="create_playlist_caption">Новый плейлист</string>
+    <string name="create_playlist_title_field">Название*</string>
+    <string name="create_playlist_description_field">Описание</string>
+    <string name="create_playlist_create_button">Создать</string>
+    <string name="rationale_for_image_picker">Разрешение на доступ к памяти необходимо для выбора изображения плейлиста</string>
+    <string name="no_image_been_chosen_message">Изображение не выбрано</string>
+    <string name="rationale_for_playlist_image_save">Разрешение на доступ к памяти необходимо для сохранения изображения плейлиста</string>
+    <string name="playlist_created_prefix">Плейлист</string>
+    <string name="playlist_created_postfix">создан</string>
+    <string name="create_playlist_exit_dialog_title">Завершить создание плейлиста?</string>
+    <string name="create_playlist_exit_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="create_playlist_exit_dialog_confirm">Завершить</string>
+    <string name="create_playlist_exit_dialog_reject">Отмена</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="add_to_playlist_success_prefix">Добавлено в плейлист</string>
+    <string name="alredy_have_in_playlist_prefix">Трек уже добавлен в плейлист</string>
+    <plurals name="tracks_count">
+        <item quantity="zero">треков нет</item>
+        <item quantity="one">трек</item>
+        <item quantity="two">трека</item>
+        <item quantity="few">трека</item>
+        <item quantity="many">треков</item>
+        <item quantity="other">треков</item>
+    </plurals>
 </resources>
