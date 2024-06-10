@@ -15,7 +15,7 @@ import com.example.playlistmaker.player.model.domain.CurrentFavoriteTrackInterac
 import com.example.playlistmaker.player.model.domain.GetTrackToPlayUseCase
 import com.example.playlistmaker.player.model.domain.MusicPlayInteractor
 import com.example.playlistmaker.player.model.domain.PlayState
-import com.example.playlistmaker.player.view.PlaylistViewOnClickListener
+import com.example.playlistmaker.player.view.ui.PlaylistViewOnClickListener
 import com.example.playlistmaker.search.model.domain.Track
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers

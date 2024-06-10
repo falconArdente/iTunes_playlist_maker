@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.map
 
 class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : PlaylistsRepository {
 
-    override suspend fun getAllPlaylists(): Flow<List<Playlist>> =
-        playlistsTable.getPlaylistsWithCountOfTracks().map { listOfPlaylistWithCount ->
+    override suspend fun getAllPlaylists(): Flow<List<Playlist>> {
+        return playlistsTable.getPlaylistsWithCountOfTracks().map { listOfPlaylistWithCount ->
             listOfPlaylistWithCount.map { onePlaylistWithCount ->
                 Playlist(
                     id = onePlaylistWithCount.playlistEntity.playlistId ?: -1,
@@ -25,9 +25,10 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
                 )
             }
         }
+    }
 
-    fun getAllPlaylistsTracksIncluded(): Flow<List<Playlist>> =
-        playlistsTable.getPlaylistsWithTracks().map { listOfPlaylistWithPtracks ->
+    fun getAllPlaylistsTracksIncluded(): Flow<List<Playlist>> {
+        return playlistsTable.getPlaylistsWithTracks().map { listOfPlaylistWithPtracks ->
             listOfPlaylistWithPtracks.map { onePlaylistWithPtracks ->
                 Playlist(id = onePlaylistWithPtracks.playlistEntity.playlistId ?: -1,
                     title = onePlaylistWithPtracks.playlistEntity.title,
@@ -38,20 +39,23 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
                     })
             }
         }
+    }
 
-    override suspend fun createPlaylist(title: String, description: String, imageUri: Uri?) =
-        playlistsTable.createPlaylist(
+    override suspend fun createPlaylist(title: String, description: String, imageUri: Uri?) {
+        return playlistsTable.createPlaylist(
             PlaylistEntity(
                 title = title, description = description, imageUri = imageUri.toString()
             )
         )
+    }
 
-    override suspend fun deletePlaylist(playlist: Playlist) =
-        playlistsTable.getPlaylistById(playlist.id).collect { list ->
+    override suspend fun deletePlaylist(playlist: Playlist) {
+        return playlistsTable.getPlaylistById(playlist.id).collect { list ->
             list.forEach { playlistEntity ->
                 playlistsTable.deletePlaylistEntity(playlistEntity)
             }
         }
+    }
 
     override fun addTrackToPlaylist(trackToAdd: Track, playlist: Playlist): Boolean {
         val idsOfTracks =
@@ -71,10 +75,11 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
         }
     }
 
-    override suspend fun getTracksOfPlaylist(playlist: Playlist): Flow<List<Track>> =
-        playlistsTable.getTracksOfPlaylist(playlist.id).map { listOfEntity ->
+    override suspend fun getTracksOfPlaylist(playlist: Playlist): Flow<List<Track>> {
+        return playlistsTable.getTracksOfPlaylist(playlist.id).map { listOfEntity ->
             listOfEntity.map { pTrackEntity ->
                 TrackDbConverter.map(pTrackEntity)
             }
         }
+    }
 }

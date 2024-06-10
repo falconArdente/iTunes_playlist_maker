@@ -29,6 +29,7 @@ import com.example.playlistmaker.player.model.domain.PlayState.NotReady
 import com.example.playlistmaker.player.model.domain.PlayState.Paused
 import com.example.playlistmaker.player.model.domain.PlayState.Playing
 import com.example.playlistmaker.player.model.domain.PlayState.ReadyToPlay
+import com.example.playlistmaker.player.view.ui.PlaylistRowRecyclerViewAdapter
 import com.example.playlistmaker.player.viewModel.PlayerScreenState
 import com.example.playlistmaker.player.viewModel.PlayerViewModel
 import com.example.playlistmaker.root.FRAGMENT_LOAD_COMMAND

@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.model.domain.Track
+import com.example.playlistmaker.search.view.ui.TrackAdapter
+import com.example.playlistmaker.search.view.ui.TrackOnClickListener
 import com.example.playlistmaker.search.viewModel.SearchScreenState
 import com.example.playlistmaker.search.viewModel.SearchViewModel
 import com.example.playlistmaker.utils.debounce

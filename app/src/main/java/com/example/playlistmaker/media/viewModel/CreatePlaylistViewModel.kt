@@ -53,28 +53,45 @@ class CreatePlaylistViewModel(
     }
 
     fun changeTitle(title: String) {
-        (mutableScreeState.value as CreatePlaylistScreenState).apply {
-            this.title = title
-            this.isReadyToCreate = title.isNotEmpty()
-            mutableScreeState.postValue(this)
-        }
+        mutableScreeState.postValue(
+            (mutableScreeState.value as CreatePlaylistScreenState).copy(
+                title = title, isReadyToCreate = title.isNotEmpty()
+            )
+        )
     }
 
     fun changeDescription(description: String) {
-        (mutableScreeState.value as CreatePlaylistScreenState).let { state ->
-            state.description = description
-            mutableScreeState.postValue(state)
-        }
+        mutableScreeState.postValue(
+            (mutableScreeState.value as CreatePlaylistScreenState).copy(
+                description = description
+            )
+        )
     }
 
     fun selectAnImage() {
         viewModelScope.launch(Dispatchers.IO) {
             imageSelector.selectImage().collect { uri ->
-                (mutableScreeState.value as CreatePlaylistScreenState).let { state ->
-                    state.imageUri = uri
-                    mutableScreeState.postValue(state)
-                }
+                mutableScreeState.postValue(
+                    (mutableScreeState.value as CreatePlaylistScreenState).copy(
+                        imageUri = uri
+                    )
+                )
             }
+        }
+    }
+
+    fun runExitSequence() {
+        if (isNeedDialog()) {
+            fragment?.runExitConfirmationDialog()
+        } else {
+            exitView()
+        }
+    }
+
+    fun exitView() {
+        with((fragment as Fragment)) {
+            if (finishActivityWhenDone) requireActivity().finish()
+            else findNavController().navigateUp()
         }
     }
 
@@ -108,21 +125,6 @@ class CreatePlaylistViewModel(
 
     private fun createMessageText(playlistName: String): String =
         "$playlistCreatedPrefix $playlistName $playlistCreatedPostfix"
-
-    fun runExitSequence() {
-        if (isNeedDialog()) {
-            fragment?.runExitConfirmationDialog()
-        } else {
-            exitView()
-        }
-    }
-
-    fun exitView() {
-        with((fragment as Fragment)) {
-            if (finishActivityWhenDone) requireActivity().finish()
-            else findNavController().navigateUp()
-        }
-    }
 
     private fun isNeedDialog(): Boolean {
         (screenStateToObserve.value as CreatePlaylistScreenState).let { state ->

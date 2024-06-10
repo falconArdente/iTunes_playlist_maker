@@ -5,6 +5,7 @@ import com.example.playlistmaker.media.model.domain.SaveImageToStorageUseCase
 
 class SaveImageToStorageUseCaseImpl(private val repository: StorageRepository) :
     SaveImageToStorageUseCase {
-    override fun saveImageByUri(imageUri: Uri, fileName: String):Uri =
-        repository.saveImageByUri(imageUri, fileName)
+    override fun saveImageByUri(imageUri: Uri, fileName: String): Uri {
+        return repository.saveImageByUri(imageUri, fileName)
+    }
 }

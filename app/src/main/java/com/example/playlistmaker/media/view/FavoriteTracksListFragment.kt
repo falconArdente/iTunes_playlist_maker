@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +13,8 @@ import com.example.playlistmaker.databinding.FragmentFavoriteTrackListBinding
 import com.example.playlistmaker.media.viewModel.FavoriteTracksFragmentViewModel
 import com.example.playlistmaker.media.viewModel.FavoriteTracksScreenState
 import com.example.playlistmaker.search.model.domain.Track
-import com.example.playlistmaker.search.view.TrackAdapter
-import com.example.playlistmaker.search.view.TrackOnClickListener
+import com.example.playlistmaker.search.view.ui.TrackAdapter
+import com.example.playlistmaker.search.view.ui.TrackOnClickListener
 import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,7 +26,7 @@ class FavoriteTracksListFragment : Fragment() {
         }
     }
 
-    private lateinit var binding: FragmentFavoriteTrackListBinding
+    private var binding: FragmentFavoriteTrackListBinding? = null
     private val favoritesViewModel by viewModel<FavoriteTracksFragmentViewModel>()
     private var favoriteTracksAdapter: TrackAdapter? = null
     private lateinit var trackOnClickDebounced: (Track) -> Unit
@@ -33,7 +34,7 @@ class FavoriteTracksListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentFavoriteTrackListBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,24 +45,25 @@ class FavoriteTracksListFragment : Fragment() {
             favoritesViewModel.openTrack(track)
         }
         favoriteTracksAdapter = TrackAdapter(emptyList(), trackOnClickListener)
-        binding.favTracksRecyclerView.adapter = favoriteTracksAdapter
-        binding.favTracksRecyclerView.layoutManager =
+        binding?.favTracksRecyclerView?.adapter = favoriteTracksAdapter
+        binding?.favTracksRecyclerView?.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         favoritesViewModel.screenState.observe(viewLifecycleOwner) { render(screenState = it) }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun render(screenState: FavoriteTracksScreenState) {
         when (screenState) {
             is FavoriteTracksScreenState.NoTracks -> {
-                binding.favTracksRecyclerView.isVisible = false
-                binding.placeholderFrame.isVisible = true
+                binding?.favTracksRecyclerView?.isVisible = false
+                binding?.placeholderFrame?.isVisible = true
             }
 
             is FavoriteTracksScreenState.HaveTracks -> {
                 favoriteTracksAdapter?.tracks = (screenState.tracks)
                 favoriteTracksAdapter?.notifyDataSetChanged()
-                binding.placeholderFrame.isVisible = false
-                binding.favTracksRecyclerView.isVisible = true
+                binding?.placeholderFrame?.isVisible = false
+                binding?.favTracksRecyclerView?.isVisible = true
             }
         }
     }

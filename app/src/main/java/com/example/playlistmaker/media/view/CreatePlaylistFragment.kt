@@ -3,14 +3,13 @@ package com.example.playlistmaker.media.view
 import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -25,39 +24,39 @@ import com.example.playlistmaker.root.FINISH_BY_DONE
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val MESSAGE_TEXT="message"
-const val MESSAGE_DURATION="duration"
-class CreatePlaylistFragment : Fragment(), FragmentWithExitConfirmationDialog,CanShowPlaylistMessage {
+const val MESSAGE_TEXT = "message"
+const val MESSAGE_DURATION = "duration"
+
+class CreatePlaylistFragment : Fragment(), FragmentWithExitConfirmationDialog,
+    CanShowPlaylistMessage {
     private val exitDialog: MaterialAlertDialogBuilder by lazy { configureExitConfirmationDialog() }
     private val viewModel by viewModel<CreatePlaylistViewModel>()
-    private lateinit var _binding: FragmentCreatePlaylistBinding
-    private val binding: FragmentCreatePlaylistBinding
-        get() = _binding
-
+    private var binding: FragmentCreatePlaylistBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCreatePlaylistBinding.inflate(layoutInflater, container, false)
+        binding = FragmentCreatePlaylistBinding.inflate(layoutInflater, container, false)
         viewModel.attachFragmentAtCreation(this)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.finishActivityWhenDone = arguments?.getBoolean(FINISH_BY_DONE) ?: false
         viewModel.screenStateToObserve.observe(viewLifecycleOwner) { render(screenState = it) }
-        viewModel.playlistMessageToObserve.observe(viewLifecycleOwner){showMessage(it)}
-        binding.playlistImage.setOnClickListener { viewModel.selectAnImage() }
-        binding.createButton.setOnClickListener { viewModel.createPlaylist() }
-        binding.header.setNavigationOnClickListener { viewModel.runExitSequence() }
+        viewModel.playlistMessageToObserve.observe(viewLifecycleOwner) { showMessage(it) }
+        binding?.playlistImage?.setOnClickListener { viewModel.selectAnImage() }
+        binding?.createButton?.setOnClickListener { viewModel.createPlaylist() }
+        binding?.header?.setNavigationOnClickListener { viewModel.runExitSequence() }
         attachFieldsTextWatchers()
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             backPressedCallback
         )
     }
+
     private fun render(screenState: CreatePlaylistScreenState) {
-        with(binding) {
+        with(binding!!) {
             screenState.let { state ->
                 if (state.imageUri != Uri.EMPTY) setImage(state.imageUri)
                 if (state.title != title.text.toString()) title.setText(state.title)
@@ -68,13 +67,15 @@ class CreatePlaylistFragment : Fragment(), FragmentWithExitConfirmationDialog,Ca
     }
 
     private fun setImage(uri: Uri) {
-        Glide.with(this).load(uri).fitCenter().centerCrop()
-            .transform(RoundedCorners(this.resources.getDimensionPixelSize(R.dimen.create_playlist_image_corner_radius)))
-            .into(binding.playlistImage)
+        binding?.let {
+            Glide.with(this).load(uri).fitCenter().centerCrop()
+                .transform(RoundedCorners(this.resources.getDimensionPixelSize(R.dimen.create_playlist_image_corner_radius)))
+                .into(it.playlistImage)
+        }
     }
 
     private fun setReadyToCreate(isReady: Boolean) {
-        with(binding) {
+        with(binding!!) {
             title.setBackgroundDrawable(
                 AppCompatResources.getDrawable(
                     requireContext(),
@@ -90,23 +91,11 @@ class CreatePlaylistFragment : Fragment(), FragmentWithExitConfirmationDialog,Ca
     }
 
     private fun attachFieldsTextWatchers() {
-        val titleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.changeTitle(s.toString())
-            }
+        binding?.title?.doOnTextChanged { text, _, _, _ ->
+            viewModel.changeTitle(text.toString())
         }
-        val descTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.changeDescription(s.toString())
-            }
-        }
-        with(binding) {
-            title.addTextChangedListener(titleTextWatcher)
-            description.addTextChangedListener(descTextWatcher)
+        binding?.description?.doOnTextChanged { text, _, _, _ ->
+            viewModel.changeDescription(text.toString())
         }
     }
 
@@ -130,14 +119,14 @@ class CreatePlaylistFragment : Fragment(), FragmentWithExitConfirmationDialog,Ca
             .setTitle(requireContext().getString(R.string.create_playlist_exit_dialog_title))
             .setMessage(R.string.create_playlist_exit_dialog_message)
             .setPositiveButton(requireContext().getString(R.string.create_playlist_exit_dialog_confirm)) { _, _ ->
-               viewModel.exitView()
+                viewModel.exitView()
             }
             .setNegativeButton(requireContext().getString(R.string.create_playlist_exit_dialog_reject)) { dialogInterface: DialogInterface, _ ->
                 dialogInterface.dismiss()
             }
 
     override fun showMessage(message: PlaylistMessage) {
-        val activity= requireActivity()
+        val activity = requireActivity()
         if (activity is CanShowPlaylistMessage) {
             activity.showMessage(message)
         } else return
