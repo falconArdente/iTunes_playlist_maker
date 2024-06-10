@@ -99,7 +99,6 @@
         android:layout_height="@dimen/search_progress_bar_size"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/search_progress_bar_top_margin"
-        android:indeterminate="true"
         app:indicatorColor="?attr/colorSecondary"
         app:indicatorDirectionCircular="counterclockwise"
         app:trackColor="@color/YP_Blue" />
@@ -117,7 +116,8 @@
         <FrameLayout
             android:layout_width="@dimen/search_placeholder_size"
             android:layout_height="@dimen/search_placeholder_size"
-            android:layout_marginBottom="@dimen/search_status_to_writings_distance">
+            android:layout_marginBottom="@dimen/search_status_to_writings_distance"
+            tools:ignore="VisualLintBounds">
 
             <ImageView
                 android:id="@+id/status_image"
@@ -147,6 +147,7 @@
             android:text="@string/update_title"
             android:textColor="?attr/colorSecondary"
             android:textSize="@dimen/update_button_text_size"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:ignore="VisualLintBounds" />
     </LinearLayout>
 </LinearLayout>

@@ -23,17 +23,22 @@ import com.example.playlistmaker.search.view.ui.TrackOnClickListener
 import com.example.playlistmaker.search.viewModel.SearchScreenState
 import com.example.playlistmaker.search.viewModel.SearchViewModel
 import com.example.playlistmaker.utils.debounce
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
     companion object {
         private const val CHOICE_DEBOUNCE_DELAY = 1100L
+        private const val INDICATOR_ROTATION_DELAY = 30L
     }
 
     private var tracksAdapter: TrackAdapter? = null
     private lateinit var binding: FragmentSearchBinding
     private val searchViewModel by viewModel<SearchViewModel>()
     private lateinit var trackOnClickDebounced: (Track) -> Unit
+    private var indicatorRotatingJob: Job? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -74,6 +79,7 @@ class SearchFragment : Fragment() {
         when (screenState) {
             is SearchScreenState.ResultHaveData -> {
                 binding.progressBar.isVisible = false
+                indicatorRotatingJob?.cancel()
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.placeholderFrame.isVisible = false
@@ -86,6 +92,7 @@ class SearchFragment : Fragment() {
 
             SearchScreenState.ResultIsEmpty -> {
                 binding.progressBar.isVisible = false
+                indicatorRotatingJob?.cancel()
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.updateButton.isVisible = false
@@ -102,6 +109,7 @@ class SearchFragment : Fragment() {
 
             SearchScreenState.Error -> {
                 binding.progressBar.isVisible = false
+                indicatorRotatingJob?.cancel()
                 binding.beenSearchedTitle.isVisible = false
                 binding.clearSearchList.isVisible = false
                 binding.tracksRecyclerView.isVisible = false
@@ -119,6 +127,7 @@ class SearchFragment : Fragment() {
 
             is SearchScreenState.HistoryHaveData -> {
                 binding.progressBar.isVisible = false
+                indicatorRotatingJob?.cancel()
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 if (tracksAdapter?.tracks != screenState.tracks) {
@@ -132,6 +141,7 @@ class SearchFragment : Fragment() {
 
             SearchScreenState.HistoryIsEmpty -> {
                 binding.progressBar.isVisible = false
+                indicatorRotatingJob?.cancel()
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
@@ -140,6 +150,15 @@ class SearchFragment : Fragment() {
             }
 
             SearchScreenState.Loading -> {
+                indicatorRotatingJob?.cancel()
+                indicatorRotatingJob = lifecycleScope.launch {
+                    while (true) {
+                        (0..359).forEach {
+                            binding.progressBar.setProgressCompat(it, true)
+                            delay(INDICATOR_ROTATION_DELAY)
+                        }
+                    }
+                }
                 binding.placeholderFrame.isVisible = false
                 binding.updateButton.isVisible = false
                 binding.beenSearchedTitle.isVisible = false
