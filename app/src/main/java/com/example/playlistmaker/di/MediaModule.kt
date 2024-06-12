@@ -1,6 +1,7 @@
 package com.example.playlistmaker.di
 
 import androidx.room.Room
+import com.example.playlistmaker.media.viewModel.PlaylistViewViewModel
 import com.example.playlistmaker.media.model.data.db.AppDbRoomBased
 import com.example.playlistmaker.media.model.data.db.FavoriteTracksRepositoryRoomImpl
 import com.example.playlistmaker.media.model.data.db.PlaylistsRepositoryRoomImpl
@@ -42,6 +43,11 @@ val mediaModule = module {
             saverForImage = get(),
             dataTable = get(),
             androidContext = androidContext()
+        )
+    }
+    viewModel {
+        PlaylistViewViewModel(
+
         )
     }
     single<AppDbRoomBased> {

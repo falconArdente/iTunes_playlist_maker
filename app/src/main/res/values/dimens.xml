@@ -123,4 +123,11 @@
     <dimen name="playlist_message_horizontal_padding">8dp</dimen>
     <dimen name="playlist_message_bottom_margin">16dp</dimen>
     <dimen name="playlist_message_text_size">14sp</dimen>
+    <dimen name="playlist_title_text_size">24sp</dimen>
+    <dimen name="playlist_non_title_text_size">18sp</dimen>
+    <dimen name="playlist_non_title_top_margin">8dp</dimen>
+    <dimen name="playlist_icon_size">24dp</dimen>
+    <dimen name="playlist_title_margin_top">24dp</dimen>
+    <dimen name="playlist_icons_margin_top">16dp</dimen>
+    <dimen name="playlist_title_landscape_start_margin">16dp</dimen>
 </resources>

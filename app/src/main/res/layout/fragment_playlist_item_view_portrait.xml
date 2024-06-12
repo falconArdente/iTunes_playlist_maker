@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/YP_Light_Gray"
+    tools:context=".media.view.PlaylistView">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/header"
+        style="@style/secondaryActivityHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/back_arrow_for_header">
+
+        <Button style="@style/hidden_search_button" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/beginGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/create_playlist_fields_horizontal_margin" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/create_playlist_fields_horizontal_margin" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/playlist_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/placeholder_search_bar"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/title_plt"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/title_plt"
+        style="@style/playlist_title_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/playlist_title_margin_top"
+        android:text="Title"
+        app:layout_constraintBottom_toTopOf="@+id/description"
+        app:layout_constraintEnd_toStartOf="@id/endGuide"
+        app:layout_constraintStart_toStartOf="@id/beginGuide"
+        app:layout_constraintTop_toBottomOf="@id/playlist_image"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck,VisualLintBounds" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/description"
+        style="@style/playlist_non_title_text_style"
+        android:layout_width="wrap_content"
+        android:text="desc"
+        app:layout_constraintBottom_toTopOf="@+id/minutes_plt"
+        app:layout_constraintEnd_toStartOf="@id/endGuide"
+        app:layout_constraintStart_toStartOf="@id/beginGuide"
+        app:layout_constraintTop_toBottomOf="@id/title_plt"
+        tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck,TextSizeCheck,VisualLintBounds" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/minutes_plt"
+        style="@style/playlist_non_title_text_style"
+        android:layout_width="wrap_content"
+        android:text="Mins"
+        app:layout_constraintBottom_toTopOf="@+id/share_icon"
+        app:layout_constraintEnd_toStartOf="@id/dot_plt"
+        app:layout_constraintHorizontal_weight="0"
+        app:layout_constraintStart_toStartOf="@id/beginGuide"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck,TextSizeCheck,VisualLintBounds" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/dot_plt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/YP_Black"
+        android:foregroundGravity="center"
+        android:src="@drawable/ic_point_centered"
+        app:layout_constraintBottom_toBottomOf="@id/minutes_plt"
+        app:layout_constraintEnd_toStartOf="@id/tracks"
+        app:layout_constraintHorizontal_weight="0"
+        app:layout_constraintStart_toEndOf="@id/minutes_plt"
+        app:layout_constraintTop_toTopOf="@id/minutes_plt"
+        tools:ignore="ContentDescription,ImageContrastCheck,VisualLintBounds" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tracks"
+        style="@style/playlist_non_title_text_style"
+        android:layout_width="0dp"
+        android:layout_marginTop="0dp"
+        android:text="Tracs"
+        app:layout_constraintBottom_toBottomOf="@id/minutes_plt"
+        app:layout_constraintEnd_toStartOf="@id/endGuide"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/dot_plt"
+        app:layout_constraintTop_toTopOf="@id/minutes_plt"
+        tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck,TextSizeCheck,VisualLintBounds" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/share_icon"
+        android:layout_width="@dimen/playlist_icon_size"
+        android:layout_height="@dimen/playlist_icon_size"
+        android:layout_marginTop="@dimen/playlist_icons_margin_top"
+        android:backgroundTint="@color/YP_Black"
+        android:clickable="true"
+        android:src="@drawable/share_plst"
+        app:flow_horizontalBias="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/options_icon"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/beginGuide"
+        app:layout_constraintTop_toBottomOf="@id/minutes_plt"
+        tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintBounds" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/options_icon"
+        android:layout_width="@dimen/playlist_icon_size"
+        android:layout_height="@dimen/playlist_icon_size"
+        android:backgroundTint="@color/YP_Black"
+        android:clickable="true"
+        android:src="@drawable/options_plst"
+        app:layout_constraintBottom_toBottomOf="@id/share_icon"
+        app:layout_constraintEnd_toStartOf="@id/endGuide"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/share_icon"
+        app:layout_constraintTop_toTopOf="@id/share_icon"
+        tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintBounds" />
+</androidx.constraintlayout.widget.ConstraintLayout>
