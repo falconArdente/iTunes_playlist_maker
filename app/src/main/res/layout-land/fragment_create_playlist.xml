@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/header"
+        style="@style/secondaryActivityHeader"
+        android:layout_width="match_parent"
+        app:layout_constraintEnd_toStartOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/back_arrow_for_header"
+        app:title="@string/create_playlist_caption">
+
+        <Button style="@style/hidden_search_button" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/beginGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/create_playlist_fields_horizontal_margin" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/create_playlist_fields_horizontal_margin" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/playlist_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/create_playlist_image_background"
+        android:clickable="true"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@id/create_button"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/title"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/beginGuide"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/title"
+        style="@style/create_playlist_field"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/create_playlist_field_height"
+        android:layout_marginStart="@dimen/create_playlist_fields_horizontal_margin"
+        android:layout_marginTop="0dp"
+        android:hint="@string/create_playlist_title_field"
+        app:layout_constraintBottom_toTopOf="@+id/description"
+        app:layout_constraintEnd_toStartOf="@id/endGuide"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/playlist_image"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/title_up_string"
+        style="@style/create_playlist_up_string"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/create_playlist_field_up_string_title_bottom_margin_landscape"
+        android:text="@string/create_playlist_title_field"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/title"
+        tools:ignore="TextContrastCheck" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/description"
+        style="@style/create_playlist_field"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/create_playlist_field_height"
+        android:layout_marginTop="@dimen/create_playlist_description_field_top_margin"
+        android:hint="@string/create_playlist_description_field"
+        app:layout_constraintBottom_toTopOf="@+id/empty_space"
+        app:layout_constraintEnd_toStartOf="@id/endGuide"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintVertical_weight="0"
+        tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/description_up_string"
+        style="@style/create_playlist_up_string"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/create_playlist_description_field_up_string_margin_top"
+        android:text="@string/create_playlist_description_field"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:ignore="TextContrastCheck" />
+
+    <View
+        android:id="@+id/empty_space"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/create_button"
+        app:layout_constraintEnd_toEndOf="@id/description"
+        app:layout_constraintStart_toStartOf="@id/description"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        app:layout_constraintVertical_weight="1" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/create_button"
+        style="@style/create_playlist_create_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/create_playlist_button_height"
+        android:layout_marginHorizontal="@dimen/create_playlist_button_horizontal_margin"
+        android:layout_marginBottom="@dimen/create_playlist_button_bottom_margin"
+        android:enabled="false"
+        android:focusedByDefault="true"
+        android:outlineProvider="none"
+        android:text="@string/create_playlist_create_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/endGuide"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/empty_space"
+        app:layout_constraintVertical_weight="0"
+        tools:ignore="TouchTargetSizeCheck,VisualLintButtonSize" />
+</androidx.constraintlayout.widget.ConstraintLayout>

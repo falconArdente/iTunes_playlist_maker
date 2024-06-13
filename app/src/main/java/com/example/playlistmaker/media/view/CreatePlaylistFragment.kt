@@ -30,8 +30,9 @@ const val MESSAGE_DURATION = "duration"
 class CreatePlaylistFragment : Fragment(), FragmentWithExitConfirmationDialog,
     CanShowPlaylistMessage {
     private val exitDialog: MaterialAlertDialogBuilder by lazy { configureExitConfirmationDialog() }
-    private val viewModel by viewModel<CreatePlaylistViewModel>()
+    private val viewModel: CreatePlaylistViewModel by viewModel()
     private var binding: FragmentCreatePlaylistBinding? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
