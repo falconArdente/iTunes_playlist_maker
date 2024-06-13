@@ -10,8 +10,8 @@
         android:id="@+id/header"
         style="@style/secondaryActivityHeader"
         android:layout_width="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/back_arrow_for_header"
         app:title="@string/create_playlist_caption">
@@ -37,15 +37,15 @@
         android:id="@+id/playlist_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
         android:background="@drawable/create_playlist_image_background"
         android:clickable="true"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="@id/create_button"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@id/title"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@id/beginGuide"
         app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintHorizontal_chainStyle="packed"
         tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -53,14 +53,14 @@
         style="@style/create_playlist_field"
         android:layout_width="0dp"
         android:layout_height="@dimen/create_playlist_field_height"
-        android:hint="@string/create_playlist_title_field"
-        android:layout_marginTop="0dp"
         android:layout_marginStart="@dimen/create_playlist_fields_horizontal_margin"
+        android:layout_marginTop="0dp"
+        android:hint="@string/create_playlist_title_field"
         app:layout_constraintBottom_toTopOf="@+id/description"
         app:layout_constraintEnd_toStartOf="@id/endGuide"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/playlist_image"
         app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintHorizontal_weight="1"
         tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck" />
 
     <TextView
@@ -70,9 +70,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/create_playlist_field_up_string_title_bottom_margin_landscape"
         android:text="@string/create_playlist_title_field"
+        app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/title"
-        app:layout_constraintBottom_toBottomOf="@id/title"
         tools:ignore="TextContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -106,9 +106,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/create_button"
+        app:layout_constraintEnd_toEndOf="@id/description"
         app:layout_constraintStart_toStartOf="@id/description"
         app:layout_constraintTop_toBottomOf="@id/description"
-        app:layout_constraintEnd_toEndOf="@id/description"
         app:layout_constraintVertical_weight="1" />
 
     <androidx.appcompat.widget.AppCompatButton

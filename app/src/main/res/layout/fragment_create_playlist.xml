@@ -10,18 +10,6 @@
         android:layout_height="match_parent"
         android:background="?attr/colorSecondary"
         tools:context=".media.view.CreatePlaylistFragment">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/header"
-            style="@style/secondaryActivityHeader"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/back_arrow_for_header"
-            app:title="@string/create_playlist_caption">
-
-            <Button style="@style/hidden_search_button" />
-        </androidx.appcompat.widget.Toolbar>
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/beginGuide"
             android:layout_width="wrap_content"
@@ -35,6 +23,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/create_playlist_fields_horizontal_margin" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/header"
+            style="@style/secondaryActivityHeader"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/back_arrow_for_header"
+            app:title="@string/create_playlist_caption">
+
+            <Button style="@style/hidden_search_button" />
+        </androidx.appcompat.widget.Toolbar>
+
+
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/playlist_image"
@@ -131,5 +131,6 @@
             app:layout_constraintTop_toBottomOf="@id/empty_space"
             app:layout_constraintVertical_weight="0"
             tools:ignore="TouchTargetSizeCheck,VisualLintButtonSize" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
