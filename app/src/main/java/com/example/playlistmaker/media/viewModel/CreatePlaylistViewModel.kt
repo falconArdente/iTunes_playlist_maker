@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -46,6 +47,10 @@ class CreatePlaylistViewModel(
     private var fragment: FragmentWithExitConfirmationDialog? = null
     var screenStateToObserve: LiveData<CreatePlaylistScreenState> = mutableScreeState
     var playlistMessageToObserve: LiveData<PlaylistMessage> = playlistMessage
+    override fun onCleared() {
+        super.onCleared()
+    }
+
     fun attachFragmentAtCreation(fragment: FragmentWithExitConfirmationDialog) {
         this.fragment = fragment
         if (imageSelector !is SelectAnImageUseCasePickerCompatibleImpl) return
