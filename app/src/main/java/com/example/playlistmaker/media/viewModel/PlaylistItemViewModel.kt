@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.viewModel
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -48,8 +49,9 @@ class PlaylistItemViewModel(
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun getMinutesOfTrackList(list: List<Track>): Int {
-        var millis: Long = 0L
+        var millis = 0L
         val minutesFormat = SimpleDateFormat("mm")
         list.forEach { track ->
             millis += track.duration.toLong()

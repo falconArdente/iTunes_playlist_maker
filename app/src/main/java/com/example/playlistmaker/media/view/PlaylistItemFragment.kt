@@ -34,6 +34,8 @@ class PlaylistItemFragment : Fragment() {
 
     companion object {
         private const val PLAYLIST_ID = "playlist"
+        private const val BOOTTOMSHEET_PEEK_RETRY_DELAY= 10L
+        private const val BOOTTOMSHEET_PEEK_TRY_COUNT = 10
         fun createArgs(playlistId: Int): Bundle {
             return bundleOf(PLAYLIST_ID to playlistId)
         }
@@ -86,13 +88,12 @@ class PlaylistItemFragment : Fragment() {
     }
 
     private suspend fun getHeightPickValue(): Int {
-        var value: Int = 0
-        var leftToTry: Int = 10
-        var delay: Long = 10
-        var isFirstTry: Boolean = true
+        var value = 0
+        var leftToTry = BOOTTOMSHEET_PEEK_TRY_COUNT
+        var isFirstTry = true
         if (binding != null) {
             while (value < 0 || leftToTry > 0) {
-                if (!isFirstTry) delay(delay)
+                if (!isFirstTry) delay(BOOTTOMSHEET_PEEK_RETRY_DELAY)
                 with(binding!!) {
                     value =
                         (root.height - shareIcon.y - shareIcon.height - requireContext().resources.getDimensionPixelSize(
