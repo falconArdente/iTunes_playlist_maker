@@ -41,7 +41,6 @@ class PlaylistsListFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playlistsViewModel.screenStateToObserve.observe(viewLifecycleOwner) { render(screenState = it) }
@@ -63,7 +62,6 @@ class PlaylistsListFragment : Fragment() {
             is PlaylistScreenState.HaveData -> {
                 binding.placeholderFrame.isVisible = false
                 playlistsAdapter.playlists = screenState.playlists
-                playlistsAdapter.notifyDataSetChanged()
                 binding.playlistsRecyclerView.isVisible = true
             }
         }
