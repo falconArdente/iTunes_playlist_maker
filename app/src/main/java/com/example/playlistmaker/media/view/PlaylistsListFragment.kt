@@ -1,6 +1,5 @@
 package com.example.playlistmaker.media.view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,28 +11,36 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.view.ui.PlaylistGridAdapter
+import com.example.playlistmaker.media.view.ui.PlaylistOnClickListener
 import com.example.playlistmaker.media.viewModel.PlaylistScreenState
 import com.example.playlistmaker.media.viewModel.PlaylistsFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistsFragment : Fragment() {
+class PlaylistsListFragment : Fragment() {
     companion object {
         fun newInstance(): Fragment {
-            return PlaylistsFragment()
+            return PlaylistsListFragment()
         }
 
         const val COLUMNS_COUNT = 2
     }
 
+    private val clicker = PlaylistOnClickListener { playlistClicked ->
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_playlistView,
+            PlaylistItemFragment.createArgs(playlistClicked.id)
+        )
+    }
     private lateinit var binding: FragmentPlaylistsBinding
     private val playlistsViewModel by viewModel<PlaylistsFragmentViewModel>()
-    private val playlistsAdapter = PlaylistGridAdapter(emptyList())
+    private val playlistsAdapter = PlaylistGridAdapter(emptyList(), clicker)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,7 +53,6 @@ class PlaylistsFragment : Fragment() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun render(screenState: PlaylistScreenState) {
         when (screenState) {
             is PlaylistScreenState.Empty -> {

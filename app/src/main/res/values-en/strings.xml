@@ -52,6 +52,10 @@
         <item quantity="one">track</item>
         <item quantity="other">tracks</item>
     </plurals>
+    <plurals name="minutes_count">
+        <item quantity="one">minute</item>
+        <item quantity="other">minutes</item>
+    </plurals>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="alredy_have_in_playlist_prefix">Track is alredy presented in</string>
     <string name="add_to_playlist_success_prefix">Been add to playlist</string>

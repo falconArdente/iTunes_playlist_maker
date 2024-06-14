@@ -55,4 +55,10 @@ interface PlaylistsDao {
             "$PLAYLIST_TABLE.playlistId = $TRACKS_TABLE.playlistRelationId GROUP BY $PLAYLIST_TABLE.playlistId " +
             "ORDER BY $PLAYLIST_TABLE.playlistId DESC")
     fun getPlaylistsWithCountOfTracks(): Flow<List<PlaylistsWithCount>>
+    @Transaction
+    @Query("SELECT $PLAYLIST_TABLE.* FROM  $PLAYLIST_TABLE " +
+            "  LEFT JOIN $TRACKS_TABLE ON " +
+            "$PLAYLIST_TABLE.playlistId = $TRACKS_TABLE.playlistRelationId WHERE  $PLAYLIST_TABLE.playlistId=:playlistId "
+        )
+    fun getPlaylistWithTracksById(playlistId: Int): Flow<PlaylistsWithTracks>
 }

@@ -1,7 +1,6 @@
 package com.example.playlistmaker.di
 
 import androidx.room.Room
-import com.example.playlistmaker.media.viewModel.PlaylistViewViewModel
 import com.example.playlistmaker.media.model.data.db.AppDbRoomBased
 import com.example.playlistmaker.media.model.data.db.FavoriteTracksRepositoryRoomImpl
 import com.example.playlistmaker.media.model.data.db.PlaylistsRepositoryRoomImpl
@@ -22,6 +21,7 @@ import com.example.playlistmaker.media.model.repository.SelectAnImageUseCasePick
 import com.example.playlistmaker.media.view.ui.ImageSelectionRepositoryPhotoPickerBased
 import com.example.playlistmaker.media.viewModel.CreatePlaylistViewModel
 import com.example.playlistmaker.media.viewModel.FavoriteTracksFragmentViewModel
+import com.example.playlistmaker.media.viewModel.PlaylistItemViewModel
 import com.example.playlistmaker.media.viewModel.PlaylistsFragmentViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -46,8 +46,8 @@ val mediaModule = module {
         )
     }
     viewModel {
-        PlaylistViewViewModel(
-
+        PlaylistItemViewModel(
+            dataSource = get()
         )
     }
     single<AppDbRoomBased> {

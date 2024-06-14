@@ -7,7 +7,7 @@ import com.example.playlistmaker.databinding.PlaylistViewHolderGridBinding
 import com.example.playlistmaker.media.model.domain.Playlist
 
 class PlaylistGridAdapter(
-    var playlists: List<Playlist>
+    var playlists: List<Playlist>, private val playlistOnClickListener: PlaylistOnClickListener
 ) : RecyclerView.Adapter<PlaylistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -22,7 +22,7 @@ class PlaylistGridAdapter(
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(playlists[position])
+        holder.bind(playlists[position], playlistOnClickListener)
     }
 
     override fun getItemCount(): Int {

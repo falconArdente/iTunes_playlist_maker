@@ -12,4 +12,5 @@ interface PlaylistsRepository {
     fun addTrackToPlaylist(trackToAdd: Track, playlist: Playlist):Boolean
     suspend fun removeTrackFromPlaylist(trackToRemove: Track, playlist: Playlist)
     suspend fun getTracksOfPlaylist(playlist: Playlist): Flow<List<Track>>
+    suspend fun getPlaylistWithTracksById(playlistId: Int): Flow<Playlist>
 }

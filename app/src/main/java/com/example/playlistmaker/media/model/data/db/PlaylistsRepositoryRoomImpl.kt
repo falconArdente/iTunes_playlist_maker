@@ -82,4 +82,15 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
             }
         }
     }
+
+    override suspend fun getPlaylistWithTracksById(playlistId: Int): Flow<Playlist> {
+        return playlistsTable.getPlaylistWithTracksById(playlistId)
+            .map { playlistAndTracksEntities ->
+                Playlist(id = playlistAndTracksEntities.playlistEntity.playlistId ?: 0,
+                    title = playlistAndTracksEntities.playlistEntity.title,
+                    description = playlistAndTracksEntities.playlistEntity.description ?: "",
+                    imageUri = playlistAndTracksEntities.playlistEntity.imageUri.toUri(),
+                    tracks = playlistAndTracksEntities.playlistTracks.map { TrackDbConverter.map(it) })
+            }
+    }
 }
