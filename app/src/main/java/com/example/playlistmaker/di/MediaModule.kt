@@ -47,7 +47,8 @@ val mediaModule = module {
     }
     viewModel {
         PlaylistItemViewModel(
-            dataSource = get()
+            dataSource = get(),
+            trackToPlayerUseCase = get()
         )
     }
     single<AppDbRoomBased> {

@@ -10,16 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/header"
-            style="@style/secondaryActivityHeader"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/back_arrow_for_header">
-
-            <Button style="@style/hidden_search_button" />
-        </androidx.appcompat.widget.Toolbar>
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/playlist_image"
             android:layout_width="0dp"
@@ -34,6 +24,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/header"
+            style="@style/secondaryActivityHeader"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/back_arrow_for_header">
+
+            <Button style="@style/hidden_search_button" />
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title_plt"

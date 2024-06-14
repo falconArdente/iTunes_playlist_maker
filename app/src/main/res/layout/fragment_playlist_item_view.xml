@@ -11,16 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/header"
-            style="@style/secondaryActivityHeader"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/back_arrow_for_header">
-
-            <Button style="@style/hidden_search_button" />
-        </androidx.appcompat.widget.Toolbar>
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/beginGuide"
             android:layout_width="wrap_content"
@@ -50,13 +40,22 @@
             app:layout_constraintVertical_chainStyle="packed"
             tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,VisualLintBounds" />
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/header"
+            style="@style/secondaryActivityHeader"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/back_arrow_for_header">
+
+            <Button style="@style/hidden_search_button" />
+        </androidx.appcompat.widget.Toolbar>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title_plt"
             style="@style/playlist_title_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/playlist_title_margin_top"
-            android:text="Title"
             app:layout_constraintBottom_toTopOf="@+id/description"
             app:layout_constraintEnd_toStartOf="@id/endGuide"
             app:layout_constraintStart_toStartOf="@id/beginGuide"
@@ -68,7 +67,6 @@
             android:id="@+id/description"
             style="@style/playlist_non_title_text_style"
             android:layout_width="wrap_content"
-            android:text="desc"
             app:layout_constraintBottom_toTopOf="@+id/minutes_plt"
             app:layout_constraintEnd_toStartOf="@id/endGuide"
             app:layout_constraintStart_toStartOf="@id/beginGuide"
@@ -79,7 +77,6 @@
             android:id="@+id/minutes_plt"
             style="@style/playlist_non_title_text_style"
             android:layout_width="wrap_content"
-            android:text="Mins"
             app:layout_constraintBottom_toTopOf="@+id/share_icon"
             app:layout_constraintEnd_toStartOf="@id/dot_plt"
             app:layout_constraintHorizontal_weight="0"
@@ -106,7 +103,6 @@
             style="@style/playlist_non_title_text_style"
             android:layout_width="0dp"
             android:layout_marginTop="0dp"
-            android:text="Tracs"
             app:layout_constraintBottom_toBottomOf="@id/minutes_plt"
             app:layout_constraintEnd_toStartOf="@id/endGuide"
             app:layout_constraintHorizontal_weight="1"
