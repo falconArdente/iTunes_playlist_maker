@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.view
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
@@ -174,10 +173,8 @@ class PlayerActivity : AppCompatActivity(), CanShowPlaylistMessage {
             .into(binding.trackImage)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun renderPlaylistsBottomSheet(playlists: List<Playlist>) {
         playlistsAdapter?.playlists = playlists
-        playlistsAdapter?.notifyDataSetChanged()
     }
 
     override fun showMessage(message: PlaylistMessage) {
