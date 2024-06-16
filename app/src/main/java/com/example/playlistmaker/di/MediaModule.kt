@@ -23,7 +23,7 @@ import com.example.playlistmaker.media.model.repository.SaveImageToStorageUseCas
 import com.example.playlistmaker.media.model.repository.SelectAnImageUseCasePickerCompatibleImpl
 import com.example.playlistmaker.media.model.repository.ShareTextRepository
 import com.example.playlistmaker.media.view.ui.ImageSelectionRepositoryPhotoPickerBased
-import com.example.playlistmaker.media.viewModel.CreatePlaylistViewModel
+import com.example.playlistmaker.media.viewModel.EditAndCreatePlaylistViewModel
 import com.example.playlistmaker.media.viewModel.FavoriteTracksFragmentViewModel
 import com.example.playlistmaker.media.viewModel.PlaylistItemViewModel
 import com.example.playlistmaker.media.viewModel.PlaylistsFragmentViewModel
@@ -42,7 +42,7 @@ val mediaModule = module {
         PlaylistsFragmentViewModel(get())
     }
     viewModel {
-        CreatePlaylistViewModel(
+        EditAndCreatePlaylistViewModel(
             imageSelector = get(),
             saverForImage = get(),
             dataTable = get(),

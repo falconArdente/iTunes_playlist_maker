@@ -94,7 +94,7 @@ class PlayerActivity : AppCompatActivity(), CanShowPlaylistMessage {
         }
         findViewById<TextView>(R.id.new_playlist_button_add_playlist_bs).setOnClickListener {
             val intent = Intent(this, RootActivity::class.java)
-            intent.putExtra(FRAGMENT_LOAD_COMMAND, R.id.createPlaylistFragment)
+            intent.putExtra(FRAGMENT_LOAD_COMMAND, R.id.editPlaylistFragment)
             getPlaylistCreationResult.launch(intent)
         }
         viewModel.getPlayerScreenState().observe(this) { renderPlayerPart(it) }

@@ -50,7 +50,7 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
     }
 
     override suspend fun deletePlaylist(playlist: Playlist) {
-        return playlistsTable.getPlaylistById(playlist.id).collect { list ->
+        return playlistsTable.getPlaylistsById(playlist.id).collect { list ->
             list.forEach { playlistEntity ->
                 playlistsTable.deletePlaylistEntity(playlistEntity)
             }
@@ -92,5 +92,22 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
                     imageUri = playlistAndTracksEntities.playlistEntity.imageUri.toUri(),
                     tracks = playlistAndTracksEntities.playlistTracks.map { TrackDbConverter.map(it) })
             }
+    }
+
+    override suspend fun getPlaylistById(playlistId: Int): Playlist {
+        return playlistsTable.getFirstPlaylistById(playlistId)
+            .let { playlistEntity ->
+                Playlist(
+                    id = playlistEntity.playlistId ?: 0,
+                    title = playlistEntity.title,
+                    description = playlistEntity.description ?: "",
+                    imageUri = playlistEntity.imageUri.toUri(),
+                    tracks = emptyList()
+                )
+            }
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistsTable.updatePlaylist(TrackDbConverter.map(playlist))
     }
 }

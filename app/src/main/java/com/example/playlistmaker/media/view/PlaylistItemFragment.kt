@@ -91,13 +91,17 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
                 recyclerViewPlaylistItem.adapter = adapter
                 tracksSheetBehavior =
                     BottomSheetBehavior.from(bottomSheet)
-
             }
         }
         if (optionsSheetBinding != null) {
-            optionsSheetBehavior =
-                BottomSheetBehavior.from(optionsSheetBinding!!.root)
+            with(optionsSheetBinding!!) {
+                this.edit.setOnClickListener { viewModel.editPlaylist() }
+                this.delete.setOnClickListener { viewModel.deletePlaylist() }
+                optionsSheetBehavior =
+                    BottomSheetBehavior.from(this.root)
+            }
             optionsSheetBehavior?.addBottomSheetCallback(optionsSheetStateChangedCallback)
+            optionsSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         if (binding != null) {
@@ -107,14 +111,12 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
                 optionsIcon.setOnClickListener { viewModel.showOptions(true) }
             }
         }
+
     }
 
     override fun onResume() {
         super.onResume()
-        if (tracksSheetBehavior == null || optionsSheetBehavior == null) return
-        if (tracksSheetBehavior!!.peekHeight != BottomSheetBehavior.PEEK_HEIGHT_AUTO &&
-            optionsSheetBehavior!!.peekHeight != BottomSheetBehavior.PEEK_HEIGHT_AUTO
-        ) return
+
         lifecycleScope.launch {
             val tracksHeight = async { getHeightPickValueByViewBottom(binding!!.shareIcon) }
             val optionsHeight = async { getHeightPickValueByViewBottom(binding!!.titlePlt) }
@@ -127,6 +129,10 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
                     R.dimen.playlist_options_view_top_margin
                 )
         }
+    }
+
+    private fun getImageMaxSize(): Int {
+    return resources.configuration.smallestScreenWidthDp/2
     }
 
     private val optionsSheetStateChangedCallback = object : BottomSheetCallback() {

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.core.net.toUri
 import com.example.playlistmaker.media.model.repository.StorageRepository
 import java.io.File
@@ -16,8 +17,9 @@ const val PLAYLIST_PREFIX = "PL"
 const val IMAGE_FILE_EXTENSION = "jpg"
 
 class PrivateStorageImageRepositoryImpl(private val context: Context) : StorageRepository {
-    override fun saveImageByUri(imageUri: Uri, fileName: String):Uri {
-        if (imageUri == Uri.EMPTY) return  Uri.EMPTY
+    override fun saveImageByUri(imageUri: Uri, fileName: String): Uri {
+        if (imageUri.toString().startsWith("file", true)) return imageUri
+        if (imageUri == Uri.EMPTY) return Uri.EMPTY
         val filePath =
             File(
                 context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -28,9 +30,11 @@ class PrivateStorageImageRepositoryImpl(private val context: Context) : StorageR
 
         val inputStream: InputStream? = context.contentResolver.openInputStream(imageUri)
         val outputStream: OutputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        if (inputStream!=null) {
+            BitmapFactory
+                .decodeStream(inputStream)
+                .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        }
         return file.toUri()
     }
 }

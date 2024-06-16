@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.model.data.db
 
+import com.example.playlistmaker.media.model.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.media.model.data.db.entity.PlaylistTrackEntity
 import com.example.playlistmaker.media.model.data.db.entity.TrackEntity
 import com.example.playlistmaker.media.model.domain.Playlist
@@ -19,7 +20,8 @@ object TrackDbConverter {
         country = track.country,
         previewUrl = track.trackPreview
     )
-    fun map(track: Track,playlist: Playlist) = PlaylistTrackEntity(
+
+    fun map(track: Track, playlist: Playlist) = PlaylistTrackEntity(
         playlistRelationId = playlist.id,
         remoteId = track.id,
         trackName = track.trackTitle,
@@ -32,6 +34,7 @@ object TrackDbConverter {
         country = track.country,
         previewUrl = track.trackPreview
     )
+
     fun map(trackEntity: TrackEntity) = Track(
         id = trackEntity.remoteId,
         trackTitle = trackEntity.trackName,
@@ -44,6 +47,7 @@ object TrackDbConverter {
         country = trackEntity.country,
         trackPreview = trackEntity.previewUrl
     )
+
     fun map(pTrackEntity: PlaylistTrackEntity) = Track(
         id = pTrackEntity.remoteId,
         trackTitle = pTrackEntity.trackName,
@@ -55,5 +59,12 @@ object TrackDbConverter {
         genre = pTrackEntity.genre,
         country = pTrackEntity.country,
         trackPreview = pTrackEntity.previewUrl
+    )
+
+    fun map(playlist: Playlist) = PlaylistEntity(
+        playlistId = playlist.id,
+        title = playlist.title,
+        description = playlist.description,
+        imageUri = playlist.imageUri.toString()
     )
 }

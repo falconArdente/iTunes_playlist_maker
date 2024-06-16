@@ -36,9 +36,11 @@
     <string name="new_playlist_button_text">New playlist</string>
     <string name="network_error">Please check internet connection</string>
     <string name="create_playlist_caption">New playlist</string>
+    <string name="create_playlist_edit_caption">Edit playlist</string>
     <string name="create_playlist_title_field">Title*</string>
     <string name="create_playlist_description_field">Description</string>
     <string name="create_playlist_create_button">Create</string>
+    <string name="create_playlist_update_button">Save</string>
     <string name="rationale_for_image_picker">Choosing playlist image is need data read acces</string>
     <string name="no_image_been_chosen_message">No image been chosen</string>
     <string name="rationale_for_playlist_image_save">Choosing playlist image is need data write acces</string>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bottom_sheet_player_background"
-    app:behavior_hideable="false"
+    app:behavior_hideable="true"
     app:layout_wrapBehaviorInParent="included"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 

@@ -8,13 +8,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.media.model.domain.Playlist
 import com.example.playlistmaker.media.model.domain.PlaylistsInteractor
 import com.example.playlistmaker.media.model.domain.SharePlaylistUseCase
+import com.example.playlistmaker.media.view.EditAndCreatePlaylistFragment
 import com.example.playlistmaker.media.view.ui.FragmentWithConfirmationDialog
 import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.search.model.domain.Track
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
@@ -28,6 +31,7 @@ class PlaylistItemViewModel(
     private var fragment: FragmentWithConfirmationDialog? = null
     private var currentPlaylist: Playlist? = null
     private var currentTrack: Track? = null
+    private var dataUpdateJob: Job? = null
     fun attachFragmentBeforeShowDialog(fragment: FragmentWithConfirmationDialog) {
         this.fragment = fragment
     }
@@ -43,6 +47,14 @@ class PlaylistItemViewModel(
         if (currentPlaylist == null || currentTrack == null) return
         viewModelScope.launch(Dispatchers.IO) {
             dataSource.removeTrackFromPlaylist(currentTrack!!, currentPlaylist!!)
+        }
+    }
+
+    fun deletePlaylist() {
+        dataUpdateJob?.cancel()
+        (fragment as Fragment).findNavController().navigateUp()
+        if (currentPlaylist != null) viewModelScope.launch(Dispatchers.IO) {
+            dataSource.deletePlaylist(currentPlaylist!!)
         }
     }
 
@@ -68,8 +80,17 @@ class PlaylistItemViewModel(
             )
     }
 
+    fun editPlaylist() {
+        if (currentPlaylist == null) return
+        (fragment as Fragment).findNavController().navigate(
+            R.id.action_playlistView_to_editPlaylistFragment,
+            args = EditAndCreatePlaylistFragment.createArgs(currentPlaylist!!.id)
+        )
+    }
+
     fun setPlaylistById(playlistId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        dataUpdateJob?.cancel()
+        dataUpdateJob = viewModelScope.launch(Dispatchers.IO) {
             dataSource.getPlaylistWithTracksById(playlistId)
                 .collect { playlist ->
                     currentPlaylist = playlist

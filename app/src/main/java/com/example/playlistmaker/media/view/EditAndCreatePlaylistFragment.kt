@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -18,19 +19,30 @@ import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.view.ui.CanShowPlaylistMessage
 import com.example.playlistmaker.media.view.ui.FragmentWithConfirmationDialog
 import com.example.playlistmaker.media.view.ui.PlaylistMessage
-import com.example.playlistmaker.media.viewModel.CreatePlaylistScreenState
-import com.example.playlistmaker.media.viewModel.CreatePlaylistViewModel
-import com.example.playlistmaker.root.FINISH_BY_DONE
+import com.example.playlistmaker.media.viewModel.EditAndCreatePlaylistScreenState
+import com.example.playlistmaker.media.viewModel.EditAndCreatePlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val MESSAGE_TEXT = "message"
 const val MESSAGE_DURATION = "duration"
 
-class CreatePlaylistFragment : Fragment(), FragmentWithConfirmationDialog,
+class EditAndCreatePlaylistFragment : Fragment(), FragmentWithConfirmationDialog,
     CanShowPlaylistMessage {
+    companion object {
+        private const val PLAYLIST_ID = "playlist"
+        private const val FINISH_BY_DONE = "to_finish_by_done"
+        fun createArgs(playlistId: Int): Bundle {
+            return bundleOf(PLAYLIST_ID to playlistId)
+        }
+
+        fun createArgs(finishByDone: Boolean): Bundle {
+            return bundleOf(FINISH_BY_DONE to finishByDone)
+        }
+    }
+
     private val exitDialog: MaterialAlertDialogBuilder by lazy { configureExitConfirmationDialog() }
-    private val viewModel by viewModel<CreatePlaylistViewModel>()
+    private val viewModel by viewModel<EditAndCreatePlaylistViewModel>()
     private var binding: FragmentCreatePlaylistBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -43,6 +55,8 @@ class CreatePlaylistFragment : Fragment(), FragmentWithConfirmationDialog,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.finishActivityWhenDone = arguments?.getBoolean(FINISH_BY_DONE) ?: false
+        val playlistId = arguments?.getInt(PLAYLIST_ID, -1)
+        if (playlistId != null && playlistId != -1) viewModel.setPlaylistToEdit(playlistId)
         viewModel.screenStateToObserve.observe(viewLifecycleOwner) { render(screenState = it) }
         viewModel.playlistMessageToObserve.observe(viewLifecycleOwner) { showMessage(it) }
         binding?.playlistImage?.setOnClickListener { viewModel.selectAnImage() }
@@ -55,13 +69,24 @@ class CreatePlaylistFragment : Fragment(), FragmentWithConfirmationDialog,
         )
     }
 
-    private fun render(screenState: CreatePlaylistScreenState) {
+    private fun render(screenState: EditAndCreatePlaylistScreenState) {
         with(binding!!) {
             screenState.let { state ->
                 if (state.imageUri != Uri.EMPTY) setImage(state.imageUri)
                 if (state.title != title.text.toString()) title.setText(state.title)
                 if (state.description != description.text.toString()) description.setText(state.description)
-                setReadyToCreate(state.isReadyToCreate)
+                setReadyToCreate(state.isReadyToSave)
+                when (state.isEditMode) {
+                    true -> {
+                        this.header.title = getString(R.string.create_playlist_edit_caption)
+                        this.createButton.text = getString(R.string.create_playlist_update_button)
+                    }
+
+                    else -> {//CreateMode
+                        this.header.title = getString(R.string.create_playlist_caption)
+                        this.createButton.text = getString(R.string.create_playlist_create_button)
+                    }
+                }
             }
         }
     }
