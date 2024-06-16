@@ -16,7 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.view.ui.CanShowPlaylistMessage
-import com.example.playlistmaker.media.view.ui.FragmentWithExitConfirmationDialog
+import com.example.playlistmaker.media.view.ui.FragmentWithConfirmationDialog
 import com.example.playlistmaker.media.view.ui.PlaylistMessage
 import com.example.playlistmaker.media.viewModel.CreatePlaylistScreenState
 import com.example.playlistmaker.media.viewModel.CreatePlaylistViewModel
@@ -27,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 const val MESSAGE_TEXT = "message"
 const val MESSAGE_DURATION = "duration"
 
-class CreatePlaylistFragment : Fragment(), FragmentWithExitConfirmationDialog,
+class CreatePlaylistFragment : Fragment(), FragmentWithConfirmationDialog,
     CanShowPlaylistMessage {
     private val exitDialog: MaterialAlertDialogBuilder by lazy { configureExitConfirmationDialog() }
     private val viewModel by viewModel<CreatePlaylistViewModel>()
@@ -105,7 +105,7 @@ class CreatePlaylistFragment : Fragment(), FragmentWithExitConfirmationDialog,
         }
     }
 
-    override fun runExitConfirmationDialog() {
+    override fun runConfirmationDialog() {
         exitDialog.show()
     }
 

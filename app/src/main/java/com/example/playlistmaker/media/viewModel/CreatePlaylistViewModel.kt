@@ -18,7 +18,7 @@ import com.example.playlistmaker.media.model.domain.SelectAnImageUseCase
 import com.example.playlistmaker.media.model.repository.SelectAnImageUseCasePickerCompatibleImpl
 import com.example.playlistmaker.media.view.MESSAGE_DURATION
 import com.example.playlistmaker.media.view.MESSAGE_TEXT
-import com.example.playlistmaker.media.view.ui.FragmentWithExitConfirmationDialog
+import com.example.playlistmaker.media.view.ui.FragmentWithConfirmationDialog
 import com.example.playlistmaker.media.view.ui.PlaylistMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,10 +43,10 @@ class CreatePlaylistViewModel(
     )
     private var playlistMessage = MutableLiveData<PlaylistMessage>(PlaylistMessage.Empty)
     var finishActivityWhenDone: Boolean = false
-    private var fragment: FragmentWithExitConfirmationDialog? = null
+    private var fragment: FragmentWithConfirmationDialog? = null
     var screenStateToObserve: LiveData<CreatePlaylistScreenState> = mutableScreeState
     var playlistMessageToObserve: LiveData<PlaylistMessage> = playlistMessage
-    fun attachFragmentAtCreation(fragment: FragmentWithExitConfirmationDialog) {
+    fun attachFragmentAtCreation(fragment: FragmentWithConfirmationDialog) {
         this.fragment = fragment
         if (imageSelector !is SelectAnImageUseCasePickerCompatibleImpl) return
         imageSelector.attachPickerToFragment(fragment as Fragment)
@@ -82,7 +82,7 @@ class CreatePlaylistViewModel(
 
     fun runExitSequence() {
         if (isNeedDialog()) {
-            fragment?.runExitConfirmationDialog()
+            fragment?.runConfirmationDialog()
         } else {
             exitView()
         }

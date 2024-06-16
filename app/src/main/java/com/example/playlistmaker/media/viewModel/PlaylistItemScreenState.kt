@@ -12,5 +12,6 @@ sealed class PlaylistItemScreenState {
         val minutes: Int,
         val tracksCount: Int,
         val trackList: List<Track> = emptyList(),
+        val isOptionsBottomSheet: Boolean = false,
     ) : PlaylistItemScreenState()
 }

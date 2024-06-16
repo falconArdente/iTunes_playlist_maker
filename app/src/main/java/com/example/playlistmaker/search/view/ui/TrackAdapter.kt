@@ -8,7 +8,9 @@ import com.example.playlistmaker.databinding.TrackRowAtSearchBinding
 import com.example.playlistmaker.search.model.domain.Track
 
 class TrackAdapter(
-    tracks: List<Track>, private val onClickListener: TrackOnClickListener
+    tracks: List<Track>,
+    private val onClickListener: TrackOnClickListener,
+    private val onLongClickListener: TrackOnLongClickListener? = null,
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     var tracks = tracks
@@ -22,19 +24,17 @@ class TrackAdapter(
             }
             field = value
         }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
         return TrackViewHolder(TrackRowAtSearchBinding.inflate(layoutInspector, parent, false))
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracks[position], onClickListener)
+        holder.bind(tracks[position], onClickListener, onLongClickListener)
     }
 
     override fun getItemCount(): Int {
         return tracks.size
     }
 }
-
-
-

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/options_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_player_background"
+    app:behavior_hideable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:layout_wrapBehaviorInParent="included">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/bottom_sheet_pin_top_margin"
+        android:layout_marginBottom="@dimen/playlist_non_title_top_margin"
+        android:background="@drawable/bottom_sheet_pin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/playlist_view_holder"
+        layout="@layout/playlist_view_holder_row"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/playlist_options_row_item_height"
+        android:layout_marginStart="@dimen/playlist_options_view_holder_start_margin"
+        android:layout_marginTop="@dimen/bottom_sheet_recycler_top_margin"
+        app:layout_constraintBottom_toTopOf="@id/share"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/share"
+        style="@style/option_row_at_sheet"
+        android:layout_marginTop="@dimen/playlist_options_share_top_margin"
+        android:text="@string/playlist_options_share"
+        app:layout_constraintBottom_toTopOf="@id/edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/edit"
+        style="@style/option_row_at_sheet"
+        android:text="@string/playlist_options_edit"
+        app:layout_constraintBottom_toTopOf="@id/delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/share" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/delete"
+        style="@style/option_row_at_sheet"
+        android:text="@string/playlist_options_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -238,4 +238,15 @@ e    </style>
         <item name="android:textColor">@color/YP_White</item>
         <item name="android:background">@drawable/create_playlist_create_button_background</item>
     </style>
+    <style name="option_row_at_sheet">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/playlist_options_row_item_height</item>
+        <item name="android:textSize">@dimen/create_playlist_field_text_size</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:gravity">start|center</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:paddingStart">@dimen/playlist_options_row_padding_start</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
 </resources>

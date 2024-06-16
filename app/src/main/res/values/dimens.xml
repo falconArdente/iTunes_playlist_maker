@@ -130,4 +130,9 @@
     <dimen name="playlist_title_margin_top">24dp</dimen>
     <dimen name="playlist_icons_margin_top">16dp</dimen>
     <dimen name="playlist_title_landscape_start_margin">16dp</dimen>
+    <dimen name="playlist_options_row_item_height">61dp</dimen>
+    <dimen name="playlist_options_row_padding_start">16dp</dimen>
+    <dimen name="playlist_options_share_top_margin">93dp</dimen>
+    <dimen name="playlist_options_view_holder_start_margin">13dp</dimen>
+    <dimen name="playlist_options_view_top_margin">8dp</dimen>
 </resources>

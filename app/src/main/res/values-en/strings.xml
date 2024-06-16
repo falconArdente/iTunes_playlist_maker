@@ -59,4 +59,10 @@
     <string name="add_to_playlist">Add to playlist</string>
     <string name="alredy_have_in_playlist_prefix">Track is alredy presented in</string>
     <string name="add_to_playlist_success_prefix">Been add to playlist</string>
+    <string name="delete_track_dialog_title">Do you wish to delete this track?</string>
+    <string name="delete_track_exit_dialog_confirm">Delete</string>
+    <string name="delete_track_exit_dialog_reject">Cancel</string>
+    <string name="playlist_options_share">Share playlist</string>
+    <string name="playlist_options_edit">Edit playlist</string>
+    <string name="playlist_options_delete">Delete playlist</string>
 </resources>

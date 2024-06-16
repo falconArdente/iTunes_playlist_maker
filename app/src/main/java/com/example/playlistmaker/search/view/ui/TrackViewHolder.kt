@@ -13,7 +13,11 @@ class TrackViewHolder(private val binding: TrackRowAtSearchBinding) : RecyclerVi
     binding.root
 ) {
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-    fun bind(item: Track, onClickListener: TrackOnClickListener) {
+    fun bind(
+        item: Track,
+        onClickListener: TrackOnClickListener,
+        onLongClickListener: TrackOnLongClickListener?
+    ) {
         binding.trackTitle.text = item.trackTitle
         binding.trackTime.text =
             dateFormat.format(item.duration.toLong())
@@ -26,5 +30,9 @@ class TrackViewHolder(private val binding: TrackRowAtSearchBinding) : RecyclerVi
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.track_row_image_corners)))
             .into(binding.imageTrack)
         itemView.setOnClickListener { onClickListener.onClick(item) }
+        if (onLongClickListener != null) {
+            itemView.isLongClickable = true
+            itemView.setOnLongClickListener { onLongClickListener.onLongClick(item) }
+        }
     }
 }

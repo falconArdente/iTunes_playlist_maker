@@ -15,7 +15,30 @@
         <item name="statusBarBackground">@color/YP_Blue</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
-
+    <style name="DeleteTrackConfirmationDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/YP_White</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+    <style name="TitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/YP_Black</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="BodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/YP_Black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/YP_Blue</item>
+        <item name="rippleColor">@color/YP_Blue_Light</item>
+    </style>
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/YP_Blue</item>
+        <item name="rippleColor">@color/YP_Blue_Light</item>
+    </style>
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
 
 </resources>
