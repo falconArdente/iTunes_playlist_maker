@@ -12,7 +12,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.media.model.domain.Playlist
 import com.example.playlistmaker.media.model.domain.PlaylistsInteractor
 import com.example.playlistmaker.media.model.domain.SharePlaylistUseCase
-import com.example.playlistmaker.media.view.EditAndCreatePlaylistFragment
+import com.example.playlistmaker.media.view.EditPlaylistFragment
 import com.example.playlistmaker.media.view.ui.FragmentWithConfirmationDialog
 import com.example.playlistmaker.search.model.domain.SendTrackToPlayerUseCase
 import com.example.playlistmaker.search.model.domain.Track
@@ -84,7 +84,7 @@ class PlaylistItemViewModel(
         if (currentPlaylist == null) return
         (fragment as Fragment).findNavController().navigate(
             R.id.action_playlistView_to_editPlaylistFragment,
-            args = EditAndCreatePlaylistFragment.createArgs(currentPlaylist!!.id)
+            args = EditPlaylistFragment.createArgs(currentPlaylist!!.id)
         )
     }
 

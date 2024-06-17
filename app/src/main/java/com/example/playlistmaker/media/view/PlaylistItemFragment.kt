@@ -111,12 +111,10 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
                 optionsIcon.setOnClickListener { viewModel.showOptions(true) }
             }
         }
-
     }
 
     override fun onResume() {
         super.onResume()
-
         lifecycleScope.launch {
             val tracksHeight = async { getHeightPickValueByViewBottom(binding!!.shareIcon) }
             val optionsHeight = async { getHeightPickValueByViewBottom(binding!!.titlePlt) }
@@ -131,10 +129,6 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
         }
     }
 
-    private fun getImageMaxSize(): Int {
-    return resources.configuration.smallestScreenWidthDp/2
-    }
-
     private val optionsSheetStateChangedCallback = object : BottomSheetCallback() {
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             if (newState == BottomSheetBehavior.STATE_HIDDEN) viewModel.showOptions(false)
@@ -143,7 +137,7 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
         override fun onSlide(bottomSheet: View, slideOffset: Float) {}
     }
 
-    private suspend fun getHeightPickValueByViewBottom(view: View): Int {
+  private suspend fun getHeightPickValueByViewBottom(view: View): Int {
         var value = 0
         var leftToTry = BOOTTOMSHEET_PEEK_TRY_COUNT
         var isFirstTry = true
@@ -152,7 +146,7 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
                 if (!isFirstTry) delay(BOOTTOMSHEET_PEEK_RETRY_DELAY)
                 with(binding!!) {
                     value =
-                        (root.height - view.y - view.height).roundToInt()
+                        (root.measuredHeight - view.y - view.measuredHeight).roundToInt()
                 }
                 leftToTry -= 1
                 isFirstTry = false

@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_media" >
         <action
             android:id="@+id/action_mediaFragment_to_createPlaylistFragment"
-            app:destination="@id/editPlaylistFragment" />
+            app:destination="@id/createPlaylistFragment" />
         <action
             android:id="@+id/action_mediaFragment_to_playlistView"
             app:destination="@id/playlistView" />
@@ -37,8 +37,8 @@
         android:label="PlayerActivity"
         tools:layout="@layout/player" />
     <fragment
-        android:id="@+id/editPlaylistFragment"
-        android:name="com.example.playlistmaker.media.view.EditAndCreatePlaylistFragment"
+        android:id="@+id/createPlaylistFragment"
+        android:name="com.example.playlistmaker.media.view.CreatePlaylistFragment"
         android:label="fragment_create_playlist"
         tools:layout="@layout/fragment_create_playlist" />
     <fragment
@@ -55,4 +55,8 @@
             android:id="@+id/action_playlistView_to_editPlaylistFragment"
             app:destination="@id/editPlaylistFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.example.playlistmaker.media.view.EditPlaylistFragment"
+        android:label="EditPlaylistFragment" />
 </navigation>

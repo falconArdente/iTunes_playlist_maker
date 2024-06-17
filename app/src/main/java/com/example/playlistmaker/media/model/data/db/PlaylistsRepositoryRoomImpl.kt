@@ -68,11 +68,12 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
     }
 
     override suspend fun removeTrackFromPlaylist(trackToRemove: Track, playlist: Playlist) {
-        playlistsTable.getTracksOfPlaylist(playlist.id).collect { pTrackList ->
-            pTrackList.forEach { pTrackEntity ->
-                playlistsTable.removePTrack(pTrackEntity)
-            }
-        }
+        playlistsTable.removePTrack(
+            playlistsTable.getExactTrackOfPlaylist(
+                playlistId = playlist.id,
+                remoteId = trackToRemove.id
+            )
+        )
     }
 
     override suspend fun getTracksOfPlaylist(playlist: Playlist): Flow<List<Track>> {

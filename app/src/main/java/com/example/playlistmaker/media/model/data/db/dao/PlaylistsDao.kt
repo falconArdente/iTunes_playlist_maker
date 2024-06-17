@@ -45,6 +45,9 @@ interface PlaylistsDao {
     @Query("SELECT * FROM $TRACKS_TABLE WHERE playlistRelationId=:playlistId")
     fun getTracksOfPlaylist(playlistId: Int): Flow<List<PlaylistTrackEntity>>
 
+    @Query("SELECT * FROM $TRACKS_TABLE WHERE playlistRelationId=:playlistId AND remoteId=:remoteId")
+    fun getExactTrackOfPlaylist(playlistId: Int, remoteId: Long): PlaylistTrackEntity
+
     @Query("SELECT * FROM $TRACKS_TABLE WHERE playlistRelationId=:playlistId")
     fun getTracksOfPlaylistStraight(playlistId: Int): List<PlaylistTrackEntity>
 

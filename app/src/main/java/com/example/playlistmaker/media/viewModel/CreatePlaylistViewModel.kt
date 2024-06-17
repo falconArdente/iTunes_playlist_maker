@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.media.model.domain.Playlist
 import com.example.playlistmaker.media.model.domain.PlaylistsInteractor
 import com.example.playlistmaker.media.model.domain.SaveImageToStorageUseCase
 import com.example.playlistmaker.media.model.domain.SelectAnImageUseCase
@@ -25,10 +24,10 @@ import kotlinx.coroutines.launch
 
 const val MESSAGE_DELAY = 3000L
 
-class EditAndCreatePlaylistViewModel(
+open class CreatePlaylistViewModel(
     private val imageSelector: SelectAnImageUseCase,
-    private val saverForImage: SaveImageToStorageUseCase,
-    private val dataTable: PlaylistsInteractor,
+    protected val saverForImage: SaveImageToStorageUseCase,
+    protected val dataTable: PlaylistsInteractor,
     androidContext: Context,
 ) : ViewModel() {
     private val playlistCreatedPrefix: String =
@@ -36,33 +35,16 @@ class EditAndCreatePlaylistViewModel(
     private val playlistCreatedPostfix: String =
         androidContext.getString(R.string.playlist_created_postfix)
 
-    private var mutableScreeState = MutableLiveData(
-        EditAndCreatePlaylistScreenState(
-            title = "", description = "", isReadyToSave = false, isEditMode = false
+    protected var mutableScreenState = MutableLiveData(
+        CreatePlaylistScreenState(
+            title = "", description = "", isReadyToSave = false
         )
     )
-    private var playlistToEdit: Playlist? = null
     private var playlistMessage = MutableLiveData<PlaylistMessage>(PlaylistMessage.Empty)
     var finishActivityWhenDone: Boolean = false
-    private var fragment: FragmentWithConfirmationDialog? = null
-    var screenStateToObserve: LiveData<EditAndCreatePlaylistScreenState> = mutableScreeState
+    protected var fragment: FragmentWithConfirmationDialog? = null
+    var screenStateToObserve: LiveData<CreatePlaylistScreenState> = mutableScreenState
     var playlistMessageToObserve: LiveData<PlaylistMessage> = playlistMessage
-
-    fun setPlaylistToEdit(playlistId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            playlistToEdit = dataTable.getPlaylistById(playlistId)
-            playlistToEdit!!.let { playlist ->
-                mutableScreeState.postValue(
-                    EditAndCreatePlaylistScreenState(
-                        imageUri = playlist.imageUri ?: Uri.EMPTY,
-                        title = playlist.title,
-                        description = playlist.description,
-                        isEditMode = true
-                    )
-                )
-            }
-        }
-    }
 
     fun attachFragmentAtCreation(fragment: FragmentWithConfirmationDialog) {
         this.fragment = fragment
@@ -71,16 +53,16 @@ class EditAndCreatePlaylistViewModel(
     }
 
     fun changeTitle(title: String) {
-        mutableScreeState.postValue(
-            (mutableScreeState.value as EditAndCreatePlaylistScreenState).copy(
+        mutableScreenState.postValue(
+            (mutableScreenState.value as CreatePlaylistScreenState).copy(
                 title = title, isReadyToSave = title.isNotEmpty()
             )
         )
     }
 
     fun changeDescription(description: String) {
-        mutableScreeState.postValue(
-            (mutableScreeState.value as EditAndCreatePlaylistScreenState).copy(
+        mutableScreenState.postValue(
+            (mutableScreenState.value as CreatePlaylistScreenState).copy(
                 description = description
             )
         )
@@ -89,8 +71,8 @@ class EditAndCreatePlaylistViewModel(
     fun selectAnImage() {
         viewModelScope.launch(Dispatchers.IO) {
             imageSelector.selectImage().collect { uri ->
-                mutableScreeState.postValue(
-                    (mutableScreeState.value as EditAndCreatePlaylistScreenState).copy(
+                mutableScreenState.postValue(
+                    (mutableScreenState.value as CreatePlaylistScreenState).copy(
                         imageUri = uri
                     )
                 )
@@ -98,7 +80,7 @@ class EditAndCreatePlaylistViewModel(
         }
     }
 
-    fun runExitSequence() {
+    open fun runExitSequence() {
         if (isNeedDialog()) {
             fragment?.runConfirmationDialog()
         } else {
@@ -113,26 +95,15 @@ class EditAndCreatePlaylistViewModel(
         }
     }
 
-    fun createPlaylist() {
-        with(screenStateToObserve.value as EditAndCreatePlaylistScreenState) {
+    open fun createPlaylist() {
+        with(screenStateToObserve.value as CreatePlaylistScreenState) {
             val uriToDB =
                 saverForImage.saveImageByUri(imageUri = imageUri, fileName = title)
             viewModelScope.launch(Dispatchers.IO) {
-                if (isEditMode) {
-                    dataTable.updatePlaylist(
-                        Playlist(
-                            id = playlistToEdit!!.id,
-                            title = title, description = description,
-                            imageUri = uriToDB
-                        )
-                    )
-                } else {//Create mode
-                    dataTable.createPlaylist(
+                       dataTable.createPlaylist(
                         title = title, description = description, imageUri = uriToDB
                     )
-                }
             }
-
             if (finishActivityWhenDone) {
                 ((fragment as Fragment).requireActivity()).let { activity ->
                     val intent: Intent = activity.intent.putExtra(
@@ -155,7 +126,7 @@ class EditAndCreatePlaylistViewModel(
         "$playlistCreatedPrefix $playlistName $playlistCreatedPostfix"
 
     private fun isNeedDialog(): Boolean {
-        (screenStateToObserve.value as EditAndCreatePlaylistScreenState).let { state ->
+        (screenStateToObserve.value as CreatePlaylistScreenState).let { state ->
             return (state.title.isNotEmpty() || state.description.isNotEmpty() || state.imageUri != Uri.EMPTY)
         }
     }
