@@ -1,6 +1,5 @@
 package com.example.playlistmaker.media.view
 
-import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,17 +16,17 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.view.ui.CanShowPlaylistMessage
-import com.example.playlistmaker.media.view.ui.FragmentWithConfirmationDialog
+import com.example.playlistmaker.media.view.ui.FragmentCanShowDialog
 import com.example.playlistmaker.media.view.ui.PlaylistMessage
-import com.example.playlistmaker.media.viewModel.CreatePlaylistViewModel
 import com.example.playlistmaker.media.viewModel.CreatePlaylistScreenState
+import com.example.playlistmaker.media.viewModel.CreatePlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val MESSAGE_TEXT = "message"
 const val MESSAGE_DURATION = "duration"
 
-open class CreatePlaylistFragment : Fragment(), FragmentWithConfirmationDialog,
+open class CreatePlaylistFragment : Fragment(), FragmentCanShowDialog,
     CanShowPlaylistMessage {
     companion object {
         private const val FINISH_BY_DONE = "to_finish_by_done"
@@ -37,7 +36,6 @@ open class CreatePlaylistFragment : Fragment(), FragmentWithConfirmationDialog,
         }
     }
 
-    private val exitDialog: MaterialAlertDialogBuilder by lazy { configureExitConfirmationDialog() }
     protected open val viewModel by viewModel<CreatePlaylistViewModel>()
     protected open var binding: FragmentCreatePlaylistBinding? = null
     override fun onCreateView(
@@ -113,25 +111,9 @@ open class CreatePlaylistFragment : Fragment(), FragmentWithConfirmationDialog,
         }
     }
 
-    override fun runConfirmationDialog() {
-        exitDialog.show()
+    override fun showDialog(dilog:MaterialAlertDialogBuilder) {
+        dilog.show()
     }
-
-    private fun configureExitConfirmationDialog(): MaterialAlertDialogBuilder =
-        MaterialAlertDialogBuilder(requireContext()).setBackground(
-            AppCompatResources.getDrawable(
-                requireContext(),
-                R.drawable.dialog_background
-            )
-        )
-            .setTitle(requireContext().getString(R.string.create_playlist_exit_dialog_title))
-            .setMessage(R.string.create_playlist_exit_dialog_message)
-            .setPositiveButton(requireContext().getString(R.string.create_playlist_exit_dialog_confirm)) { _, _ ->
-                viewModel.exitView()
-            }
-            .setNegativeButton(requireContext().getString(R.string.create_playlist_exit_dialog_reject)) { dialogInterface: DialogInterface, _ ->
-                dialogInterface.dismiss()
-            }
 
     override fun showMessage(message: PlaylistMessage) {
         val activity = requireActivity()

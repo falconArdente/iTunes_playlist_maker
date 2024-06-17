@@ -2,8 +2,10 @@ package com.example.playlistmaker.media.viewModel
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,8 +19,9 @@ import com.example.playlistmaker.media.model.domain.SelectAnImageUseCase
 import com.example.playlistmaker.media.model.repository.SelectAnImageUseCasePickerCompatibleImpl
 import com.example.playlistmaker.media.view.MESSAGE_DURATION
 import com.example.playlistmaker.media.view.MESSAGE_TEXT
-import com.example.playlistmaker.media.view.ui.FragmentWithConfirmationDialog
+import com.example.playlistmaker.media.view.ui.FragmentCanShowDialog
 import com.example.playlistmaker.media.view.ui.PlaylistMessage
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -29,12 +32,21 @@ open class CreatePlaylistViewModel(
     protected val saverForImage: SaveImageToStorageUseCase,
     protected val dataTable: PlaylistsInteractor,
     androidContext: Context,
-) : ViewModel() {
+) : ViewModel(),ViewModelForFragmentShowsDialog {
     private val playlistCreatedPrefix: String =
         androidContext.getString(R.string.playlist_created_prefix)
     private val playlistCreatedPostfix: String =
         androidContext.getString(R.string.playlist_created_postfix)
-
+    private val exitDialog: MaterialAlertDialogBuilder by lazy {
+        configureExitConfirmationDialog(
+            R.string.create_playlist_exit_dialog_title,
+            R.string.create_playlist_exit_dialog_confirm,
+            R.string.create_playlist_exit_dialog_reject,
+            R.string.create_playlist_exit_dialog_message,
+            R.drawable.dialog_background,
+            (fragment as Fragment).requireContext()
+        )
+    }
     protected var mutableScreenState = MutableLiveData(
         CreatePlaylistScreenState(
             title = "", description = "", isReadyToSave = false
@@ -42,11 +54,11 @@ open class CreatePlaylistViewModel(
     )
     private var playlistMessage = MutableLiveData<PlaylistMessage>(PlaylistMessage.Empty)
     var finishActivityWhenDone: Boolean = false
-    protected var fragment: FragmentWithConfirmationDialog? = null
+    protected var fragment: FragmentCanShowDialog? = null
     var screenStateToObserve: LiveData<CreatePlaylistScreenState> = mutableScreenState
     var playlistMessageToObserve: LiveData<PlaylistMessage> = playlistMessage
 
-    fun attachFragmentAtCreation(fragment: FragmentWithConfirmationDialog) {
+    override fun attachFragmentAtCreation(fragment: FragmentCanShowDialog) {
         this.fragment = fragment
         if (imageSelector !is SelectAnImageUseCasePickerCompatibleImpl) return
         imageSelector.attachPickerToFragment(fragment as Fragment)
@@ -82,7 +94,7 @@ open class CreatePlaylistViewModel(
 
     open fun runExitSequence() {
         if (isNeedDialog()) {
-            fragment?.runConfirmationDialog()
+            fragment?.showDialog(exitDialog)
         } else {
             exitView()
         }
@@ -100,9 +112,9 @@ open class CreatePlaylistViewModel(
             val uriToDB =
                 saverForImage.saveImageByUri(imageUri = imageUri, fileName = title)
             viewModelScope.launch(Dispatchers.IO) {
-                       dataTable.createPlaylist(
-                        title = title, description = description, imageUri = uriToDB
-                    )
+                dataTable.createPlaylist(
+                    title = title, description = description, imageUri = uriToDB
+                )
             }
             if (finishActivityWhenDone) {
                 ((fragment as Fragment).requireActivity()).let { activity ->
@@ -121,6 +133,29 @@ open class CreatePlaylistViewModel(
             exitView()
         }
     }
+
+    private fun configureExitConfirmationDialog(
+        titleId: Int,
+        positiveTextId: Int,
+        negativeTextId: Int,
+        messageId: Int,
+        drawableId: Int,
+        context: Context
+    ): MaterialAlertDialogBuilder =
+        MaterialAlertDialogBuilder(context).setBackground(
+            AppCompatResources.getDrawable(
+                context,
+                drawableId
+            )
+        )
+            .setTitle(titleId)
+            .setMessage(messageId)
+            .setPositiveButton(positiveTextId) { _, _ ->
+                exitView()
+            }
+            .setNegativeButton(negativeTextId) { dialogInterface: DialogInterface, _ ->
+                dialogInterface.dismiss()
+            }
 
     private fun createMessageText(playlistName: String): String =
         "$playlistCreatedPrefix $playlistName $playlistCreatedPostfix"

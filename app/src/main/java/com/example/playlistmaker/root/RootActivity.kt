@@ -20,7 +20,8 @@ import kotlinx.coroutines.launch
 
 const val FRAGMENT_LOAD_COMMAND = "load_fragment"
 const val FINISH_BY_DONE = "to_finish_by_done"
-class RootActivity : AppCompatActivity(R.layout.activity_root) ,CanShowPlaylistMessage{
+
+class RootActivity : AppCompatActivity(R.layout.activity_root), CanShowPlaylistMessage {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,33 +46,34 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) ,CanShowPlaylistM
             }
         }
     }
-private fun unpackAnIntent(navController: NavController){
-    val fragmentToNavigate = intent.getIntExtra(FRAGMENT_LOAD_COMMAND, 0)
 
-    if (fragmentToNavigate > 0) {
-        val args = Bundle()
-        args.putBoolean(FINISH_BY_DONE, true)
-        navController.navigate(fragmentToNavigate, args = args)
+    private fun unpackAnIntent(navController: NavController) {
+        val fragmentToNavigate = intent.getIntExtra(FRAGMENT_LOAD_COMMAND, 0)
+
+        if (fragmentToNavigate > 0) {
+            val args = Bundle()
+            args.putBoolean(FINISH_BY_DONE, true)
+            navController.navigate(fragmentToNavigate, args = args)
+        }
     }
-}
+
     override fun showMessage(message: PlaylistMessage) {
-        if (message is PlaylistMessage.Empty)return
-        val messenger=findViewById<LinearLayout>(R.id.playlist_messenger)
-        val textView=findViewById<TextView>(R.id.playlist_message_text_view)
+        if (message is PlaylistMessage.Empty) return
+        val messenger = findViewById<LinearLayout>(R.id.playlist_messenger)
+        val textView = findViewById<TextView>(R.id.playlist_message_text_view)
         val bottomMenu = findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
         val borderLine = findViewById<View>(R.id.bottom_views_border)
         with((message as PlaylistMessage.HaveData)) {
             lifecycleScope.launch {
-                var isShowing=true
-                textView.text =this@with.message
-                bottomMenu.isVisible=!isShowing
-                borderLine.isVisible=!isShowing
-                messenger.isVisible=isShowing
+                var bottomState = bottomMenu.isVisible
+                textView.text = this@with.message
+                bottomMenu.isVisible = false
+                borderLine.isVisible = false
+                messenger.isVisible = true
                 delay(this@with.showTimeMillis)
-                isShowing=false
-                bottomMenu.isVisible=!isShowing
-                borderLine.isVisible=!isShowing
-                messenger.isVisible=isShowing
+                bottomMenu.isVisible = bottomState
+                borderLine.isVisible = bottomState
+                messenger.isVisible = false
             }
         }
     }

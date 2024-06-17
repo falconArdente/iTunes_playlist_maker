@@ -54,7 +54,8 @@ val mediaModule = module {
         PlaylistItemViewModel(
             dataSource = get(),
             trackToPlayerUseCase = get(),
-            sharePlaylistUseCase = get()
+            sharePlaylistUseCase = get(),
+            androidContext()
         )
     }
     viewModel {

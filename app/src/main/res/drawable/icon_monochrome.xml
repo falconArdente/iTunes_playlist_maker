@@ -2,7 +2,7 @@
     <item
         android:width="72dp"
         android:height="72dp"
-        android:drawable="@drawable/squrecicle_back_figure"
+        android:drawable="@drawable/icon_backfigure_monochrome"
         android:gravity="center" />
     <item
         android:width="26dp"

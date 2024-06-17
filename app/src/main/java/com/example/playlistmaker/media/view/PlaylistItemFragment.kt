@@ -1,7 +1,6 @@
 package com.example.playlistmaker.media.view
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
@@ -20,11 +19,12 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistItemViewBinding
 import com.example.playlistmaker.databinding.PlaylistItemBottomSheetBinding
 import com.example.playlistmaker.databinding.PlaylistItemOptionsSheetBinding
-import com.example.playlistmaker.media.view.ui.FragmentWithConfirmationDialog
+import com.example.playlistmaker.media.view.ui.CanShowPlaylistMessage
+import com.example.playlistmaker.media.view.ui.FragmentCanShowDialog
+import com.example.playlistmaker.media.view.ui.PlaylistMessage
 import com.example.playlistmaker.media.viewModel.PlaylistItemScreenState
 import com.example.playlistmaker.media.viewModel.PlaylistItemViewModel
 import com.example.playlistmaker.player.view.ui.PlaylistRowViewHolder
-import com.example.playlistmaker.player.view.ui.PlaylistViewOnClickListener
 import com.example.playlistmaker.search.view.ui.DiffForTrack
 import com.example.playlistmaker.search.view.ui.TrackAdapter
 import com.example.playlistmaker.search.view.ui.TrackOnClickListener
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
 
-class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
+class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistMessage {
 
     companion object {
         private const val PLAYLIST_ID = "playlist"
@@ -55,7 +55,7 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
     private var tracksSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
     private var optionsSheetBinding: PlaylistItemOptionsSheetBinding? = null
     private var optionsSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
-    private val deleteConfirmationDialog: MaterialAlertDialogBuilder by lazy { configureExitConfirmationDialog() }
+
     private val trackClick = TrackOnClickListener {
         viewModel.goToPlay(it)
     }
@@ -68,7 +68,7 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         viewModel.setPlaylistById(requireArguments().getInt(PLAYLIST_ID))
-        viewModel.attachFragmentBeforeShowDialog(this)
+        viewModel.attachFragmentAtCreation(this)
         binding = FragmentPlaylistItemViewBinding.inflate(inflater, container, false)
         tracksSheetBinding = PlaylistItemBottomSheetBinding.inflate(inflater, binding!!.root, true)
         optionsSheetBinding =
@@ -95,6 +95,7 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
         }
         if (optionsSheetBinding != null) {
             with(optionsSheetBinding!!) {
+                this.share.setOnClickListener { viewModel.sharePlaylist() }
                 this.edit.setOnClickListener { viewModel.editPlaylist() }
                 this.delete.setOnClickListener { viewModel.deletePlaylist() }
                 optionsSheetBehavior =
@@ -137,7 +138,7 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
         override fun onSlide(bottomSheet: View, slideOffset: Float) {}
     }
 
-  private suspend fun getHeightPickValueByViewBottom(view: View): Int {
+    private suspend fun getHeightPickValueByViewBottom(view: View): Int {
         var value = 0
         var leftToTry = BOOTTOMSHEET_PEEK_TRY_COUNT
         var isFirstTry = true
@@ -185,7 +186,7 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
             optionsSheetBinding?.playlistViewHolder?.let { holder ->
                 PlaylistRowViewHolder(holder).bind(
                     item = viewModel.requirePlaylist()!!,
-                    onClickListener = PlaylistViewOnClickListener {})
+                    onClickListener = {})
             }
             when (state.isOptionsBottomSheet) {
                 true -> {//toShowOptions
@@ -203,17 +204,14 @@ class PlaylistItemFragment : Fragment(), FragmentWithConfirmationDialog {
         }
     }
 
-    override fun runConfirmationDialog() {
-        deleteConfirmationDialog.show()
+    override fun showMessage(message: PlaylistMessage) {
+        val activity = requireActivity()
+        if (activity is CanShowPlaylistMessage) {
+            activity.showMessage(message)
+        } else return
     }
 
-    private fun configureExitConfirmationDialog(): MaterialAlertDialogBuilder =
-        MaterialAlertDialogBuilder(requireContext(), R.style.DeleteTrackConfirmationDialogTheme)
-            .setTitle(requireContext().getString(R.string.delete_track_dialog_title))
-            .setPositiveButton(R.string.delete_track_exit_dialog_confirm) { _, _ ->
-                viewModel.deleteTrack()
-            }
-            .setNegativeButton(R.string.delete_track_exit_dialog_reject) { dialogInterface: DialogInterface, _ ->
-                dialogInterface.dismiss()
-            }
+    override fun showDialog(dialog: MaterialAlertDialogBuilder) {
+        dialog.show()
+    }
 }
