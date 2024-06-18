@@ -1,6 +1,5 @@
 package com.example.playlistmaker.media.view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +50,6 @@ class FavoriteTracksListFragment : Fragment() {
         favoritesViewModel.screenState.observe(viewLifecycleOwner) { render(screenState = it) }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun render(screenState: FavoriteTracksScreenState) {
         when (screenState) {
             is FavoriteTracksScreenState.NoTracks -> {
@@ -61,7 +59,6 @@ class FavoriteTracksListFragment : Fragment() {
 
             is FavoriteTracksScreenState.HaveTracks -> {
                 favoriteTracksAdapter?.tracks = (screenState.tracks)
-                favoriteTracksAdapter?.notifyDataSetChanged()
                 binding?.placeholderFrame?.isVisible = false
                 binding?.favTracksRecyclerView?.isVisible = true
             }
