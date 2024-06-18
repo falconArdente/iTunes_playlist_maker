@@ -47,7 +47,7 @@ class CreatePlaylistViewModel(
     var screenStateToObserve: LiveData<CreatePlaylistScreenState> = mutableScreeState
     var playlistMessageToObserve: LiveData<PlaylistMessage> = playlistMessage
 
-    fun attachFragmentAtCreation(fragment: FragmentWithExitConfirmationDialog) {
+    override fun attachFragmentAtCreation(fragment: FragmentCanShowDialog) {
         this.fragment = fragment
         if (imageSelector !is SelectAnImageUseCasePickerCompatibleImpl) return
         imageSelector.attachPickerToFragment(fragment as Fragment)
