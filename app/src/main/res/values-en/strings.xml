@@ -68,4 +68,8 @@
     <string name="playlist_options_edit">Edit playlist</string>
     <string name="playlist_options_delete">Delete playlist</string>
     <string name="playlist_no_tracks_to_share">No tracks to share with</string>
+    <string name="delete_playlist_dialog_message_prefix">Delete playlist «</string>
+    <string name="delete_playlist_dialog_title">Delete playlist</string>
+    <string name="delete_playlist_dialog_title_positive">Yes</string>
+    <string name="delete_playlist_dialog_title_negative">No</string>
 </resources>

@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -44,6 +46,7 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
         private const val PLAYLIST_ID = "playlist"
         private const val BOOTTOMSHEET_PEEK_RETRY_DELAY = 10L
         private const val BOOTTOMSHEET_PEEK_TRY_COUNT = 10
+        private const val FADE_DURATION = 250L
         fun createArgs(playlistId: Int): Bundle {
             return bundleOf(PLAYLIST_ID to playlistId)
         }
@@ -91,13 +94,14 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
                 recyclerViewPlaylistItem.adapter = adapter
                 tracksSheetBehavior =
                     BottomSheetBehavior.from(bottomSheet)
+                tracksSheetBehavior!!.shouldSkipSmoothAnimation()
             }
         }
         if (optionsSheetBinding != null) {
             with(optionsSheetBinding!!) {
                 this.share.setOnClickListener { viewModel.sharePlaylist() }
                 this.edit.setOnClickListener { viewModel.editPlaylist() }
-                this.delete.setOnClickListener { viewModel.deletePlaylist() }
+                this.delete.setOnClickListener { viewModel.deletePlaylistSequence() }
                 optionsSheetBehavior =
                     BottomSheetBehavior.from(this.root)
             }
@@ -112,6 +116,26 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
                 optionsIcon.setOnClickListener { viewModel.showOptions(true) }
             }
         }
+        optionsSheetBehavior?.addBottomSheetCallback(object : BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                val fadeOut = AlphaAnimation(0.0f, 0.7f)
+                fadeOut.duration = FADE_DURATION
+                val fadeIn = AlphaAnimation(0.7f, 0.0f)
+                fadeIn.duration = FADE_DURATION
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    binding!!.screen.isVisible = true
+                    binding!!.screen.alpha = 0.7f
+                    binding!!.screen.startAnimation(fadeOut)
+                } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    binding!!.screen.startAnimation(fadeIn)
+                    binding!!.screen.alpha = 0f
+                    binding!!.screen.isVisible = false
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+
+        })
     }
 
     override fun onResume() {
@@ -192,6 +216,7 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
                 true -> {//toShowOptions
                     tracksSheetBehavior?.isHideable = true
                     tracksSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+                    optionsSheetBehavior?.cancelBackProgress()
                     optionsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
                 }
 

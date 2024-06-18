@@ -68,6 +68,11 @@
     <string name="delete_track_dialog_title">Вы уверены, что хотите удалить трек из плейлиста?</string>
     <string name="delete_track_exit_dialog_confirm">Удалить</string>
     <string name="delete_track_exit_dialog_reject">Отмена</string>
+    <string name="delete_playlist_dialog_message_prefix">Хотите удалить плейлист «</string>
+    <string name="delete_playlist_dialog_message_postfix" translatable="false">»?</string>
+    <string name="delete_playlist_dialog_title">Удалить плейлист</string>
+    <string name="delete_playlist_dialog_title_positive">Да</string>
+    <string name="delete_playlist_dialog_title_negative">Нет</string>
     <string name="playlist_options_share">Поделиться</string>
     <string name="playlist_options_edit">Редактировать информацию</string>
     <string name="playlist_options_delete">Удалить плейлист</string>

@@ -2,13 +2,15 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/YP_Light_Gray">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/background_frame">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/playlist_image"
@@ -126,5 +128,13 @@
             app:layout_constraintStart_toEndOf="@id/share_icon"
             app:layout_constraintTop_toTopOf="@id/share_icon"
             tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintBounds" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/screen"
+            android:background="@color/YP_Black"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

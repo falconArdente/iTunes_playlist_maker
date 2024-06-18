@@ -31,7 +31,7 @@ class PlaylistItemViewModel(
     private val trackToPlayerUseCase: SendTrackToPlayerUseCase,
     private val sharePlaylistUseCase: SharePlaylistUseCase,
     appContext: Context,
-) : ViewModel(),ViewModelForFragmentShowsDialog {
+) : ViewModel(), ViewModelForFragmentShowsDialog {
     private val noTracksString = appContext.getString(R.string.playlist_no_tracks_to_share)
     private val mutablePlaylistScreen = MutableLiveData<PlaylistItemScreenState>()
     val playlistScreenToObserve: LiveData<PlaylistItemScreenState> = mutablePlaylistScreen
@@ -40,12 +40,26 @@ class PlaylistItemViewModel(
     private var currentTrack: Track? = null
     private var dataUpdateJob: Job? = null
     private val trackDeletionConfirmationDialog: MaterialAlertDialogBuilder by lazy {
-        configureExitConfirmationDialog(
-            R.string.delete_track_dialog_title,
-            R.string.delete_track_exit_dialog_confirm,
-            R.string.delete_track_exit_dialog_reject,
-            R.style.DeleteTrackConfirmationDialogTheme,
-            (fragment as Fragment).requireContext()
+        configureConfirmationDialog(
+            title = appContext.getString(R.string.delete_track_dialog_title),
+            positiveText = appContext.getString(R.string.delete_track_exit_dialog_confirm),
+            actionPositive = { deleteTrack() },
+            negativeText = appContext.getString(R.string.delete_track_exit_dialog_reject),
+            styleId = R.style.DeleteTrackConfirmationDialogTheme,
+            viewContext = (fragment as Fragment).requireContext()
+        )
+    }
+    private val playlistDeletionConfirmationDialog: MaterialAlertDialogBuilder by lazy {
+        configureConfirmationDialog(
+            title = appContext.getString(R.string.delete_playlist_dialog_title),
+            message = appContext.getString(R.string.delete_playlist_dialog_message_prefix) +
+                    (playlistScreenToObserve.value as PlaylistItemScreenState.HaveData).title +
+                    appContext.getString(R.string.delete_playlist_dialog_message_postfix),
+            positiveText = appContext.getString(R.string.delete_playlist_dialog_title_positive),
+            actionPositive = { deletePlaylist() },
+            negativeText = appContext.getString(R.string.delete_playlist_dialog_title_negative),
+            styleId = R.style.DeleteTrackConfirmationDialogTheme,
+            viewContext = (fragment as Fragment).requireContext()
         )
     }
 
@@ -60,14 +74,18 @@ class PlaylistItemViewModel(
         return true
     }
 
-    fun deleteTrack() {
+    private fun deleteTrack() {
         if (currentPlaylist == null || currentTrack == null) return
         viewModelScope.launch(Dispatchers.IO) {
             dataSource.removeTrackFromPlaylist(currentTrack!!, currentPlaylist!!)
         }
     }
 
-    fun deletePlaylist() {
+    fun deletePlaylistSequence() {
+        fragment?.showDialog(playlistDeletionConfirmationDialog)
+    }
+
+    private fun deletePlaylist() {
         dataUpdateJob?.cancel()
         (fragment as Fragment).findNavController().navigateUp()
         if (currentPlaylist != null) viewModelScope.launch(Dispatchers.IO) {
@@ -115,8 +133,10 @@ class PlaylistItemViewModel(
             R.id.action_playlistView_to_editPlaylistFragment,
             args = EditPlaylistFragment.createArgs(currentPlaylist!!.id)
         )
-        (mutablePlaylistScreen.value as PlaylistItemScreenState.HaveData).copy(
-            isOptionsBottomSheet = false
+        mutablePlaylistScreen.postValue(
+            (mutablePlaylistScreen.value as PlaylistItemScreenState.HaveData).copy(
+                isOptionsBottomSheet = false
+            )
         )
     }
 
@@ -141,21 +161,27 @@ class PlaylistItemViewModel(
 
     }
 
-    private fun configureExitConfirmationDialog(
-        titleId: Int,
-        positiveTextId: Int,
-        negativeTextId: Int,
+    private fun configureConfirmationDialog(
+        title: String,
+        message: String = "",
+        positiveText: String,
+        negativeText: String,
         styleId: Int,
+        actionPositive: DialogCallback,
         viewContext: Context,
-    ): MaterialAlertDialogBuilder =
-        MaterialAlertDialogBuilder(viewContext,  styleId)
-            .setTitle(titleId)
-            .setPositiveButton(positiveTextId) { _, _ ->
-                deleteTrack()
+    ): MaterialAlertDialogBuilder {
+        val dialog = MaterialAlertDialogBuilder(viewContext, styleId)
+            .setTitle(title)
+            .setPositiveButton(positiveText) { _, _ ->
+                actionPositive.execute()
             }
-            .setNegativeButton(negativeTextId) { dialogInterface: DialogInterface, _ ->
+            .setNegativeButton(negativeText) { dialogInterface: DialogInterface, _ ->
                 dialogInterface.dismiss()
             }
+        if (message != "") dialog.setMessage(message)
+        return dialog
+    }
+
 
     @SuppressLint("SimpleDateFormat")
     private fun getMinutesOfTrackList(list: List<Track>): Int {
@@ -165,5 +191,9 @@ class PlaylistItemViewModel(
             millis += track.duration.toLong()
         }
         return minutesFormat.format(millis).toInt()
+    }
+
+    fun interface DialogCallback {
+        fun execute()
     }
 }
