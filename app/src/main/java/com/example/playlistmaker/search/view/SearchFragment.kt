@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -65,7 +64,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun render(screenState: SearchScreenState) {
         if (binding == null) return
         with(binding!!) {
@@ -77,7 +75,6 @@ class SearchFragment : Fragment() {
                     placeholderFrame.isVisible = false
                     if (tracksAdapter?.tracks != screenState.tracks) {
                         tracksAdapter?.tracks = screenState.tracks
-                        tracksAdapter?.notifyDataSetChanged()
                     }
                     tracksRecyclerView.visibility = View.VISIBLE
                 }
@@ -119,7 +116,6 @@ class SearchFragment : Fragment() {
                     updateButton.isVisible = false
                     if (tracksAdapter?.tracks != screenState.tracks) {
                         tracksAdapter?.tracks = screenState.tracks
-                        tracksAdapter?.notifyDataSetChanged()
                     }
                     beenSearchedTitle.visibility = View.VISIBLE
                     clearSearchList.visibility = View.VISIBLE
