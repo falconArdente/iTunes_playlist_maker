@@ -14,7 +14,7 @@
         <activity
             android:name=".root.RootActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateUnchanged">
+            android:windowSoftInputMode="adjustUnspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
