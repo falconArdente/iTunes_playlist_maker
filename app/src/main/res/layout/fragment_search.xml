@@ -42,6 +42,7 @@
             android:scaleX="2.2"
             android:scaleY="2.2"
             android:src="@drawable/clear"
+            android:visibility="invisible"
             app:tint="?attr/colorOnSecondaryContainer"
             tools:ignore="ImageContrastCheck" />
 

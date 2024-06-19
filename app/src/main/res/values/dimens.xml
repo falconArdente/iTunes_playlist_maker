@@ -93,6 +93,7 @@
     <dimen name="create_playlist_field_up_string_title_bottom_margin_landscape">48dp</dimen>
     <dimen name="create_playlist_field_up_string_padding_horizontal">4dp</dimen>
     <dimen name="create_playlist_title_field_up_string_margin_top">25dp</dimen>
+    <dimen name="create_playlist_title_field_up_string_gone_margin_top">76dp</dimen>
     <dimen name="create_playlist_description_field_up_string_margin_top">10dp</dimen>
     <dimen name="create_playlist_create_button_corner_radius">8dp</dimen>
     <dimen name="playlist_thumbnail_size">160dp</dimen>

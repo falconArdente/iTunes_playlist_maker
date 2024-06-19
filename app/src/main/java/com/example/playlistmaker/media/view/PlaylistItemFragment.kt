@@ -94,7 +94,6 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
                 recyclerViewPlaylistItem.adapter = adapter
                 tracksSheetBehavior =
                     BottomSheetBehavior.from(bottomSheet)
-                tracksSheetBehavior!!.shouldSkipSmoothAnimation()
             }
         }
         if (optionsSheetBinding != null) {
@@ -118,6 +117,7 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
         }
         optionsSheetBehavior?.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (binding == null) return
                 val fadeOut = AlphaAnimation(0.0f, 0.7f)
                 fadeOut.duration = FADE_DURATION
                 val fadeIn = AlphaAnimation(0.7f, 0.0f)
@@ -140,6 +140,7 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
 
     override fun onResume() {
         super.onResume()
+        if (binding == null) return
         lifecycleScope.launch {
             val tracksHeight = async { getHeightPickValueByViewBottom(binding!!.shareIcon) }
             val optionsHeight = async { getHeightPickValueByViewBottom(binding!!.titlePlt) }
@@ -189,7 +190,7 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
                     .with(this@PlaylistItemFragment)
                     .load(this.imageUri)
                     .placeholder(R.drawable.placeholder_media_bar)
-                    .into(binding!!.playlistImage)
+                    .into(requireActivity().findViewById(R.id.playlist_image))
             }
             binding?.let { binding ->
                 binding.titlePlt.text = title
@@ -208,9 +209,11 @@ class PlaylistItemFragment : Fragment(), FragmentCanShowDialog, CanShowPlaylistM
             adapter.tracks = state.trackList
             diffResult.dispatchUpdatesTo(adapter)
             optionsSheetBinding?.playlistViewHolder?.let { holder ->
-                PlaylistRowViewHolder(holder).bind(
-                    item = viewModel.requirePlaylist()!!,
-                    onClickListener = {})
+                if (viewModel.requirePlaylist() != null) {
+                    PlaylistRowViewHolder(holder).bind(
+                        item = viewModel.requirePlaylist()!!,
+                        onClickListener = {})
+                }
             }
             when (state.isOptionsBottomSheet) {
                 true -> {//toShowOptions

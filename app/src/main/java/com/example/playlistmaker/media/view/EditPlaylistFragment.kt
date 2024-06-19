@@ -17,8 +17,13 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
      override val viewModel by viewModel<EditPlaylistViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.header?.title = getString(R.string.create_playlist_edit_caption)
-        binding?.createButton?.text = getString(R.string.create_playlist_update_button)
+        if (binding!=null){
+            with(binding!!){
+                header.title = getString(R.string.create_playlist_edit_caption)
+                createButton.text = getString(R.string.create_playlist_update_button)
+                playlistImage.setBackgroundDrawable(requireContext().getDrawable(R.drawable.placeholder_media_bar))
+            }
+        }
         val playlistId = arguments?.getInt(PLAYLIST_ID, -1)
         if (playlistId != null && playlistId != -1) viewModel.setPlaylistToEdit(playlistId)
     }

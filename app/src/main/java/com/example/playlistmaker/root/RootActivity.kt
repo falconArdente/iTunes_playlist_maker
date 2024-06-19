@@ -9,7 +9,9 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navOptions
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.media.view.ui.CanShowPlaylistMessage
@@ -53,7 +55,13 @@ class RootActivity : AppCompatActivity(R.layout.activity_root), CanShowPlaylistM
         if (fragmentToNavigate > 0) {
             val args = Bundle()
             args.putBoolean(FINISH_BY_DONE, true)
-            navController.navigate(fragmentToNavigate, args = args)
+            navController.navigate(fragmentToNavigate, args = args, navOptions = navOptions {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            })
         }
     }
 

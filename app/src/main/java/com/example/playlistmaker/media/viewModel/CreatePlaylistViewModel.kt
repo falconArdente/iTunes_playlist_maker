@@ -32,7 +32,7 @@ open class CreatePlaylistViewModel(
     protected val saverForImage: SaveImageToStorageUseCase,
     protected val dataTable: PlaylistsInteractor,
     androidContext: Context,
-) : ViewModel(),ViewModelForFragmentShowsDialog {
+) : ViewModel(), ViewModelForFragmentShowsDialog {
     private val playlistCreatedPrefix: String =
         androidContext.getString(R.string.playlist_created_prefix)
     private val playlistCreatedPostfix: String =

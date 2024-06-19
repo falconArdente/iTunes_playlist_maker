@@ -28,13 +28,13 @@ class SearchViewModel(
 
     fun getScreenState(): LiveData<SearchScreenState> = screenState
     fun doSearchTracks(prompt: String) {
-        if (prompt.isEmpty() || searchPrompt.compareTo(prompt) == 0) return
+        if (prompt.isEmpty()) return
         searchPrompt = prompt
         autoSearchJob?.cancel()
         if (screenState.value != SearchScreenState.Loading) screenState.postValue(
             SearchScreenState.Loading
         )
-        searchJob=viewModelScope.launch {
+        searchJob = viewModelScope.launch {
             search
                 .searchTracks(expression = searchPrompt).flowOn(Dispatchers.IO)
                 .collect { pair ->
@@ -76,6 +76,7 @@ class SearchViewModel(
         autoSearchJob?.cancel()
         searchJob?.cancel()
     }
+
     fun addTrackToHistory(track: Track) {
         history.addTrackToHistory(track)
     }

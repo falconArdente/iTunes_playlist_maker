@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.view
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ class PlaylistsListFragment : Fragment() {
         }
 
         const val COLUMNS_COUNT = 2
+        const val COLUMNS_COUNT_LANDSCAPE = 4
     }
 
     private val clicker = PlaylistOnClickListener { playlistClicked ->
@@ -46,7 +48,12 @@ class PlaylistsListFragment : Fragment() {
         playlistsViewModel.screenStateToObserve.observe(viewLifecycleOwner) { render(screenState = it) }
         binding.playlistsRecyclerView.adapter = playlistsAdapter
         binding.playlistsRecyclerView.layoutManager =
-            GridLayoutManager(requireContext(), COLUMNS_COUNT, GridLayoutManager.VERTICAL, false)
+            GridLayoutManager(
+                requireContext(),
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) COLUMNS_COUNT else COLUMNS_COUNT_LANDSCAPE,
+                GridLayoutManager.VERTICAL,
+                false
+            )
         binding.newPlaylistButton.setOnClickListener {
             findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
         }

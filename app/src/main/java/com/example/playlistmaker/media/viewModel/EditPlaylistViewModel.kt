@@ -22,7 +22,7 @@ class EditPlaylistViewModel(
     fun setPlaylistToEdit(playlistId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             playlistToEdit = dataTable.getPlaylistById(playlistId)
-            playlistToEdit!!.let { playlist ->
+            playlistToEdit?.let { playlist ->
                 mutableScreenState.postValue(
                     CreatePlaylistScreenState(
                         imageUri = playlist.imageUri ?: Uri.EMPTY,
@@ -36,6 +36,7 @@ class EditPlaylistViewModel(
     }
 
     override fun createPlaylist() {
+        if (playlistToEdit==null) return
         with(screenStateToObserve.value as CreatePlaylistScreenState) {
             val uriToDB =
                 saverForImage.saveImageByUri(imageUri = imageUri, fileName = title)
