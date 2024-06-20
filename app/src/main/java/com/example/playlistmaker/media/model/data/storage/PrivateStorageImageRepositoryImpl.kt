@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
 import androidx.core.net.toUri
 import com.example.playlistmaker.media.model.repository.StorageRepository
 import java.io.File
@@ -26,11 +25,19 @@ class PrivateStorageImageRepositoryImpl(private val context: Context) : StorageR
                 context.packageName
             )
         if (!filePath.exists()) filePath.mkdirs()
-        val file = File(filePath, "$PLAYLIST_PREFIX$fileName.$IMAGE_FILE_EXTENSION")
+        var file: File
+        var fileCounterForUniqueFileNameCreation = 0
+        do {
+            file = File(
+                filePath,
+                "$PLAYLIST_PREFIX$fileName$fileCounterForUniqueFileNameCreation.$IMAGE_FILE_EXTENSION"
+            )
+            fileCounterForUniqueFileNameCreation++
+        } while (file.exists())
 
         val inputStream: InputStream? = context.contentResolver.openInputStream(imageUri)
         val outputStream: OutputStream = FileOutputStream(file)
-        if (inputStream!=null) {
+        if (inputStream != null) {
             BitmapFactory
                 .decodeStream(inputStream)
                 .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)

@@ -24,6 +24,9 @@ const val FRAGMENT_LOAD_COMMAND = "load_fragment"
 const val FINISH_BY_DONE = "to_finish_by_done"
 
 class RootActivity : AppCompatActivity(R.layout.activity_root), CanShowPlaylistMessage {
+    private val destinationIdsForBottomNavigationToSeeList: List<Int> =
+        listOf(R.id.searchFragment, R.id.mediaFragment, R.id.settingsFragment)
+    private var currentDestinationId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +38,13 @@ class RootActivity : AppCompatActivity(R.layout.activity_root), CanShowPlaylistM
         bottomMenu.setupWithNavController(navController)
         unpackAnIntent(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.searchFragment, R.id.mediaFragment, R.id.settingsFragment -> {
-                    bottomMenu.isGone = false
-                    borderLine.isGone = false
-                }
-
-                else -> {
-                    bottomMenu.isGone = true
-                    borderLine.isGone = true
-                }
+            currentDestinationId = destination.id
+            if (destinationIdsForBottomNavigationToSeeList.contains(destination.id)) {
+                bottomMenu.isGone = false
+                borderLine.isGone = false
+            } else {
+                bottomMenu.isGone = true
+                borderLine.isGone = true
             }
         }
     }
@@ -73,12 +73,13 @@ class RootActivity : AppCompatActivity(R.layout.activity_root), CanShowPlaylistM
         val borderLine = findViewById<View>(R.id.bottom_views_border)
         with((message as PlaylistMessage.HaveData)) {
             lifecycleScope.launch {
-                var bottomState = bottomMenu.isVisible
                 textView.text = this@with.message
                 bottomMenu.isVisible = false
                 borderLine.isVisible = false
                 messenger.isVisible = true
                 delay(this@with.showTimeMillis)
+                val bottomState =
+                    (destinationIdsForBottomNavigationToSeeList.contains(currentDestinationId))
                 bottomMenu.isVisible = bottomState
                 borderLine.isVisible = bottomState
                 messenger.isVisible = false
