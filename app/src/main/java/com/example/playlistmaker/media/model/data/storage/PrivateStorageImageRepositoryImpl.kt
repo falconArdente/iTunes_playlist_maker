@@ -16,21 +16,32 @@ const val PLAYLIST_PREFIX = "PL"
 const val IMAGE_FILE_EXTENSION = "jpg"
 
 class PrivateStorageImageRepositoryImpl(private val context: Context) : StorageRepository {
-    override fun saveImageByUri(imageUri: Uri, fileName: String):Uri {
-        if (imageUri == Uri.EMPTY) return  Uri.EMPTY
+    override fun saveImageByUri(imageUri: Uri, fileName: String): Uri {
+        if (imageUri.toString().startsWith("file", true)) return imageUri
+        if (imageUri == Uri.EMPTY) return Uri.EMPTY
         val filePath =
             File(
                 context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 context.packageName
             )
         if (!filePath.exists()) filePath.mkdirs()
-        val file = File(filePath, "$PLAYLIST_PREFIX$fileName.$IMAGE_FILE_EXTENSION")
+        var file: File
+        var fileCounterForUniqueFileNameCreation = 0
+        do {
+            file = File(
+                filePath,
+                "$PLAYLIST_PREFIX$fileName$fileCounterForUniqueFileNameCreation.$IMAGE_FILE_EXTENSION"
+            )
+            fileCounterForUniqueFileNameCreation++
+        } while (file.exists())
 
         val inputStream: InputStream? = context.contentResolver.openInputStream(imageUri)
         val outputStream: OutputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        if (inputStream != null) {
+            BitmapFactory
+                .decodeStream(inputStream)
+                .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        }
         return file.toUri()
     }
 }

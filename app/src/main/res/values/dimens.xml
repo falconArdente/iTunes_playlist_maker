@@ -93,6 +93,7 @@
     <dimen name="create_playlist_field_up_string_title_bottom_margin_landscape">48dp</dimen>
     <dimen name="create_playlist_field_up_string_padding_horizontal">4dp</dimen>
     <dimen name="create_playlist_title_field_up_string_margin_top">25dp</dimen>
+    <dimen name="create_playlist_title_field_up_string_gone_margin_top">76dp</dimen>
     <dimen name="create_playlist_description_field_up_string_margin_top">10dp</dimen>
     <dimen name="create_playlist_create_button_corner_radius">8dp</dimen>
     <dimen name="playlist_thumbnail_size">160dp</dimen>
@@ -113,6 +114,7 @@
     <dimen name="bottom_sheet_button_top_margin">92dp</dimen>
     <dimen name="bottom_sheet_recycler_top_margin">24dp</dimen>
     <dimen name="bottom_sheet_recycler_horizontal_padding">13dp</dimen>
+    <dimen name="bottom_sheet_recycler_padding_bottom">24dp</dimen>
     <dimen name="playlist_vh_row_height">61dp</dimen>
     <dimen name="playlist_vh_row_thumbnail_size">45dp</dimen>
     <dimen name="playlist_vh_row_title_top_margin">14dp</dimen>
@@ -124,4 +126,17 @@
     <dimen name="playlist_message_horizontal_padding">8dp</dimen>
     <dimen name="playlist_message_bottom_margin">16dp</dimen>
     <dimen name="playlist_message_text_size">14sp</dimen>
+    <dimen name="playlist_title_text_size">24sp</dimen>
+    <dimen name="playlist_non_title_text_size">18sp</dimen>
+    <dimen name="playlist_non_title_top_margin">8dp</dimen>
+    <dimen name="playlist_icon_size">24dp</dimen>
+    <dimen name="playlist_title_margin_top">24dp</dimen>
+    <dimen name="playlist_icons_margin_top">16dp</dimen>
+    <dimen name="playlist_title_landscape_start_margin">16dp</dimen>
+    <dimen name="playlist_options_row_item_height">61dp</dimen>
+    <dimen name="playlist_options_row_padding_start">16dp</dimen>
+    <dimen name="playlist_options_share_top_margin">93dp</dimen>
+    <dimen name="playlist_options_view_holder_start_margin">13dp</dimen>
+    <dimen name="playlist_options_view_top_margin">8dp</dimen>
+    <dimen name="playlist_item_image_max_height">420dp</dimen>
 </resources>

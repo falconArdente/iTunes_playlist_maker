@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.example.playlistmaker.media.model.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.media.model.data.db.entity.PlaylistTrackEntity
 import com.example.playlistmaker.media.model.data.db.entity.PlaylistsWithCount
@@ -23,11 +24,17 @@ interface PlaylistsDao {
     @Delete(PlaylistEntity::class)
     suspend fun deletePlaylistEntity(playlist: PlaylistEntity): Int
 
+    @Update(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    fun updatePlaylist(playlistEntity: PlaylistEntity): Int
+
     @Query("SELECT * FROM $PLAYLIST_TABLE ORDER BY $PLAYLIST_TABLE.playlistId DESC")
     fun getAllPlaylists(): Flow<List<PlaylistEntity>>
 
-    @Query("SELECT * FROM $PLAYLIST_TABLE WHERE playlistId=:playlistId")
-    fun getPlaylistById(playlistId: Int): Flow<List<PlaylistEntity>>
+    @Query("SELECT * FROM $PLAYLIST_TABLE WHERE playlistId =:playlistId")
+    fun getPlaylistsById(playlistId: Int): Flow<List<PlaylistEntity>>
+
+    @Query("SELECT * FROM $PLAYLIST_TABLE WHERE playlistId =:playlistId")
+    fun getFirstPlaylistById(playlistId: Int): PlaylistEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addPTrack(playlistTrackEntity: PlaylistTrackEntity)
@@ -37,6 +44,10 @@ interface PlaylistsDao {
 
     @Query("SELECT * FROM $TRACKS_TABLE WHERE playlistRelationId=:playlistId")
     fun getTracksOfPlaylist(playlistId: Int): Flow<List<PlaylistTrackEntity>>
+
+    @Query("SELECT * FROM $TRACKS_TABLE WHERE playlistRelationId=:playlistId AND remoteId=:remoteId")
+    fun getExactTrackOfPlaylist(playlistId: Int, remoteId: Long): PlaylistTrackEntity
+
     @Query("SELECT * FROM $TRACKS_TABLE WHERE playlistRelationId=:playlistId")
     fun getTracksOfPlaylistStraight(playlistId: Int): List<PlaylistTrackEntity>
 
@@ -44,15 +55,28 @@ interface PlaylistsDao {
     fun getTracksRemoteIDsByPlaylistStraight(playlistId: Int): List<Long>
 
     @Transaction
-    @Query("SELECT $PLAYLIST_TABLE.* FROM  $PLAYLIST_TABLE  LEFT JOIN $TRACKS_TABLE ON " +
-            "$PLAYLIST_TABLE.playlistId = $TRACKS_TABLE.playlistRelationId GROUP BY $PLAYLIST_TABLE.playlistId "+
-            " ORDER BY $PLAYLIST_TABLE.playlistId DESC")
+    @Query(
+        "SELECT $PLAYLIST_TABLE.* FROM  $PLAYLIST_TABLE  LEFT JOIN $TRACKS_TABLE ON " +
+                "$PLAYLIST_TABLE.playlistId = $TRACKS_TABLE.playlistRelationId GROUP BY $PLAYLIST_TABLE.playlistId " +
+                " ORDER BY $PLAYLIST_TABLE.playlistId DESC"
+    )
     fun getPlaylistsWithTracks(): Flow<List<PlaylistsWithTracks>>
 
     @Transaction
-    @Query("SELECT $PLAYLIST_TABLE.*, COUNT( $TRACKS_TABLE.pTrackId) AS child_count " +
-            " FROM  $PLAYLIST_TABLE  LEFT JOIN $TRACKS_TABLE ON " +
-            "$PLAYLIST_TABLE.playlistId = $TRACKS_TABLE.playlistRelationId GROUP BY $PLAYLIST_TABLE.playlistId " +
-            "ORDER BY $PLAYLIST_TABLE.playlistId DESC")
+    @Query(
+        "SELECT $PLAYLIST_TABLE.*, COUNT( $TRACKS_TABLE.pTrackId) AS child_count " +
+                " FROM  $PLAYLIST_TABLE  LEFT JOIN $TRACKS_TABLE ON " +
+                "$PLAYLIST_TABLE.playlistId = $TRACKS_TABLE.playlistRelationId GROUP BY $PLAYLIST_TABLE.playlistId " +
+                "ORDER BY $PLAYLIST_TABLE.playlistId DESC"
+    )
     fun getPlaylistsWithCountOfTracks(): Flow<List<PlaylistsWithCount>>
+
+    @Transaction
+    @Query(
+        "SELECT $PLAYLIST_TABLE.* FROM  $PLAYLIST_TABLE " +
+                "  LEFT JOIN $TRACKS_TABLE ON " +
+                "$PLAYLIST_TABLE.playlistId = $TRACKS_TABLE.playlistRelationId WHERE  $PLAYLIST_TABLE.playlistId=:playlistId "
+    )
+    fun getPlaylistWithTracksById(playlistId: Int): Flow<PlaylistsWithTracks>
+
 }

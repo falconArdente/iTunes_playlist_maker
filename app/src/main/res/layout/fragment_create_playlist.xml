@@ -6,10 +6,12 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorSecondary"
         tools:context=".media.view.CreatePlaylistFragment">
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/beginGuide"
             android:layout_width="wrap_content"
@@ -23,6 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/create_playlist_fields_horizontal_margin" />
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/header"
             style="@style/secondaryActivityHeader"
@@ -33,7 +36,6 @@
 
             <Button style="@style/hidden_search_button" />
         </androidx.appcompat.widget.Toolbar>
-
 
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -48,7 +50,8 @@
             app:layout_constraintEnd_toStartOf="@id/endGuide"
             app:layout_constraintStart_toStartOf="@id/beginGuide"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintVertical_weight="0"
             tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
@@ -62,7 +65,10 @@
             app:layout_constraintEnd_toStartOf="@id/endGuide"
             app:layout_constraintStart_toStartOf="@id/beginGuide"
             app:layout_constraintTop_toBottomOf="@id/playlist_image"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintVertical_weight="0"
+            app:layout_goneMarginTop="@dimen/create_playlist_image_margin_top"
             tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck" />
 
         <TextView
@@ -76,6 +82,8 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/beginGuide"
             app:layout_constraintTop_toBottomOf="@id/playlist_image"
+            app:layout_constraintVertical_bias="0"
+            app:layout_goneMarginTop="@dimen/create_playlist_title_field_up_string_gone_margin_top"
             tools:ignore="TextContrastCheck" />
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -85,10 +93,12 @@
             android:layout_height="@dimen/create_playlist_field_height"
             android:layout_marginTop="@dimen/create_playlist_description_field_top_margin"
             android:hint="@string/create_playlist_description_field"
-            app:layout_constraintBottom_toTopOf="@+id/empty_space"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/endGuide"
             app:layout_constraintStart_toStartOf="@id/beginGuide"
             app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintVertical_weight="0"
             tools:ignore="VisualLintTextFieldSize,DuplicateSpeakableTextCheck" />
 
@@ -105,14 +115,6 @@
             app:layout_constraintTop_toBottomOf="@id/title"
             tools:ignore="TextContrastCheck" />
 
-        <View
-            android:id="@+id/empty_space"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/create_button"
-            app:layout_constraintStart_toStartOf="@id/beginGuide"
-            app:layout_constraintTop_toBottomOf="@id/description"
-            app:layout_constraintVertical_weight="1" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/create_button"
@@ -128,7 +130,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/endGuide"
             app:layout_constraintStart_toStartOf="@id/beginGuide"
-            app:layout_constraintTop_toBottomOf="@id/empty_space"
+            app:layout_constraintTop_toBottomOf="@id/description"
+            app:layout_constraintVertical_bias="1"
             app:layout_constraintVertical_weight="0"
             tools:ignore="TouchTargetSizeCheck,VisualLintButtonSize" />
 

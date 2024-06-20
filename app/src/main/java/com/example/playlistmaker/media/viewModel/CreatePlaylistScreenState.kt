@@ -6,5 +6,5 @@ data class CreatePlaylistScreenState(
     val imageUri: Uri = Uri.EMPTY,
     val title: String = "",
     val description: String = "",
-    val isReadyToCreate: Boolean = false
+    val isReadyToSave: Boolean = false,
 )

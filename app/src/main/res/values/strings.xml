@@ -48,9 +48,11 @@
     <string name="new_playlist_button_text">Новый плейлист</string>
     <string name="network_error">Проверьте подключение к интернету</string>
     <string name="create_playlist_caption">Новый плейлист</string>
+    <string name="create_playlist_edit_caption">Редактировать</string>
     <string name="create_playlist_title_field">Название*</string>
     <string name="create_playlist_description_field">Описание</string>
     <string name="create_playlist_create_button">Создать</string>
+    <string name="create_playlist_update_button">Сохранить</string>
     <string name="rationale_for_image_picker">Разрешение на доступ к памяти необходимо для выбора изображения плейлиста</string>
     <string name="no_image_been_chosen_message">Изображение не выбрано</string>
     <string name="rationale_for_playlist_image_save">Разрешение на доступ к памяти необходимо для сохранения изображения плейлиста</string>
@@ -63,6 +65,19 @@
     <string name="add_to_playlist">Добавить в плейлист</string>
     <string name="add_to_playlist_success_prefix">Добавлено в плейлист</string>
     <string name="alredy_have_in_playlist_prefix">Трек уже добавлен в плейлист</string>
+    <string name="delete_track_dialog_title">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="delete_track_exit_dialog_confirm">Удалить</string>
+    <string name="delete_track_exit_dialog_reject">Отмена</string>
+    <string name="delete_playlist_dialog_message_prefix">Хотите удалить плейлист «</string>
+    <string name="delete_playlist_dialog_message_postfix" translatable="false">»?</string>
+    <string name="delete_playlist_dialog_title">Удалить плейлист</string>
+    <string name="delete_playlist_dialog_title_positive">Да</string>
+    <string name="delete_playlist_dialog_title_negative">Нет</string>
+    <string name="playlist_options_share">Поделиться</string>
+    <string name="playlist_options_edit">Редактировать информацию</string>
+    <string name="playlist_options_delete">Удалить плейлист</string>
+    <string name="playlist_no_tracks_to_share">В плейлисте нет треков</string>
+
     <plurals name="tracks_count">
         <item quantity="zero">треков нет</item>
         <item quantity="one">трек</item>
@@ -70,5 +85,13 @@
         <item quantity="few">трека</item>
         <item quantity="many">треков</item>
         <item quantity="other">треков</item>
+    </plurals>
+    <plurals name="minutes_count">
+        <item quantity="zero">минут</item>
+        <item quantity="one">минута</item>
+        <item quantity="two">минуты</item>
+        <item quantity="few">минуты</item>
+        <item quantity="many">минут</item>
+        <item quantity="other">минут</item>
     </plurals>
 </resources>

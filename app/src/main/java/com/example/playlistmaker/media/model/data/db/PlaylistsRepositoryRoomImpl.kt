@@ -50,7 +50,7 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
     }
 
     override suspend fun deletePlaylist(playlist: Playlist) {
-        return playlistsTable.getPlaylistById(playlist.id).collect { list ->
+        return playlistsTable.getPlaylistsById(playlist.id).collect { list ->
             list.forEach { playlistEntity ->
                 playlistsTable.deletePlaylistEntity(playlistEntity)
             }
@@ -68,11 +68,12 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
     }
 
     override suspend fun removeTrackFromPlaylist(trackToRemove: Track, playlist: Playlist) {
-        playlistsTable.getTracksOfPlaylist(playlist.id).collect { pTrackList ->
-            pTrackList.forEach { pTrackEntity ->
-                playlistsTable.removePTrack(pTrackEntity)
-            }
-        }
+        playlistsTable.removePTrack(
+            playlistsTable.getExactTrackOfPlaylist(
+                playlistId = playlist.id,
+                remoteId = trackToRemove.id
+            )
+        )
     }
 
     override suspend fun getTracksOfPlaylist(playlist: Playlist): Flow<List<Track>> {
@@ -81,5 +82,33 @@ class PlaylistsRepositoryRoomImpl(private val playlistsTable: PlaylistsDao) : Pl
                 TrackDbConverter.map(pTrackEntity)
             }
         }
+    }
+
+    override suspend fun getPlaylistWithTracksById(playlistId: Int): Flow<Playlist> {
+        return playlistsTable.getPlaylistWithTracksById(playlistId)
+            .map { playlistAndTracksEntities ->
+                Playlist(id = playlistAndTracksEntities.playlistEntity.playlistId ?: 0,
+                    title = playlistAndTracksEntities.playlistEntity.title,
+                    description = playlistAndTracksEntities.playlistEntity.description ?: "",
+                    imageUri = playlistAndTracksEntities.playlistEntity.imageUri.toUri(),
+                    tracks = playlistAndTracksEntities.playlistTracks.map { TrackDbConverter.map(it) })
+            }
+    }
+
+    override suspend fun getPlaylistById(playlistId: Int): Playlist {
+        return playlistsTable.getFirstPlaylistById(playlistId)
+            .let { playlistEntity ->
+                Playlist(
+                    id = playlistEntity.playlistId ?: 0,
+                    title = playlistEntity.title,
+                    description = playlistEntity.description ?: "",
+                    imageUri = playlistEntity.imageUri.toUri(),
+                    tracks = emptyList()
+                )
+            }
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistsTable.updatePlaylist(TrackDbConverter.map(playlist))
     }
 }

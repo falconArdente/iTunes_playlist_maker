@@ -36,9 +36,11 @@
     <string name="new_playlist_button_text">New playlist</string>
     <string name="network_error">Please check internet connection</string>
     <string name="create_playlist_caption">New playlist</string>
+    <string name="create_playlist_edit_caption">Edit playlist</string>
     <string name="create_playlist_title_field">Title*</string>
     <string name="create_playlist_description_field">Description</string>
     <string name="create_playlist_create_button">Create</string>
+    <string name="create_playlist_update_button">Save</string>
     <string name="rationale_for_image_picker">Choosing playlist image is need data read acces</string>
     <string name="no_image_been_chosen_message">No image been chosen</string>
     <string name="rationale_for_playlist_image_save">Choosing playlist image is need data write acces</string>
@@ -52,7 +54,22 @@
         <item quantity="one">track</item>
         <item quantity="other">tracks</item>
     </plurals>
+    <plurals name="minutes_count">
+        <item quantity="one">minute</item>
+        <item quantity="other">minutes</item>
+    </plurals>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="alredy_have_in_playlist_prefix">Track is alredy presented in</string>
     <string name="add_to_playlist_success_prefix">Been add to playlist</string>
+    <string name="delete_track_dialog_title">Do you wish to delete this track?</string>
+    <string name="delete_track_exit_dialog_confirm">Delete</string>
+    <string name="delete_track_exit_dialog_reject">Cancel</string>
+    <string name="playlist_options_share">Share playlist</string>
+    <string name="playlist_options_edit">Edit playlist</string>
+    <string name="playlist_options_delete">Delete playlist</string>
+    <string name="playlist_no_tracks_to_share">No tracks to share with</string>
+    <string name="delete_playlist_dialog_message_prefix">Delete playlist «</string>
+    <string name="delete_playlist_dialog_title">Delete playlist</string>
+    <string name="delete_playlist_dialog_title_positive">Yes</string>
+    <string name="delete_playlist_dialog_title_negative">No</string>
 </resources>

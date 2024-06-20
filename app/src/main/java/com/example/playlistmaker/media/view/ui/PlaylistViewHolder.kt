@@ -14,7 +14,7 @@ class PlaylistViewHolder(private val binding: PlaylistViewHolderGridBinding) :
         binding.root
     ) {
     @SuppressLint("SetTextI18n")
-    fun bind(item: Playlist) {
+    fun bind(item: Playlist, playlistOnClickListener: PlaylistOnClickListener) {
         binding.playlistTitle.text = item.title
         val count = getCount(item)
         binding.playlistTracksCount.text =
@@ -24,6 +24,7 @@ class PlaylistViewHolder(private val binding: PlaylistViewHolderGridBinding) :
                 CenterCrop(),
                 RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.create_playlist_image_corner_radius))
             ).into(binding.playlistThumbnail)
+        binding.root.setOnClickListener { playlistOnClickListener.onClick(item) }
     }
 
     private fun getCount(playlist: Playlist): Int {

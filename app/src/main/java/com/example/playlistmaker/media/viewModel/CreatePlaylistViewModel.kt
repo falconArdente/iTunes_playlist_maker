@@ -2,8 +2,10 @@ package com.example.playlistmaker.media.viewModel
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,40 +13,49 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.media.model.data.db.dao.PlaylistsDao
-import com.example.playlistmaker.media.model.data.db.entity.PlaylistEntity
+import com.example.playlistmaker.media.model.domain.PlaylistsInteractor
 import com.example.playlistmaker.media.model.domain.SaveImageToStorageUseCase
 import com.example.playlistmaker.media.model.domain.SelectAnImageUseCase
 import com.example.playlistmaker.media.model.repository.SelectAnImageUseCasePickerCompatibleImpl
 import com.example.playlistmaker.media.view.MESSAGE_DURATION
 import com.example.playlistmaker.media.view.MESSAGE_TEXT
-import com.example.playlistmaker.media.view.ui.FragmentWithExitConfirmationDialog
+import com.example.playlistmaker.media.view.ui.FragmentCanShowDialog
 import com.example.playlistmaker.media.view.ui.PlaylistMessage
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 const val MESSAGE_DELAY = 3000L
 
-class CreatePlaylistViewModel(
+open class CreatePlaylistViewModel(
     private val imageSelector: SelectAnImageUseCase,
-    private val saverForImage: SaveImageToStorageUseCase,
-    private val dataTable: PlaylistsDao,
+    protected val saverForImage: SaveImageToStorageUseCase,
+    protected val dataTable: PlaylistsInteractor,
     androidContext: Context,
-) : ViewModel() {
+) : ViewModel(), ViewModelForFragmentShowsDialog {
     private val playlistCreatedPrefix: String =
         androidContext.getString(R.string.playlist_created_prefix)
     private val playlistCreatedPostfix: String =
         androidContext.getString(R.string.playlist_created_postfix)
-
-    private var mutableScreeState = MutableLiveData(
+    private val exitDialog: MaterialAlertDialogBuilder by lazy {
+        configureExitConfirmationDialog(
+            R.string.create_playlist_exit_dialog_title,
+            R.string.create_playlist_exit_dialog_confirm,
+            R.string.create_playlist_exit_dialog_reject,
+            R.string.create_playlist_exit_dialog_message,
+            R.drawable.dialog_background,
+            (fragment as Fragment).requireContext()
+        )
+    }
+    protected var mutableScreenState = MutableLiveData(
         CreatePlaylistScreenState(
-            title = "", description = "", isReadyToCreate = false
+            title = "", description = "", isReadyToSave = false
         )
     )
     private var playlistMessage = MutableLiveData<PlaylistMessage>(PlaylistMessage.Empty)
     var finishActivityWhenDone: Boolean = false
-    private var fragment: FragmentWithExitConfirmationDialog? = null
-    var screenStateToObserve: LiveData<CreatePlaylistScreenState> = mutableScreeState
+    protected var fragment: FragmentCanShowDialog? = null
+    var screenStateToObserve: LiveData<CreatePlaylistScreenState> = mutableScreenState
     var playlistMessageToObserve: LiveData<PlaylistMessage> = playlistMessage
 
     override fun attachFragmentAtCreation(fragment: FragmentCanShowDialog) {
@@ -54,16 +65,16 @@ class CreatePlaylistViewModel(
     }
 
     fun changeTitle(title: String) {
-        mutableScreeState.postValue(
-            (mutableScreeState.value as CreatePlaylistScreenState).copy(
-                title = title, isReadyToCreate = title.isNotEmpty()
+        mutableScreenState.postValue(
+            (mutableScreenState.value as CreatePlaylistScreenState).copy(
+                title = title, isReadyToSave = title.isNotEmpty()
             )
         )
     }
 
     fun changeDescription(description: String) {
-        mutableScreeState.postValue(
-            (mutableScreeState.value as CreatePlaylistScreenState).copy(
+        mutableScreenState.postValue(
+            (mutableScreenState.value as CreatePlaylistScreenState).copy(
                 description = description
             )
         )
@@ -72,8 +83,8 @@ class CreatePlaylistViewModel(
     fun selectAnImage() {
         viewModelScope.launch(Dispatchers.IO) {
             imageSelector.selectImage().collect { uri ->
-                mutableScreeState.postValue(
-                    (mutableScreeState.value as CreatePlaylistScreenState).copy(
+                mutableScreenState.postValue(
+                    (mutableScreenState.value as CreatePlaylistScreenState).copy(
                         imageUri = uri
                     )
                 )
@@ -81,9 +92,9 @@ class CreatePlaylistViewModel(
         }
     }
 
-    fun runExitSequence() {
+    open fun runExitSequence() {
         if (isNeedDialog()) {
-            fragment?.runExitConfirmationDialog()
+            fragment?.showDialog(exitDialog)
         } else {
             exitView()
         }
@@ -96,14 +107,13 @@ class CreatePlaylistViewModel(
         }
     }
 
-    fun createPlaylist() {
+    open fun createPlaylist() {
         with(screenStateToObserve.value as CreatePlaylistScreenState) {
-            val uriToDB = saverForImage.saveImageByUri(imageUri = imageUri, fileName = title)
+            val uriToDB =
+                saverForImage.saveImageByUri(imageUri = imageUri, fileName = title)
             viewModelScope.launch(Dispatchers.IO) {
                 dataTable.createPlaylist(
-                    PlaylistEntity(
-                        title = title, description = description, imageUri = uriToDB.toString()
-                    )
+                    title = title, description = description, imageUri = uriToDB
                 )
             }
             if (finishActivityWhenDone) {
@@ -123,6 +133,29 @@ class CreatePlaylistViewModel(
             exitView()
         }
     }
+
+    private fun configureExitConfirmationDialog(
+        titleId: Int,
+        positiveTextId: Int,
+        negativeTextId: Int,
+        messageId: Int,
+        drawableId: Int,
+        context: Context
+    ): MaterialAlertDialogBuilder =
+        MaterialAlertDialogBuilder(context).setBackground(
+            AppCompatResources.getDrawable(
+                context,
+                drawableId
+            )
+        )
+            .setTitle(titleId)
+            .setMessage(messageId)
+            .setPositiveButton(positiveTextId) { _, _ ->
+                exitView()
+            }
+            .setNegativeButton(negativeTextId) { dialogInterface: DialogInterface, _ ->
+                dialogInterface.dismiss()
+            }
 
     private fun createMessageText(playlistName: String): String =
         "$playlistCreatedPrefix $playlistName $playlistCreatedPostfix"

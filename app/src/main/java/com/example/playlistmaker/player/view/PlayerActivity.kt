@@ -5,6 +5,7 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.View.OnClickListener
+import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -77,7 +78,7 @@ class PlayerActivity : AppCompatActivity(), CanShowPlaylistMessage {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         binding = PlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val provider by inject<GetTrackToPlayUseCase> { parametersOf(this) }
