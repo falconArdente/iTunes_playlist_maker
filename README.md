@@ -1,7 +1,7 @@
 
 
 
-# Android-приложение для прослушивания коротких музыкальных композиций и метаданных сервиса iTunes. Использует [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html)
+# Android-приложение для прослушивания коротких музыкальных композиций и просмотра метаданных. Использует [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html)
 
 ## Общая функциональность приложения:
 - Поиск музыкальных композиций по текстовому запросу;
