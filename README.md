@@ -1,5 +1,5 @@
 
-![Header for diploma gitHub](https://github.com/user-attachments/assets/983b6013-0a00-440e-9d65-4eaab86235b4)
+
 
 # Android-приложение для прослушивания коротких музыкальных композиций и метаданных сервиса iTunes. Использует [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html)
 
