@@ -1,4 +1,6 @@
 
+![horSmal](https://github.com/user-attachments/assets/e226c483-6338-423f-be56-46f8b670a308)
+![metSm](https://github.com/user-attachments/assets/0b57855d-cb8d-475c-b8b5-0d14afd95ece)
 
 
 # Android-приложение для прослушивания коротких музыкальных композиций и просмотра метаданных. Использует [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html)
