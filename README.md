@@ -1,5 +1,4 @@
-
-![horSmal](https://github.com/user-attachments/assets/e226c483-6338-423f-be56-46f8b670a308)
+![horSmal20](https://github.com/user-attachments/assets/1dd2b6c9-0120-4e3d-b053-6bce0010d7f5)
 ![metSm](https://github.com/user-attachments/assets/a5e85026-9792-4d33-b42b-70a38d884581)
 ![listsSm](https://github.com/user-attachments/assets/8e4e1066-e292-4055-8f7b-7e8fbf877576)
 
