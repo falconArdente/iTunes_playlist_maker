@@ -1,9 +1,9 @@
 
 ![horSmal](https://github.com/user-attachments/assets/e226c483-6338-423f-be56-46f8b670a308)
-![metSm](https://github.com/user-attachments/assets/0b57855d-cb8d-475c-b8b5-0d14afd95ece)
+![metSm](https://github.com/user-attachments/assets/a5e85026-9792-4d33-b42b-70a38d884581)
+![listsSm](https://github.com/user-attachments/assets/8e4e1066-e292-4055-8f7b-7e8fbf877576)
 
-
-# Android-приложение для прослушивания коротких музыкальных композиций и просмотра метаданных. Использует [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html)
+# Android-приложение для поиска, прослушивания музыкальных композиций и составления плейлистов. Использует [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html)
 
 ## Общая функциональность приложения:
 - Поиск музыкальных композиций по текстовому запросу;
