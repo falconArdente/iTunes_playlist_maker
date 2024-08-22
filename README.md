@@ -22,3 +22,5 @@
 ## Последующее использование репозитория
 - Приложение успешно компилируется в среде разработки Android Studio Jellyfish | 2023.3.1 Patch 1 в соответствии настройкам конфигурационных файлов репозитория;
 - Дли использования функционала [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html) не требуется регистрация или авторизация. Форк может быть использован сразу после компиляции.
+
+![GitHub top language](https://img.shields.io/github/languages/top/falconArdente/iTunes_playlist_maker)
